@@ -1,27 +1,31 @@
 import { StyleSheet, View, Text, Pressable } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { Feather, AntDesign } from "@expo/vector-icons";
 
-interface ImportMediaButtonProps {}
+interface ImportMediaButtonProps {
+  onPress: () => void;
+  size?: number;
+}
 
-const ImportMediaButton: React.FC<ImportMediaButtonProps> = ({}) => {
-  const importMedia = () => {
-    console.log("import");
-  };
-
+const AddMediaButton: React.FC<ImportMediaButtonProps> = ({
+  onPress,
+  size = 70,
+}) => {
   return (
-    <Pressable onPress={importMedia} style={styles.button}>
-      {/* @ts-ignore*/}
-      <AntDesign name="pluscircleo" size={40} color="white" />
-    </Pressable>
+    <View style={styles.container}>
+      <Pressable onPress={onPress}>
+        <AntDesign name="pluscircle" size={size} color="white" />
+      </Pressable>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  button: {
+  container: {
+    width: "100%",
     position: "absolute",
-    marginHorizontal: "auto",
     bottom: 50,
+    alignItems: "center",
   },
 });
 
-export default ImportMediaButton;
+export default AddMediaButton;

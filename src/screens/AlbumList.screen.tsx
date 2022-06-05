@@ -1,15 +1,8 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  Alert,
-  FlatList,
-  SafeAreaView,
-} from "react-native";
+import { Alert, FlatList, SafeAreaView, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
 import { createDirectory, readDirectory } from "../util/MediaHelper";
-import AlbumPreview from "../components/AlbumPreview";
 import AddMediaButton from "../components/AddMediaButton";
+import AlbumPreview from "../components/AlbumPreview";
 
 interface AlbumListScreenProps {}
 
@@ -20,7 +13,6 @@ const AlbumListScreen: React.FC<AlbumListScreenProps> = ({}) => {
     const result = await createDirectory("media/" + name);
     if (result) {
       Alert.alert("Das Album wurde erstellt");
-      // TODO navigation.navigate("Album", {name})
       await readAlbums();
     }
   };
@@ -41,7 +33,7 @@ const AlbumListScreen: React.FC<AlbumListScreenProps> = ({}) => {
     <SafeAreaView style={styles.root}>
       <FlatList
         data={directories}
-        renderItem={({ item }) => <AlbumPreview key={item} name={item} />}
+        renderItem={({ item }) => <AlbumPreview key={item} albumName={item} />}
         numColumns={2}
         showsVerticalScrollIndicator={false}
         style={{ marginLeft: -2, marginRight: -2 }}
@@ -58,9 +50,6 @@ const styles = StyleSheet.create({
   root: {
     backgroundColor: "black",
     flex: 1,
-  },
-  text: {
-    color: "white",
   },
 });
 
