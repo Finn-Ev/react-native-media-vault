@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text } from "react-native";
-import Dialog from "react-native-dialog";
+// import Dialog from "react-native-dialog";
 import { useState } from "react";
 
 interface CreateAlbumDialogProps {
@@ -16,19 +16,19 @@ const CreateAlbumDialog: React.FC<CreateAlbumDialogProps> = ({
   const [albumName, setAlbumName] = useState("");
   return (
     <View>
-      <Dialog.Container visible={visible}>
-        <Dialog.Title>Neues Album erstellen</Dialog.Title>
-        <Dialog.Input
-          onChangeText={setAlbumName}
-          value={albumName}
-          placeholder={"Albumname"}
-        ></Dialog.Input>
-        <Dialog.Button onPress={onCancel} label="Cancel" />
-        <Dialog.Button
-          onPress={() => createAlbum(albumName)}
-          label="Erstellen"
-        />
-      </Dialog.Container>
+      {/*<Dialog.Container visible={visible}>*/}
+      {/*  <Dialog.Title>Neues Album erstellen</Dialog.Title>*/}
+      {/*  <Dialog.Input*/}
+      {/*    onChangeText={setAlbumName}*/}
+      {/*    value={albumName}*/}
+      {/*    placeholder={"Albumname"}*/}
+      {/*  ></Dialog.Input>*/}
+      {/*  <Dialog.Button onPress={onCancel} label="Abbrechen" />*/}
+      {/*  <Dialog.Button*/}
+      {/*    onPress={() => createAlbum(albumName)}*/}
+      {/*    label="Erstellen"*/}
+      {/*  />*/}
+      {/*</Dialog.Container>*/}
     </View>
   );
 };

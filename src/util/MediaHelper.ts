@@ -1,5 +1,7 @@
 import * as FileSystem from "expo-file-system";
 const { documentDirectory, getInfoAsync } = FileSystem;
+import "react-native-get-random-values";
+import { v4 as uuidv4 } from "uuid";
 
 export const createDirectory = async (dirName: string) => {
   if (!documentDirectoryExists()) return false;
@@ -14,10 +16,23 @@ export const createDirectory = async (dirName: string) => {
     if (directoryExists) return;
 
     await FileSystem.makeDirectoryAsync(newDirectoryPath);
+
     return true;
   } catch (e) {
     console.warn(e.message);
   }
+};
+
+export const importMediaFileIntoAlbum = async (
+  uri: string,
+  albumName: string
+) => {
+  const fileName = uuidv4() + "." + getFileExtension(uri);
+
+  await FileSystem.moveAsync({
+    from: uri,
+    to: getFullDirectoryPath("media/" + albumName) + fileName,
+  });
 };
 
 export const readDirectory = async (dirName: string) => {
@@ -59,7 +74,6 @@ export const getImageUriByAlbumAndFileName = (
   if (!documentDirectoryExists()) return false;
 
   imageName = imageName.replace(/\s/g, "%20");
-  console.log(imageName);
   return getFullDirectoryPath("media/" + albumName) + imageName;
 };
 
@@ -71,13 +85,35 @@ export const getImageInfoByUri = async (uri: string) => {
   }
 };
 
-const getFullDirectoryPath = (dirName: string) => {
+export const getImageInfo = async (albumName: string, fileName: string) => {
+  try {
+    const uri = getFullDirectoryPath("media/" + albumName) + fileName;
+
+    return FileSystem.getInfoAsync(uri);
+  } catch (e) {
+    console.warn(e.message);
+  }
+};
+
+export const getFullDirectoryPath = (dirName: string) => {
   return documentDirectory! + dirName + "/";
 };
 
 export const getFileExtension = (fileName: string) => {
   return fileName.split(".").pop();
 };
+
+// export const getFileName = (uri: string, withExtension = false) => {
+//   const fileNameWithExtension = uri.replace(documentDirectory!, "");
+//
+//   if (withExtension) {
+//     return fileNameWithExtension;
+//   }
+//
+//   const fileExtension = getFileExtension(fileNameWithExtension);
+//
+//   if (fileExtension) return fileNameWithExtension.replace(fileExtension, "");
+// };
 
 export const getIsImage = (fileName: string) => {
   const extension = getFileExtension(fileName);

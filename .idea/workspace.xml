@@ -4,11 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6bbeae37-5161-4dd9-a061-f9297add82d8" name="Changes" comment="init">
-      <change afterPath="$PROJECT_DIR$/src/components/CreateAlbumDialog.tsx" afterDir="false" />
+    <list default="true" id="6bbeae37-5161-4dd9-a061-f9297add82d8" name="Changes" comment="added create album dialog for android">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AddMediaButton.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AlbumPreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AlbumPreview.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/CreateAlbumDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CreateAlbumDialog.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ImagePreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ImagePreview.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/navigation/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/navigation/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/AlbumDetail.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/AlbumDetail.screen.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/AlbumList.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/AlbumList.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/util/MediaHelper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/MediaHelper.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -30,25 +36,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/finnevermann/projects/media-vault/src/components&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
-    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/usr/local/lib/node_modules/prettier&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Users/finnevermann/projects/media-vault/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "/Users/finnevermann/projects/media-vault/src/components",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "yarn",
+    "prettierjs.PrettierConfiguration.Package": "/usr/local/lib/node_modules/prettier",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "ts.external.directory.path": "/Users/finnevermann/projects/media-vault/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/components" />
@@ -80,7 +87,8 @@
       <workItem from="1654442127931" duration="134000" />
       <workItem from="1654442471188" duration="6729000" />
       <workItem from="1654452940589" duration="18831000" />
-      <workItem from="1654535922468" duration="1848000" />
+      <workItem from="1654535922468" duration="2037000" />
+      <workItem from="1654542796845" duration="9992000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1654472318477</created>
@@ -96,7 +104,14 @@
       <option name="project" value="LOCAL" />
       <updated>1654472329036</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="added create album dialog for android">
+      <created>1654542117633</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1654542117633</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -114,8 +129,10 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="init" />
-    <option name="LAST_COMMIT_MESSAGE" value="init" />
+    <MESSAGE value="added create album dialog for android" />
+    <option name="LAST_COMMIT_MESSAGE" value="added create album dialog for android" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

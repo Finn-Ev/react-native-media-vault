@@ -25,7 +25,9 @@ const Navigation: React.FC = ({}) => {
           <>
             <Stack.Screen
               name={"AlbumList"}
-              options={{ headerTitle: "Alben" }}
+              options={{
+                headerTitle: "Alben",
+              }}
               component={AlbumListScreen}
             />
             <Stack.Screen

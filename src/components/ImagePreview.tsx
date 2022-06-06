@@ -1,34 +1,25 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AlbumListScreenNavigationProps } from "../navigation/types";
-import { getImageUriByAlbumAndFileName, getIsImage } from "../util/MediaHelper";
-import { useEffect, useState } from "react";
+import { getIsImage } from "../util/MediaHelper";
+import { useState } from "react";
 import { ResizeMode, Video } from "expo-av";
 import { getVideoDurationString } from "../util";
 
 interface ImagePreviewProps {
-  imgName: string;
-  albumName: string;
+  uri: string;
 }
 
-const ImagePreview: React.FC<ImagePreviewProps> = ({ imgName, albumName }) => {
+const ImagePreview: React.FC<ImagePreviewProps> = ({ uri }) => {
   const navigation = useNavigation<AlbumListScreenNavigationProps>();
 
-  const [mediaUri, setMediaUri] = useState<string>("");
   const [videoDuration, setVideoDuration] = useState(0);
 
   const onPress = () => {
     // TODO open image carousel at this image's index
   };
 
-  useEffect(() => {
-    const uri = getImageUriByAlbumAndFileName(albumName, imgName);
-    if (uri) setMediaUri(uri);
-  }, []);
-
-  if (!mediaUri) return null;
-
-  const isImage = getIsImage(mediaUri);
+  const isImage = getIsImage(uri);
 
   return (
     <Pressable style={styles.container} onPress={onPress}>
@@ -37,14 +28,14 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ imgName, albumName }) => {
           style={styles.preview}
           resizeMode={"cover"}
           source={{
-            uri: mediaUri,
+            uri,
           }}
         />
       ) : (
         <View>
           <Video
             style={styles.preview}
-            source={{ uri: mediaUri }}
+            source={{ uri }}
             resizeMode={ResizeMode.COVER}
             // @ts-ignore
 

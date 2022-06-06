@@ -20,7 +20,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ albumName }) => {
         style={styles.preview}
         resizeMode={"cover"}
         source={{
-          uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARMAAAC3CAMAAAAGjUrGAAAAD1BMVEX+/v7////Z2dnc3Ny6urpCvU+4AAABU0lEQVR4nO3QQQHEIBAAMWDxr/nu2XYsJBKy7hye5q7ZvM06e/G0j5MvJ+WknJSTclJOykk5KSflpJyUk3JSTspJOSkn5aSclJNyUk7KSTkpJ+WknJSTclJOykk5KSflpJyUk3JSTspJOSkn5aSclJNyUk7KSTkpJ+WknJSTclJOykk5KSflpJyUk3JSTspJOSkn5aSclJNyUk7KSTkpJ+WknJSTclJOykk5KSflpJyUk3JSTspJOSkn5aSclJNyUk7KSTkpJ+WknJSTclJOykk5KSflpJyUk3JSTspJOSkn5aSclJNyUk7KSTkpJ+WknJSTclJOykk5KSflpJyUk3JSTspJOSkn5aSclJNyUk7KSTkpJ+WknJSTclJOykk5KSflpJyUk3JSTspJOSkn5aSclJNyUk7KSTkpJ+WknJSTclJOykk5KSf1P5nN26w7h6e5P2aaCrlKyIulAAAAAElFTkSuQmCC",
+          uri: "https://picsum.photos/200",
         }}
       />
       <Text style={styles.text}>{albumName}</Text>
