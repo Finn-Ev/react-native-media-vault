@@ -1,18 +1,28 @@
-import { Alert, FlatList, SafeAreaView, StyleSheet } from "react-native";
+import {
+  Alert,
+  FlatList,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+} from "react-native";
 import { useEffect, useState } from "react";
 import { createDirectory, readDirectory } from "../util/MediaHelper";
 import AddMediaButton from "../components/AddMediaButton";
 import AlbumPreview from "../components/AlbumPreview";
+import CreateAlbumDialog from "../components/CreateAlbumDialog";
+import createAlbumDialog from "../components/CreateAlbumDialog";
 
 interface AlbumListScreenProps {}
 
 const AlbumListScreen: React.FC<AlbumListScreenProps> = ({}) => {
   const [directories, setDirectories] = useState<string[]>([""]);
+  const [showDialog, setShowDialog] = useState(false);
 
   const createAlbum = async (name: string) => {
     const result = await createDirectory("media/" + name);
     if (result) {
       Alert.alert("Das Album wurde erstellt");
+      setShowDialog(false);
       await readAlbums();
     }
   };
@@ -40,7 +50,16 @@ const AlbumListScreen: React.FC<AlbumListScreenProps> = ({}) => {
       />
 
       <AddMediaButton
-        onPress={() => Alert.prompt("Neues Album erstellen", "", createAlbum)}
+        onPress={() => {
+          Platform.OS === "ios"
+            ? Alert.prompt("Neues Album erstellen", "", createAlbum)
+            : setShowDialog((v) => !v);
+        }}
+      />
+      <CreateAlbumDialog
+        visible={showDialog}
+        createAlbum={createAlbum}
+        onCancel={() => setShowDialog(false)}
       />
     </SafeAreaView>
   );
