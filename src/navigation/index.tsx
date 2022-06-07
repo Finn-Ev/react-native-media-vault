@@ -7,6 +7,7 @@ import { Platform } from "react-native";
 import { RootStackParamList } from "./types";
 import AlbumDetailScreen from "../screens/AlbumDetail.screen";
 import AssetSelectorScreen from "../screens/AssetSelector.screen";
+import AssetsDetailScreen from "../screens/AssetsDetail.screen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -35,6 +36,15 @@ const Navigation: React.FC = ({}) => {
               name={"AlbumDetail"}
               options={{ headerTitle: "" }}
               component={AlbumDetailScreen}
+            />
+            <Stack.Screen
+              name={"AssetsDetail"}
+              options={{
+                headerTitle: "",
+                headerBackTitle: "Zur Übersicht",
+                headerLargeTitle: false,
+              }}
+              component={AssetsDetailScreen}
             />
             <Stack.Screen
               name={"AssetSelector"}

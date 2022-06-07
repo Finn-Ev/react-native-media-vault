@@ -21,7 +21,6 @@ import { FileInfo } from "expo-file-system";
 import ImagePreview from "../components/ImagePreview";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import Asss from "./AssetSelector.screen";
 
 interface AlbumDetailProps {}
 
@@ -30,7 +29,7 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
   const navigation = useNavigation<AlbumDetailScreenNavigationProps>();
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
-  const [images, setImages] = useState<FileInfo[]>([]);
+  const [images, setImages] = useState<string[]>([]);
   const { albumName } = route.params;
 
   useEffect(() => {
@@ -62,14 +61,38 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
           }
           return 0;
         });
-        setImages(metaInfoImages);
+
+        const imageUris = metaInfoImages.map((info) => info.uri);
+
+        setImages(imageUris);
       }
     }
+  };
+
+  const viewInAssetCarousel = (startIndex: number) => {
+    // console.log("assetUris", assetUris.length);
+    // console.log("startIndex", startIndex);
+
+    navigation.navigate("AssetsDetail", {
+      assetUris: images,
+      startIndex,
+    });
   };
 
   const importMedia = async () => {
     navigation.navigate("AssetSelector", { albumName });
     navigation.setParams({ assetsHaveBeenImported: false }); // in case someone imports something back to back
+
+    // const result = await ImagePicker.launchImageLibraryAsync({
+    //   mediaTypes: ImagePicker.MediaTypeOptions.All,
+    //   allowsEditing: false,
+    //   quality: 1,
+    // });
+    //
+    // if (!result.cancelled) {
+    //   await importMediaFileIntoAlbum(result.uri, albumName);
+    // }
+    // await getMediaFiles();
   };
 
   const toggleSortDirection = () => {
@@ -82,12 +105,19 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
       <FlatList
         numColumns={3}
         data={images}
-        renderItem={({ item }) => <ImagePreview uri={item.uri} />}
+        renderItem={({ item, index }) => {
+          return (
+            <ImagePreview
+              onPress={() => viewInAssetCarousel(index)}
+              uri={item}
+            />
+          );
+        }}
       />
       {/* Footer */}
       <View style={styles.footer}>
         <Pressable onPress={toggleSortDirection} hitSlop={15}>
-          <View style={styles.sortContainer}>
+          <View style={styles.buttonContainer}>
             <MaterialCommunityIcons
               name={
                 sortDirection === "asc"
@@ -97,13 +127,16 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
               size={28}
               color="white"
             />
-            <Text style={styles.sortText}>
+            <Text style={styles.buttonText}>
               {sortDirection === "asc" ? "Älteste zuerst" : "Neueste zuerst"}
             </Text>
           </View>
         </Pressable>
         <Pressable onPress={importMedia} hitSlop={15}>
-          <AntDesign name="addfile" size={28} color="white" />
+          <View style={styles.buttonContainer}>
+            {/*<AntDesign name="addfile" size={28} color="white" />*/}
+            <Text style={styles.buttonText}>Bilder/Videos hinzufügen</Text>
+          </View>
         </Pressable>
       </View>
     </SafeAreaView>
@@ -123,12 +156,12 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingVertical: 10,
   },
-  sortContainer: {
+  buttonContainer: {
     flexDirection: "row",
     alignItems: "center",
   },
-  sortText: {
-    marginLeft: 10,
+  buttonText: {
+    marginLeft: 5,
     color: "white",
   },
 });

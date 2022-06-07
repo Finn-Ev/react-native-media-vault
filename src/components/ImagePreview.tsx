@@ -1,23 +1,20 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AlbumListScreenNavigationProps } from "../navigation/types";
-import { getIsImage } from "../util/MediaHelper";
+import { getFullDirectoryPath, getIsImage } from "../util/MediaHelper";
 import { useState } from "react";
 import { ResizeMode, Video } from "expo-av";
 import { getVideoDurationString } from "../util";
 
 interface ImagePreviewProps {
   uri: string;
+  onPress: () => void;
 }
 
-const ImagePreview: React.FC<ImagePreviewProps> = ({ uri }) => {
+const ImagePreview: React.FC<ImagePreviewProps> = ({ uri, onPress }) => {
   const navigation = useNavigation<AlbumListScreenNavigationProps>();
-
+  getFullDirectoryPath("");
   const [videoDuration, setVideoDuration] = useState(0);
-
-  const onPress = () => {
-    // TODO open image carousel at this image's index
-  };
 
   const isImage = getIsImage(uri);
 
@@ -26,7 +23,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ uri }) => {
       {isImage ? (
         <Image
           style={styles.preview}
-          resizeMode={"cover"}
+          resizeMode={ResizeMode.COVER}
           source={{
             uri,
           }}
@@ -39,7 +36,6 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ uri }) => {
             resizeMode={ResizeMode.COVER}
             // @ts-ignore
             onLoad={(data) => setVideoDuration(data.durationMillis)}
-            // shouldPlay={true}
           />
           <Text style={styles.duration}>
             {getVideoDurationString(videoDuration)}
@@ -55,8 +51,10 @@ const styles = StyleSheet.create({
     flex: 1,
     maxWidth: "33.33%",
     aspectRatio: 1,
-
     padding: 2,
+    // borderRadius: 2,
+    // borderWidth: 1,
+    // borderColor: "lime",
   },
   preview: {
     aspectRatio: 1,

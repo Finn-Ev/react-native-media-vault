@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Alert, Settings } from "react-native";
+import { StyleSheet, View, Alert } from "react-native";
 import { AssetsSelector } from "expo-images-picker";
 import { Ionicons } from "@expo/vector-icons";
 import { useMemo } from "react";
@@ -9,6 +9,7 @@ import {
   AssetSelectorScreenRouteProps,
 } from "../navigation/types";
 import { importMediaFileIntoAlbum } from "../util/MediaHelper";
+import * as MediaLibrary from "expo-media-library";
 
 interface AssetSelectorProps {}
 
@@ -30,14 +31,26 @@ const AssetSelectorScreen: React.FC<AssetSelectorProps> = ({}) => {
   };
 
   const importMedia = async (data: any) => {
-    console.log(data);
-
     for (const asset of data) {
-      console.log(asset.localUri);
       await importMediaFileIntoAlbum(asset.localUri, route.params.albumName);
     }
 
-    Alert.alert("Success", "Media imported successfully");
+    const assetIds = data.map((asset: any) => asset.id);
+
+    Alert.alert(
+      "Duplikate löschen?",
+      "Wenn sie die importierten Dateien aus ihrer Galerie löschen wollen, drücken sie im nächsten Schritt auf 'Löschen'",
+      [
+        {
+          text: "Weiter",
+          onPress: async () => await MediaLibrary.deleteAssetsAsync(assetIds),
+        },
+        {
+          text: "Nein",
+          style: "cancel",
+        },
+      ]
+    );
 
     goBack();
   };
@@ -105,7 +118,7 @@ const AssetSelectorScreen: React.FC<AssetSelectorProps> = ({}) => {
         back: "Zurück",
         selected: "ausgewählt",
       },
-      midTextColor: "black",
+      midTextColor: "white",
       minSelection: 1,
       buttonTextStyle: { color: "#2997ff", fontSize: 16 },
       buttonStyle: {

@@ -4,6 +4,11 @@ import { RouteProp } from "@react-navigation/native";
 export type RootStackParamList = {
   AlbumList: undefined;
   AlbumDetail: { albumName: string; assetsHaveBeenImported?: boolean };
+  AssetsDetail: {
+    assetUris: string[];
+    startIndex: number;
+    refreshCarousel?: boolean;
+  };
   AssetSelector: { albumName: string };
   Auth: undefined;
 };
@@ -19,16 +24,25 @@ export type AlbumDetailScreenNavigationProps = NativeStackNavigationProp<
   "AlbumDetail"
 >;
 
+export type AssetsDetailScreenScreenNavigationProps = NativeStackNavigationProp<
+  RootStackParamList,
+  "AssetsDetail"
+>;
+
 export type AssetSelectorScreenNavigationProps = NativeStackNavigationProp<
   RootStackParamList,
   "AssetSelector"
 >;
 
 // route prop types
-
 export type AlbumDetailScreenRouteProps = RouteProp<
   RootStackParamList,
   "AlbumDetail"
+>;
+
+export type AssetsDetailScreenRouteProps = RouteProp<
+  RootStackParamList,
+  "AssetsDetail"
 >;
 
 export type AssetSelectorScreenRouteProps = RouteProp<

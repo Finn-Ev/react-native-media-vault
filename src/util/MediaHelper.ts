@@ -97,6 +97,7 @@ export const getImageInfo = async (albumName: string, fileName: string) => {
 
 export const getFullDirectoryPath = (dirName: string) => {
   // console.log("getFullDirectoryPath:", documentDirectory! + dirName + "/");
+  console.log(documentDirectory!);
   return documentDirectory! + dirName + "/";
 };
 
@@ -106,6 +107,7 @@ export const getFileExtension = (fileName: string) => {
 
 export const getIsImage = (fileName: string) => {
   const extension = getFileExtension(fileName)?.toLowerCase();
+
   return (
     extension === "jpg" ||
     extension === "png" ||
