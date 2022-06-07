@@ -1,4 +1,6 @@
 import {
+  Alert,
+  Button,
   FlatList,
   Pressable,
   SafeAreaView,
@@ -12,7 +14,12 @@ import {
   AlbumDetailScreenRouteProps,
 } from "../navigation/types";
 import { useEffect, useState } from "react";
-import { getImageInfo, readDirectory } from "../util/MediaHelper";
+import {
+  deleteAsset,
+  exportAssetsIntoMediaLibrary,
+  getImageInfo,
+  readDirectory,
+} from "../util/MediaHelper";
 import ImagePreview from "../components/ImagePreview";
 import { MaterialCommunityIcons, Feather, Ionicons } from "@expo/vector-icons";
 
@@ -23,6 +30,7 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
   const { albumName } = route.params;
   const navigation = useNavigation<AlbumDetailScreenNavigationProps>();
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [selectedAssets, setSelectedAssets] = useState<string[]>([]);
   const [isSelectModeActive, setIsSelectModeActive] = useState(false);
@@ -32,14 +40,23 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
   useEffect(() => {
     navigation.setOptions({ headerTitle: albumName });
 
-    getMediaFiles();
+    fetchAssets();
   }, []);
 
+  // fetch assets again when assets have been imported
   useEffect(() => {
-    getMediaFiles();
+    fetchAssets();
   }, [route.params.assetsHaveBeenImported]);
 
+  // change headerRight when selectMode is active or images have changed
   useEffect(() => {
+    if (images.length === 0) {
+      navigation.setOptions({
+        headerRight: () => null,
+      });
+      return;
+    }
+
     if (isSelectModeActive) {
       navigation.setOptions({
         headerRight: () => (
@@ -68,7 +85,7 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
         ),
       });
     }
-  }, [isSelectModeActive]);
+  }, [isSelectModeActive, images]);
 
   const viewInAssetCarousel = (startIndex: number) => {
     navigation.navigate("AssetsDetail", {
@@ -102,9 +119,10 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
   const disableSelectMode = () => {
     setSelectedAssets([]);
     setIsSelectModeActive(false);
+    fetchAssets();
   };
 
-  const getMediaFiles = async () => {
+  const fetchAssets = async () => {
     const fileNames = await readDirectory("media/" + albumName);
 
     if (fileNames && fileNames.length) {
@@ -115,8 +133,9 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
         if (info) metaInfoImages.push(info);
       }
 
-      if (metaInfoImages) {
+      if (metaInfoImages.length) {
         // default is ascending; the oldest file first
+
         metaInfoImages.sort((a, b) => {
           if (a && b) {
             if (a.modificationTime! <= b.modificationTime!) return -1;
@@ -129,7 +148,7 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
 
         setImages(imageUris);
       }
-    }
+    } else setImages([]);
   };
 
   const importAssets = async () => {
@@ -137,82 +156,144 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
     navigation.setParams({ assetsHaveBeenImported: false }); // in case someone imports something back to back
   };
 
-  const exportAssets = async () => {
-    // todo loop over assets and add them to (default) album via MediaLibrary
+  const exportSelectedAssets = async () => {
+    if (loading) return;
+
+    setLoading(true);
+
+    await exportAssetsIntoMediaLibrary(selectedAssets);
+    Alert.alert(
+      "Export erfolgreich",
+      "Sollen  die Kopien der exportierten Dateien gelöscht werden?",
+      [
+        {
+          text: "Abbrechen",
+          style: "cancel",
+          onPress: () => setLoading(false),
+        },
+        {
+          text: "Löschen",
+          onPress: async () => {
+            for (const uri of selectedAssets) {
+              await deleteAsset(uri);
+            }
+            disableSelectMode();
+            await fetchAssets();
+            setLoading(false);
+          },
+        },
+      ]
+    );
   };
 
-  const deleteAssets = async () => {
-    // todo loop over assets and remove them from this album
+  const deleteSelectedAssets = async () => {
+    if (loading) return;
+    Alert.alert(
+      "Löschen",
+      "Sollen die ausgewählten Dateien wirklich gelöscht werden?",
+      [
+        {
+          text: "Abbrechen",
+          style: "cancel",
+          onPress: () => setLoading(false),
+        },
+        {
+          text: "Löschen",
+          onPress: async () => {
+            for (const uri of selectedAssets) {
+              await deleteAsset(uri);
+            }
+            disableSelectMode();
+            await fetchAssets();
+            setLoading(false);
+          },
+        },
+      ]
+    );
   };
 
   return (
     <SafeAreaView style={styles.root}>
-      <FlatList
-        numColumns={3}
-        data={images}
-        renderItem={({ item, index }) => {
-          return (
-            <ImagePreview
-              onLongPress={() => enableSelectMode(item)}
-              onPress={
-                isSelectModeActive
-                  ? () => toggleSelect(item)
-                  : () => viewInAssetCarousel(index)
-              }
-              isSelected={selectedAssets.includes(item)}
-              uri={item}
-            />
-          );
-        }}
-      />
-      {/* Footer */}
-      <View style={styles.footer}>
-        {isSelectModeActive ? (
-          <>
-            <Pressable onPress={exportAssets} hitSlop={15}>
-              <View style={styles.buttonContainer}>
-                <Feather name="share" size={24} color="white" />
-                <Text style={styles.buttonText}>Exportieren</Text>
-              </View>
-            </Pressable>
-            <Text style={{ color: "white", fontSize: 16 }}>
-              {selectedAssets.length} ausgewählt
-            </Text>
-            <Pressable onPress={deleteAssets} hitSlop={15}>
-              <View style={styles.buttonContainer}>
-                <Ionicons name="trash" size={24} color="white" />
-              </View>
-            </Pressable>
-          </>
-        ) : (
-          <>
-            <Pressable onPress={toggleSortDirection} hitSlop={15}>
-              <View style={styles.buttonContainer}>
-                <MaterialCommunityIcons
-                  name={
-                    sortDirection === "asc"
-                      ? "sort-clock-ascending-outline"
-                      : "sort-clock-descending-outline"
+      {images.length > 0 ? (
+        <>
+          <FlatList
+            numColumns={3}
+            data={images}
+            renderItem={({ item, index }) => {
+              return (
+                <ImagePreview
+                  onLongPress={() => enableSelectMode(item)}
+                  onPress={
+                    isSelectModeActive
+                      ? () => toggleSelect(item)
+                      : () => viewInAssetCarousel(index)
                   }
-                  size={28}
-                  color="white"
+                  isSelected={selectedAssets.includes(item)}
+                  uri={item}
                 />
-                <Text style={styles.buttonText}>
-                  {sortDirection === "asc"
-                    ? "Älteste zuerst"
-                    : "Neueste zuerst"}
+              );
+            }}
+          />
+          <View style={styles.footer}>
+            {isSelectModeActive ? (
+              <>
+                <Pressable onPress={exportSelectedAssets} hitSlop={15}>
+                  <View style={styles.buttonContainer}>
+                    <Feather name="share" size={24} color="white" />
+                    <Text style={styles.buttonText}>Exportieren</Text>
+                  </View>
+                </Pressable>
+                <Text style={{ color: "white", fontSize: 16 }}>
+                  {selectedAssets.length} ausgewählt
                 </Text>
-              </View>
-            </Pressable>
-            <Pressable onPress={importAssets} hitSlop={15}>
-              <View style={styles.buttonContainer}>
-                {/*<AntDesign name="addfile" size={28} color="white" />*/}
-                <Text style={styles.buttonText}>Bilder/Videos hinzufügen</Text>
-              </View>
-            </Pressable>
-          </>
-        )}
-      </View>
+                <Pressable onPress={deleteSelectedAssets} hitSlop={15}>
+                  <View style={styles.buttonContainer}>
+                    <Ionicons name="trash" size={24} color="white" />
+                  </View>
+                </Pressable>
+              </>
+            ) : (
+              <>
+                <Pressable onPress={toggleSortDirection} hitSlop={15}>
+                  <View style={styles.buttonContainer}>
+                    <MaterialCommunityIcons
+                      name={
+                        sortDirection === "asc"
+                          ? "sort-clock-ascending-outline"
+                          : "sort-clock-descending-outline"
+                      }
+                      size={28}
+                      color="white"
+                    />
+                    <Text style={styles.buttonText}>
+                      {sortDirection === "asc"
+                        ? "Älteste zuerst"
+                        : "Neueste zuerst"}
+                    </Text>
+                  </View>
+                </Pressable>
+                <Pressable onPress={importAssets} hitSlop={15}>
+                  <View style={styles.buttonContainer}>
+                    {/*<AntDesign name="addfile" size={28} color="white" />*/}
+                    <Text style={styles.buttonText}>
+                      Bilder/Videos hinzufügen
+                    </Text>
+                  </View>
+                </Pressable>
+              </>
+            )}
+          </View>
+        </>
+      ) : (
+        <View style={styles.emptyAlbum}>
+          <Text style={styles.emptyAlbumText}>Dieses Album ist leer</Text>
+          <Text />
+          <Text style={styles.emptyAlbumButton} onPress={importAssets}>
+            Bilder & Videos hinzufügen
+          </Text>
+        </View>
+      )}
+      {/* Footer */}
     </SafeAreaView>
   );
 };
@@ -245,6 +326,27 @@ const styles = StyleSheet.create({
   buttonText: {
     marginLeft: 5,
     color: "white",
+  },
+  emptyAlbum: {
+    marginTop: 30,
+    alignItems: "center",
+  },
+  emptyAlbumText: {
+    marginTop: 15,
+    color: "white",
+    textAlign: "center",
+    fontSize: 16,
+  },
+  emptyAlbumButton: {
+    marginTop: 10,
+    color: "white",
+    textAlign: "center",
+    fontSize: 20,
+    borderWidth: 1,
+    borderColor: "white",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 5,
   },
 });
 

@@ -1,6 +1,7 @@
 import * as FileSystem from "expo-file-system";
 const { documentDirectory, getInfoAsync } = FileSystem;
 import "react-native-get-random-values";
+import * as MediaLibrary from "expo-media-library";
 import { v4 as uuidv4 } from "uuid";
 
 export const createDirectory = async (dirName: string) => {
@@ -23,16 +24,26 @@ export const createDirectory = async (dirName: string) => {
   }
 };
 
-export const importMediaFileIntoAlbum = async (
-  uri: string,
-  albumName: string
-) => {
+export const importAssetIntoAlbum = async (uri: string, albumName: string) => {
   const fileName = uuidv4() + "." + getFileExtension(uri);
 
   await FileSystem.copyAsync({
     from: uri,
     to: getFullDirectoryPath("media/" + albumName) + fileName,
   });
+};
+
+export const exportAssetsIntoMediaLibrary = async (uris: string[]) => {
+  try {
+    const assets = [];
+    for (const uri of uris) {
+      assets.push(await MediaLibrary.createAssetAsync(uri));
+    }
+
+    await MediaLibrary.addAssetsToAlbumAsync(assets, "Media", false);
+  } catch (e) {
+    console.warn(e.message);
+  }
 };
 
 export const readDirectory = async (dirName: string) => {
@@ -59,10 +70,10 @@ export const deleteDirectory = async (dirName: string) => {
   }
 };
 
-export const deleteAsset = async (albumName: string, fileName: string) => {
+export const deleteAsset = async (uri: string) => {
   if (!documentDirectoryExists()) return false;
   try {
-    await FileSystem.deleteAsync(getFullDirectoryPath(albumName) + fileName);
+    await FileSystem.deleteAsync(uri);
     return true;
   } catch (e) {
     console.warn(e.message);

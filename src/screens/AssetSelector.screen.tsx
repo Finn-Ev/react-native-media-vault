@@ -8,7 +8,7 @@ import {
   AssetSelectorScreenNavigationProps,
   AssetSelectorScreenRouteProps,
 } from "../navigation/types";
-import { importMediaFileIntoAlbum } from "../util/MediaHelper";
+import { importAssetIntoAlbum } from "../util/MediaHelper";
 import * as MediaLibrary from "expo-media-library";
 
 interface AssetSelectorProps {}
@@ -32,7 +32,7 @@ const AssetSelectorScreen: React.FC<AssetSelectorProps> = ({}) => {
 
   const importMedia = async (data: any) => {
     for (const asset of data) {
-      await importMediaFileIntoAlbum(asset.localUri, route.params.albumName);
+      await importAssetIntoAlbum(asset.localUri, route.params.albumName);
     }
 
     const assetIds = data.map((asset: any) => asset.id);
@@ -42,11 +42,11 @@ const AssetSelectorScreen: React.FC<AssetSelectorProps> = ({}) => {
       "Wenn sie die importierten Dateien aus ihrer Galerie löschen wollen, drücken sie im nächsten Schritt auf 'Löschen'",
       [
         {
-          text: "Weiter",
+          text: "Ja, weiter",
           onPress: async () => await MediaLibrary.deleteAssetsAsync(assetIds),
         },
         {
-          text: "Nein",
+          text: "Nein, abbrechen",
           style: "cancel",
         },
       ]
