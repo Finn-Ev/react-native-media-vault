@@ -6,6 +6,7 @@ import AuthScreen from "../screens/Auth.screen";
 import { Platform } from "react-native";
 import { RootStackParamList } from "./types";
 import AlbumDetailScreen from "../screens/AlbumDetail.screen";
+import AssetSelectorScreen from "../screens/AssetSelector.screen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -34,6 +35,11 @@ const Navigation: React.FC = ({}) => {
               name={"AlbumDetail"}
               options={{ headerTitle: "" }}
               component={AlbumDetailScreen}
+            />
+            <Stack.Screen
+              name={"AssetSelector"}
+              options={{ headerShown: false }}
+              component={AssetSelectorScreen}
             />
           </>
         ) : (

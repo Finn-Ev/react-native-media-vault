@@ -38,7 +38,6 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ uri }) => {
             source={{ uri }}
             resizeMode={ResizeMode.COVER}
             // @ts-ignore
-
             onLoad={(data) => setVideoDuration(data.durationMillis)}
             // shouldPlay={true}
           />

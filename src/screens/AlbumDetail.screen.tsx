@@ -21,6 +21,7 @@ import { FileInfo } from "expo-file-system";
 import ImagePreview from "../components/ImagePreview";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import Asss from "./AssetSelector.screen";
 
 interface AlbumDetailProps {}
 
@@ -36,6 +37,10 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
     navigation.setOptions({ headerTitle: albumName });
     getMediaFiles();
   }, []);
+
+  useEffect(() => {
+    getMediaFiles();
+  }, [route.params.assetsHaveBeenImported]);
 
   const getMediaFiles = async () => {
     const fileNames = await readDirectory("media/" + albumName);
@@ -63,18 +68,8 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
   };
 
   const importMedia = async () => {
-    const mediaFileToImport = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      // allowsMultipleSelection: true,
-      allowsEditing: false,
-    });
-
-    if (mediaFileToImport.cancelled) return;
-
-    if (mediaFileToImport) {
-      await importMediaFileIntoAlbum(mediaFileToImport.uri, albumName);
-      await getMediaFiles();
-    }
+    navigation.navigate("AssetSelector", { albumName });
+    navigation.setParams({ assetsHaveBeenImported: false }); // in case someone imports something back to back
   };
 
   const toggleSortDirection = () => {

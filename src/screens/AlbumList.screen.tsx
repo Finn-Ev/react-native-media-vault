@@ -39,7 +39,7 @@ const AlbumListScreen: React.FC<AlbumListScreenProps> = ({}) => {
     createDirectory("media").then(() =>
       createDirectory("media/Album1").then(() => readAlbums())
     );
-  });
+  }, []);
 
   const changeSortDirection = () => {
     // TODO

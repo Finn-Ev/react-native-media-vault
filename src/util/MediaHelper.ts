@@ -29,7 +29,7 @@ export const importMediaFileIntoAlbum = async (
 ) => {
   const fileName = uuidv4() + "." + getFileExtension(uri);
 
-  await FileSystem.moveAsync({
+  await FileSystem.copyAsync({
     from: uri,
     to: getFullDirectoryPath("media/" + albumName) + fileName,
   });
@@ -44,7 +44,7 @@ export const readDirectory = async (dirName: string) => {
 
     return directories.filter((dirName) => dirName !== ".DS_Store");
   } catch (e) {
-    console.warn(e.message);
+    console.warn(e);
   }
 };
 
@@ -96,6 +96,7 @@ export const getImageInfo = async (albumName: string, fileName: string) => {
 };
 
 export const getFullDirectoryPath = (dirName: string) => {
+  // console.log("getFullDirectoryPath:", documentDirectory! + dirName + "/");
   return documentDirectory! + dirName + "/";
 };
 
@@ -103,19 +104,12 @@ export const getFileExtension = (fileName: string) => {
   return fileName.split(".").pop();
 };
 
-// export const getFileName = (uri: string, withExtension = false) => {
-//   const fileNameWithExtension = uri.replace(documentDirectory!, "");
-//
-//   if (withExtension) {
-//     return fileNameWithExtension;
-//   }
-//
-//   const fileExtension = getFileExtension(fileNameWithExtension);
-//
-//   if (fileExtension) return fileNameWithExtension.replace(fileExtension, "");
-// };
-
 export const getIsImage = (fileName: string) => {
-  const extension = getFileExtension(fileName);
-  return extension === "jpg" || extension === "png";
+  const extension = getFileExtension(fileName)?.toLowerCase();
+  return (
+    extension === "jpg" ||
+    extension === "png" ||
+    extension === "heic" ||
+    extension === "webp"
+  );
 };
