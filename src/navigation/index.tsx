@@ -41,8 +41,9 @@ const Navigation: React.FC = ({}) => {
               name={"AssetsDetail"}
               options={{
                 headerTitle: "",
-                headerBackTitle: "Zur Übersicht",
+                headerBackVisible: false,
                 headerLargeTitle: false,
+                animation: "slide_from_bottom",
               }}
               component={AssetsDetailScreen}
             />

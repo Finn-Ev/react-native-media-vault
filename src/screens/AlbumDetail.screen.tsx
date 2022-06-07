@@ -12,34 +12,97 @@ import {
   AlbumDetailScreenRouteProps,
 } from "../navigation/types";
 import { useEffect, useState } from "react";
-import {
-  getImageInfo,
-  importMediaFileIntoAlbum,
-  readDirectory,
-} from "../util/MediaHelper";
-import { FileInfo } from "expo-file-system";
+import { getImageInfo, readDirectory } from "../util/MediaHelper";
 import ImagePreview from "../components/ImagePreview";
-import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
-import * as ImagePicker from "expo-image-picker";
+import { MaterialCommunityIcons, Feather, Ionicons } from "@expo/vector-icons";
 
 interface AlbumDetailProps {}
 
 const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
   const route = useRoute<AlbumDetailScreenRouteProps>();
+  const { albumName } = route.params;
   const navigation = useNavigation<AlbumDetailScreenNavigationProps>();
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
+  const [selectedAssets, setSelectedAssets] = useState<string[]>([]);
+  const [isSelectModeActive, setIsSelectModeActive] = useState(false);
+
   const [images, setImages] = useState<string[]>([]);
-  const { albumName } = route.params;
 
   useEffect(() => {
     navigation.setOptions({ headerTitle: albumName });
+
     getMediaFiles();
   }, []);
 
   useEffect(() => {
     getMediaFiles();
   }, [route.params.assetsHaveBeenImported]);
+
+  useEffect(() => {
+    if (isSelectModeActive) {
+      navigation.setOptions({
+        headerRight: () => (
+          <View style={styles.headerRight}>
+            <Text
+              onPress={selectAllAssets}
+              style={[styles.headerRightButton, { marginLeft: 5 }]}
+            >
+              Alle auswählen
+            </Text>
+            <Text onPress={disableSelectMode} style={styles.headerRightButton}>
+              Abbrechen
+            </Text>
+          </View>
+        ),
+      });
+    } else {
+      navigation.setOptions({
+        headerRight: () => (
+          <Text
+            onPress={() => enableSelectMode()}
+            style={styles.headerRightButton}
+          >
+            Auswählen
+          </Text>
+        ),
+      });
+    }
+  }, [isSelectModeActive]);
+
+  const viewInAssetCarousel = (startIndex: number) => {
+    navigation.navigate("AssetsDetail", {
+      assetUris: images,
+      startIndex,
+    });
+  };
+
+  const toggleSortDirection = () => {
+    setImages(images.reverse());
+    setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+  };
+
+  const toggleSelect = (uri: string) => {
+    if (selectedAssets.includes(uri)) {
+      setSelectedAssets(selectedAssets.filter((a) => a !== uri));
+    } else {
+      setSelectedAssets([...selectedAssets, uri]);
+    }
+  };
+
+  const selectAllAssets = () => {
+    setSelectedAssets(images);
+  };
+
+  const enableSelectMode = (firstItemUri?: string) => {
+    setIsSelectModeActive(true);
+    if (firstItemUri) setSelectedAssets([firstItemUri]);
+  };
+
+  const disableSelectMode = () => {
+    setSelectedAssets([]);
+    setIsSelectModeActive(false);
+  };
 
   const getMediaFiles = async () => {
     const fileNames = await readDirectory("media/" + albumName);
@@ -69,35 +132,17 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
     }
   };
 
-  const viewInAssetCarousel = (startIndex: number) => {
-    // console.log("assetUris", assetUris.length);
-    // console.log("startIndex", startIndex);
-
-    navigation.navigate("AssetsDetail", {
-      assetUris: images,
-      startIndex,
-    });
-  };
-
-  const importMedia = async () => {
+  const importAssets = async () => {
     navigation.navigate("AssetSelector", { albumName });
     navigation.setParams({ assetsHaveBeenImported: false }); // in case someone imports something back to back
-
-    // const result = await ImagePicker.launchImageLibraryAsync({
-    //   mediaTypes: ImagePicker.MediaTypeOptions.All,
-    //   allowsEditing: false,
-    //   quality: 1,
-    // });
-    //
-    // if (!result.cancelled) {
-    //   await importMediaFileIntoAlbum(result.uri, albumName);
-    // }
-    // await getMediaFiles();
   };
 
-  const toggleSortDirection = () => {
-    setImages(images.reverse()); // works better than re-running sort()
-    setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+  const exportAssets = async () => {
+    // todo loop over assets and add them to (default) album via MediaLibrary
+  };
+
+  const deleteAssets = async () => {
+    // todo loop over assets and remove them from this album
   };
 
   return (
@@ -108,7 +153,13 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
         renderItem={({ item, index }) => {
           return (
             <ImagePreview
-              onPress={() => viewInAssetCarousel(index)}
+              onLongPress={() => enableSelectMode(item)}
+              onPress={
+                isSelectModeActive
+                  ? () => toggleSelect(item)
+                  : () => viewInAssetCarousel(index)
+              }
+              isSelected={selectedAssets.includes(item)}
               uri={item}
             />
           );
@@ -116,28 +167,51 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
       />
       {/* Footer */}
       <View style={styles.footer}>
-        <Pressable onPress={toggleSortDirection} hitSlop={15}>
-          <View style={styles.buttonContainer}>
-            <MaterialCommunityIcons
-              name={
-                sortDirection === "asc"
-                  ? "sort-clock-ascending-outline"
-                  : "sort-clock-descending-outline"
-              }
-              size={28}
-              color="white"
-            />
-            <Text style={styles.buttonText}>
-              {sortDirection === "asc" ? "Älteste zuerst" : "Neueste zuerst"}
+        {isSelectModeActive ? (
+          <>
+            <Pressable onPress={exportAssets} hitSlop={15}>
+              <View style={styles.buttonContainer}>
+                <Feather name="share" size={24} color="white" />
+                <Text style={styles.buttonText}>Exportieren</Text>
+              </View>
+            </Pressable>
+            <Text style={{ color: "white", fontSize: 16 }}>
+              {selectedAssets.length} ausgewählt
             </Text>
-          </View>
-        </Pressable>
-        <Pressable onPress={importMedia} hitSlop={15}>
-          <View style={styles.buttonContainer}>
-            {/*<AntDesign name="addfile" size={28} color="white" />*/}
-            <Text style={styles.buttonText}>Bilder/Videos hinzufügen</Text>
-          </View>
-        </Pressable>
+            <Pressable onPress={deleteAssets} hitSlop={15}>
+              <View style={styles.buttonContainer}>
+                <Ionicons name="trash" size={24} color="white" />
+              </View>
+            </Pressable>
+          </>
+        ) : (
+          <>
+            <Pressable onPress={toggleSortDirection} hitSlop={15}>
+              <View style={styles.buttonContainer}>
+                <MaterialCommunityIcons
+                  name={
+                    sortDirection === "asc"
+                      ? "sort-clock-ascending-outline"
+                      : "sort-clock-descending-outline"
+                  }
+                  size={28}
+                  color="white"
+                />
+                <Text style={styles.buttonText}>
+                  {sortDirection === "asc"
+                    ? "Älteste zuerst"
+                    : "Neueste zuerst"}
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable onPress={importAssets} hitSlop={15}>
+              <View style={styles.buttonContainer}>
+                {/*<AntDesign name="addfile" size={28} color="white" />*/}
+                <Text style={styles.buttonText}>Bilder/Videos hinzufügen</Text>
+              </View>
+            </Pressable>
+          </>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -147,6 +221,14 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: "black",
+  },
+  headerRight: {
+    flexDirection: "row",
+  },
+  headerRightButton: {
+    color: "white",
+    fontSize: 16,
+    marginRight: 10,
   },
   footer: {
     flexDirection: "row",

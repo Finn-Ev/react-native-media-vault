@@ -4,21 +4,25 @@ import { AlbumListScreenNavigationProps } from "../navigation/types";
 import { getFullDirectoryPath, getIsImage } from "../util/MediaHelper";
 import { useState } from "react";
 import { ResizeMode, Video } from "expo-av";
+import { FontAwesome5 } from "@expo/vector-icons";
 import { getVideoDurationString } from "../util";
 
 interface ImagePreviewProps {
   uri: string;
   onPress: () => void;
+  onLongPress: () => void;
+  isSelected: boolean;
 }
 
-const ImagePreview: React.FC<ImagePreviewProps> = ({ uri, onPress }) => {
+const ImagePreview: React.FC<ImagePreviewProps> = ({
+  uri,
+  onPress,
+  onLongPress,
+  isSelected,
+}) => {
   const navigation = useNavigation<AlbumListScreenNavigationProps>();
   getFullDirectoryPath("");
   const [videoDuration, setVideoDuration] = useState(0);
-
-  const openActionSheet = () => {
-    console.log("openActionSheet");
-  };
 
   const isImage = getIsImage(uri);
 
@@ -26,8 +30,13 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ uri, onPress }) => {
     <Pressable
       style={styles.container}
       onPress={onPress}
-      onLongPress={openActionSheet}
+      onLongPress={onLongPress}
     >
+      {isSelected && (
+        <View style={styles.selectOverlay}>
+          <FontAwesome5 name="check-circle" size={30} color="lightgrey" />
+        </View>
+      )}
       {isImage ? (
         <Image
           style={styles.preview}
@@ -60,9 +69,6 @@ const styles = StyleSheet.create({
     maxWidth: "33.33%",
     aspectRatio: 1,
     padding: 2,
-    // borderRadius: 2,
-    // borderWidth: 1,
-    // borderColor: "lime",
   },
   preview: {
     aspectRatio: 1,
@@ -82,6 +88,18 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 10,
   },
+  selectOverlay: {
+    height: "100%",
+    width: "100%",
+    zIndex: 1,
+    position: "absolute",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    top: 2, // padding of container
+    left: 2, // padding of container
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  selectOverlayIcon: {},
 });
 
 export default ImagePreview;

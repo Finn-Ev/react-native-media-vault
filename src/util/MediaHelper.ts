@@ -59,6 +59,17 @@ export const deleteDirectory = async (dirName: string) => {
   }
 };
 
+export const deleteAsset = async (albumName: string, fileName: string) => {
+  if (!documentDirectoryExists()) return false;
+  try {
+    await FileSystem.deleteAsync(getFullDirectoryPath(albumName) + fileName);
+    return true;
+  } catch (e) {
+    console.warn(e.message);
+    return false;
+  }
+};
+
 const documentDirectoryExists = () => {
   if (!documentDirectory) {
     console.error("documentDirectory is not available");

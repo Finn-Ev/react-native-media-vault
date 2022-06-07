@@ -1,30 +1,38 @@
 import {
   FlatList,
   Image,
+  Pressable,
   SafeAreaView,
   StyleSheet,
   useWindowDimensions,
   View,
   ViewToken,
 } from "react-native";
-import { AssetsDetailScreenRouteProps } from "../navigation/types";
-import { useRoute } from "@react-navigation/native";
+import {
+  AssetsDetailScreenRouteProps,
+  AssetsDetailScreenScreenNavigationProps,
+} from "../navigation/types";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { getIsImage } from "../util/MediaHelper";
 import { Video } from "expo-av";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import ImageZoomView from "../components/ImageZoomView";
+import { AntDesign } from "@expo/vector-icons";
 
 interface AssetsDetailScreenProps {}
 
 const AssetsDetailScreen: React.FC<AssetsDetailScreenProps> = ({}) => {
+  const { width } = useWindowDimensions();
   const route = useRoute<AssetsDetailScreenRouteProps>();
+  const navigation = useNavigation<AssetsDetailScreenScreenNavigationProps>();
+
   const { assetUris, startIndex } = route.params;
 
   const insets = useSafeAreaInsets();
 
   const flatList = useRef<FlatList>(null);
 
-  const { width } = useWindowDimensions();
   const [activeImageIndex, setActiveImageIndex] = useState(startIndex);
 
   const onViewableItemsChanged = useRef(
@@ -34,6 +42,21 @@ const AssetsDetailScreen: React.FC<AssetsDetailScreenProps> = ({}) => {
       }
     }
   );
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Pressable onPress={() => navigation.goBack()} hitSlop={30}>
+          <AntDesign name="close" size={24} color="white" />
+        </Pressable>
+      ),
+    });
+  }, []);
+
+  const hideHeader = () => {
+    console.log("hideHeader");
+    navigation.setOptions({ headerRight: () => null });
+  };
 
   return (
     <SafeAreaView style={[styles.root, { marginTop: -insets.top }]}>
@@ -45,11 +68,7 @@ const AssetsDetailScreen: React.FC<AssetsDetailScreenProps> = ({}) => {
         ref={flatList}
         renderItem={({ item }) =>
           getIsImage(item) ? (
-            <Image
-              style={{ width, height: "100%" }}
-              source={{ uri: item }}
-              resizeMode={"center"}
-            />
+            <ImageZoomView uri={item} />
           ) : (
             <Video
               source={{ uri: item }}
