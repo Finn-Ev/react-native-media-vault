@@ -16,10 +16,18 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ uri, onPress }) => {
   getFullDirectoryPath("");
   const [videoDuration, setVideoDuration] = useState(0);
 
+  const openActionSheet = () => {
+    console.log("openActionSheet");
+  };
+
   const isImage = getIsImage(uri);
 
   return (
-    <Pressable style={styles.container} onPress={onPress}>
+    <Pressable
+      style={styles.container}
+      onPress={onPress}
+      onLongPress={openActionSheet}
+    >
       {isImage ? (
         <Image
           style={styles.preview}

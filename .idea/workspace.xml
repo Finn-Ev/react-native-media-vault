@@ -5,14 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6bbeae37-5161-4dd9-a061-f9297add82d8" name="Changes" comment="added single file import and sorting">
-      <change afterPath="$PROJECT_DIR$/src/screens/AssetsDetail.screen.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ImagePreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ImagePreview.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/navigation/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/navigation/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/navigation/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/navigation/types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/AlbumDetail.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/AlbumDetail.screen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/AssetSelector.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/AssetSelector.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/AssetsDetail.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/AssetsDetail.screen.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/util/MediaHelper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/MediaHelper.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

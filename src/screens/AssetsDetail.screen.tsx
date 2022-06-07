@@ -1,11 +1,10 @@
 import {
-  StyleSheet,
-  View,
-  Text,
-  SafeAreaView,
   FlatList,
   Image,
+  SafeAreaView,
+  StyleSheet,
   useWindowDimensions,
+  View,
   ViewToken,
 } from "react-native";
 import { AssetsDetailScreenRouteProps } from "../navigation/types";
@@ -13,12 +12,15 @@ import { useRoute } from "@react-navigation/native";
 import { getIsImage } from "../util/MediaHelper";
 import { Video } from "expo-av";
 import { useRef, useState } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface AssetsDetailScreenProps {}
 
 const AssetsDetailScreen: React.FC<AssetsDetailScreenProps> = ({}) => {
   const route = useRoute<AssetsDetailScreenRouteProps>();
   const { assetUris, startIndex } = route.params;
+
+  const insets = useSafeAreaInsets();
 
   const flatList = useRef<FlatList>(null);
 
@@ -34,7 +36,7 @@ const AssetsDetailScreen: React.FC<AssetsDetailScreenProps> = ({}) => {
   );
 
   return (
-    <SafeAreaView style={styles.root}>
+    <SafeAreaView style={[styles.root, { marginTop: -insets.top }]}>
       <FlatList
         initialScrollIndex={startIndex}
         horizontal={true}
@@ -44,14 +46,15 @@ const AssetsDetailScreen: React.FC<AssetsDetailScreenProps> = ({}) => {
         renderItem={({ item }) =>
           getIsImage(item) ? (
             <Image
-              style={[styles.image, { width, aspectRatio: 1 }]}
+              style={{ width, height: "100%" }}
               source={{ uri: item }}
+              resizeMode={"center"}
             />
           ) : (
             <Video
               source={{ uri: item }}
-              style={[styles.image, { width, aspectRatio: 1 }]}
-              shouldPlay={true}
+              style={{ width, height: "100%" }}
+              // shouldPlay={true}
               isLooping
               useNativeControls={true}
             />
@@ -71,20 +74,20 @@ const AssetsDetailScreen: React.FC<AssetsDetailScreenProps> = ({}) => {
         }}
         onViewableItemsChanged={onViewableItemsChanged.current}
       />
-      <View style={[styles.dotsContainer, { bottom: -25 }]}>
-        {assetUris.map((_, index) => (
-          <View
-            key={index}
-            style={[
-              styles.dot,
-              {
-                backgroundColor:
-                  activeImageIndex === index ? "#0095f6" : "grey",
-              },
-            ]}
-          />
-        ))}
-      </View>
+      {/*<View style={[styles.dotsContainer, { bottom: insets.bottom + 25 }]}>*/}
+      {/*  {assetUris.map((_, index) => (*/}
+      {/*    <View*/}
+      {/*      key={index}*/}
+      {/*      style={[*/}
+      {/*        styles.dot,*/}
+      {/*        {*/}
+      {/*          backgroundColor:*/}
+      {/*            activeImageIndex === index ? "#2997ff" : "grey",*/}
+      {/*        },*/}
+      {/*      ]}*/}
+      {/*    />*/}
+      {/*  ))}*/}
+      {/*</View>*/}
     </SafeAreaView>
   );
 };
@@ -94,10 +97,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
     justifyContent: "center",
     flex: 1,
-  },
-  image: {
-    width: "100%",
-    height: 200,
   },
   dotsContainer: {
     flexDirection: "row",

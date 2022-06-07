@@ -97,7 +97,7 @@ export const getImageInfo = async (albumName: string, fileName: string) => {
 
 export const getFullDirectoryPath = (dirName: string) => {
   // console.log("getFullDirectoryPath:", documentDirectory! + dirName + "/");
-  console.log(documentDirectory!);
+  // console.log(documentDirectory!);
   return documentDirectory! + dirName + "/";
 };
 
