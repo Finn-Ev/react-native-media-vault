@@ -4,27 +4,28 @@ import "react-native-get-random-values";
 import * as MediaLibrary from "expo-media-library";
 import { v4 as uuidv4 } from "uuid";
 
-export const createDirectory = async (dirName: string) => {
+export const createAlbumAsync = async (albumName: string) => {
   if (!documentDirectoryExists()) return false;
   try {
-    const newDirectoryPath = getFullDirectoryPath(dirName).replace(
-      /\s/g,
-      "%20"
+    const newDirectoryPath = getFullDirectoryPath(
+      "media/" + encodeURIComponent(albumName) // deal with " " and "/" etc.
     );
 
     const directoryExists = (await getInfoAsync(newDirectoryPath)).exists;
 
-    if (directoryExists) return;
+    if (directoryExists) return false;
 
     await FileSystem.makeDirectoryAsync(newDirectoryPath);
 
     return true;
   } catch (e) {
     console.warn(e.message);
+    return false;
   }
 };
 
 export const importAssetIntoAlbum = async (uri: string, albumName: string) => {
+  console.log(albumName);
   const fileName = uuidv4() + "." + getFileExtension(uri);
 
   await FileSystem.copyAsync({
@@ -46,11 +47,11 @@ export const exportAssetsIntoMediaLibrary = async (uris: string[]) => {
   }
 };
 
-export const readDirectory = async (dirName: string) => {
+export const getAssetsByAlbumName = async (albumName: string) => {
   if (!documentDirectoryExists()) return false;
   try {
     const directories = await FileSystem.readDirectoryAsync(
-      getFullDirectoryPath(dirName)
+      getFullDirectoryPath("media/" + decodeURIComponent(albumName))
     );
 
     return directories.filter((dirName) => dirName !== ".DS_Store");
@@ -59,10 +60,23 @@ export const readDirectory = async (dirName: string) => {
   }
 };
 
-export const deleteDirectory = async (dirName: string) => {
+export const getAllAlbums = async () => {
   if (!documentDirectoryExists()) return false;
   try {
-    await FileSystem.deleteAsync(getFullDirectoryPath(dirName));
+    const directories = await FileSystem.readDirectoryAsync(
+      getFullDirectoryPath("media")
+    );
+
+    return directories.filter((dirName) => dirName !== ".DS_Store");
+  } catch (e) {
+    console.warn(e);
+  }
+};
+
+export const deleteAlbum = async (albumName: string) => {
+  if (!documentDirectoryExists()) return false;
+  try {
+    await FileSystem.deleteAsync(getFullDirectoryPath(albumName));
     return true;
   } catch (e) {
     console.warn(e.message);
@@ -89,7 +103,7 @@ const documentDirectoryExists = () => {
   return true;
 };
 
-export const getImageUriByAlbumAndFileName = (
+export const getAssetUriByAlbumAndFileName = (
   albumName: string,
   imageName: string
 ) => {
@@ -99,7 +113,7 @@ export const getImageUriByAlbumAndFileName = (
   return getFullDirectoryPath("media/" + albumName) + imageName;
 };
 
-export const getImageInfoByUri = async (uri: string) => {
+export const getAssetInfoByUri = async (uri: string) => {
   try {
     return FileSystem.getInfoAsync(uri);
   } catch (e) {
@@ -107,11 +121,32 @@ export const getImageInfoByUri = async (uri: string) => {
   }
 };
 
-export const getImageInfo = async (albumName: string, fileName: string) => {
+export const getAssetInfo = async (albumName: string, fileName: string) => {
   try {
     const uri = getFullDirectoryPath("media/" + albumName) + fileName;
 
     return FileSystem.getInfoAsync(uri);
+  } catch (e) {
+    console.warn(e.message);
+  }
+};
+
+export const getAlbumInfo = async (albumName: string) => {
+  try {
+    const uri = getFullDirectoryPath("media/" + albumName);
+
+    return FileSystem.getInfoAsync(uri);
+  } catch (e) {
+    console.warn(e.message);
+  }
+};
+
+export const hasMediaRootBeenCreated = async () => {
+  try {
+    const uri = getFullDirectoryPath("media");
+
+    const album = await FileSystem.getInfoAsync(uri);
+    return album.exists;
   } catch (e) {
     console.warn(e.message);
   }

@@ -4,11 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6bbeae37-5161-4dd9-a061-f9297add82d8" name="Changes" comment="image-selection mode, preparation for deletion and export of assets">
+    <list default="true" id="6bbeae37-5161-4dd9-a061-f9297add82d8" name="Changes" comment="deletion and library-export of assets">
+      <change afterPath="$PROJECT_DIR$/assets/placeholder-image.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AlbumPreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AlbumPreview.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/navigation/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/navigation/types.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/AlbumDetail.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/AlbumDetail.screen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/AssetSelector.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/AssetSelector.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/AlbumList.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/AlbumList.screen.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/util/MediaHelper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/MediaHelper.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,6 +59,7 @@
       <recent name="$PROJECT_DIR$/src/components" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/assets" />
       <recent name="$PROJECT_DIR$/src/screens" />
       <recent name="$PROJECT_DIR$/src/screens/AlbumDetail" />
       <recent name="$PROJECT_DIR$/src/components" />
@@ -85,6 +91,7 @@
       <workItem from="1654535922468" duration="2037000" />
       <workItem from="1654542796845" duration="15927000" />
       <workItem from="1654596661487" duration="11119000" />
+      <workItem from="1654699941992" duration="14193000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1654472318477</created>
@@ -128,7 +135,14 @@
       <option name="project" value="LOCAL" />
       <updated>1654630383050</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="deletion and library-export of assets">
+      <created>1654641176215</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1654641176215</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -152,7 +166,8 @@
     <MESSAGE value="added single file import and sorting" />
     <MESSAGE value="image display fixes" />
     <MESSAGE value="image-selection mode, preparation for deletion and export of assets" />
-    <option name="LAST_COMMIT_MESSAGE" value="image-selection mode, preparation for deletion and export of assets" />
+    <MESSAGE value="deletion and library-export of assets" />
+    <option name="LAST_COMMIT_MESSAGE" value="deletion and library-export of assets" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

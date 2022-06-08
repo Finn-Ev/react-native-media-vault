@@ -1,6 +1,5 @@
 import {
   Alert,
-  Button,
   FlatList,
   Pressable,
   SafeAreaView,
@@ -17,11 +16,12 @@ import { useEffect, useState } from "react";
 import {
   deleteAsset,
   exportAssetsIntoMediaLibrary,
-  getImageInfo,
-  readDirectory,
+  getAssetInfo,
+  getAssetsByAlbumName,
 } from "../util/MediaHelper";
 import ImagePreview from "../components/ImagePreview";
-import { MaterialCommunityIcons, Feather, Ionicons } from "@expo/vector-icons";
+import * as Haptics from "expo-haptics";
+import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 interface AlbumDetailProps {}
 
@@ -43,10 +43,13 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
     fetchAssets();
   }, []);
 
-  // fetch assets again when assets have been imported
   useEffect(() => {
-    fetchAssets();
-  }, [route.params.assetsHaveBeenImported]);
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchAssets();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   // change headerRight when selectMode is active or images have changed
   useEffect(() => {
@@ -61,27 +64,23 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
       navigation.setOptions({
         headerRight: () => (
           <View style={styles.headerRight}>
-            <Text
-              onPress={selectAllAssets}
-              style={[styles.headerRightButton, { marginLeft: 5 }]}
-            >
-              Alle auswählen
-            </Text>
-            <Text onPress={disableSelectMode} style={styles.headerRightButton}>
-              Abbrechen
-            </Text>
+            <Pressable onPress={selectAllAssets} hitSlop={10}>
+              <Text style={[styles.headerRightButton, { marginLeft: 5 }]}>
+                Alle auswählen
+              </Text>
+            </Pressable>
+            <Pressable onPress={disableSelectMode} hitSlop={10}>
+              <Text style={styles.headerRightButton}>Abbrechen</Text>
+            </Pressable>
           </View>
         ),
       });
     } else {
       navigation.setOptions({
         headerRight: () => (
-          <Text
-            onPress={() => enableSelectMode()}
-            style={styles.headerRightButton}
-          >
-            Auswählen
-          </Text>
+          <Pressable onPress={() => enableSelectMode()} hitSlop={20}>
+            <Text style={styles.headerRightButton}>Auswählen</Text>
+          </Pressable>
         ),
       });
     }
@@ -114,6 +113,7 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
   const enableSelectMode = (firstItemUri?: string) => {
     setIsSelectModeActive(true);
     if (firstItemUri) setSelectedAssets([firstItemUri]);
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
   };
 
   const disableSelectMode = () => {
@@ -123,13 +123,13 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
   };
 
   const fetchAssets = async () => {
-    const fileNames = await readDirectory("media/" + albumName);
+    const fileNames = await getAssetsByAlbumName(albumName);
 
     if (fileNames && fileNames.length) {
       const metaInfoImages = [];
 
       for (const fileName of fileNames) {
-        const info = await getImageInfo(albumName, fileName);
+        const info = await getAssetInfo(albumName, fileName);
         if (info) metaInfoImages.push(info);
       }
 
@@ -153,11 +153,10 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
 
   const importAssets = async () => {
     navigation.navigate("AssetSelector", { albumName });
-    navigation.setParams({ assetsHaveBeenImported: false }); // in case someone imports something back to back
   };
 
   const exportSelectedAssets = async () => {
-    if (loading) return;
+    if (loading || !selectedAssets.length) return;
 
     setLoading(true);
 
@@ -187,7 +186,7 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
   };
 
   const deleteSelectedAssets = async () => {
-    if (loading) return;
+    if (loading || !selectedAssets.length) return;
     Alert.alert(
       "Löschen",
       "Sollen die ausgewählten Dateien wirklich gelöscht werden?",
