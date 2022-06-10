@@ -8,7 +8,7 @@ import {
   AssetSelectorScreenNavigationProps,
   AssetSelectorScreenRouteProps,
 } from "../navigation/types";
-import { importAssetIntoAlbum } from "../util/MediaHelper";
+import { importAssetIntoFSAlbum } from "../util/MediaHelper";
 import * as MediaLibrary from "expo-media-library";
 
 interface AssetSelectorProps {}
@@ -26,13 +26,12 @@ const AssetSelectorScreen: React.FC<AssetSelectorProps> = ({}) => {
     //   });
     navigation.navigate("AlbumDetail", {
       albumName: route.params.albumName,
-      assetsHaveBeenImported: true,
     });
   };
 
   const importMedia = async (data: any) => {
     for (const asset of data) {
-      await importAssetIntoAlbum(asset.localUri, route.params.albumName);
+      await importAssetIntoFSAlbum(asset.localUri, route.params.albumName);
     }
 
     const assetIds = data.map((asset: any) => asset.id);

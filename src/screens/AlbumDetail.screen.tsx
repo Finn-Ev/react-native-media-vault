@@ -14,31 +14,37 @@ import {
 } from "../navigation/types";
 import { useEffect, useState } from "react";
 import {
-  deleteAsset,
+  deleteAssetFromFS,
   exportAssetsIntoMediaLibrary,
-  getAssetInfo,
-  getAssetsByAlbumName,
+  getFSAssetInfo,
+  getAlbumAssetsFromFS,
 } from "../util/MediaHelper";
 import ImagePreview from "../components/ImagePreview";
 import * as Haptics from "expo-haptics";
 import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { useAlbumContext } from "../context/AlbumContext";
 
 interface AlbumDetailProps {}
 
 const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
   const route = useRoute<AlbumDetailScreenRouteProps>();
-  const { albumName } = route.params;
+
+  const albumContext = useAlbumContext();
+  if (!albumContext) throw new Error("MetaAlbumContext not found");
+  const albumMetaInfo = albumContext.getMetaAlbum(route.params.albumName);
+  if (!albumMetaInfo) throw new Error("AlbumMetaInfo not found");
+
   const navigation = useNavigation<AlbumDetailScreenNavigationProps>();
-  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+
   const [loading, setLoading] = useState<boolean>(false);
 
   const [selectedAssets, setSelectedAssets] = useState<string[]>([]);
   const [isSelectModeActive, setIsSelectModeActive] = useState(false);
 
-  const [images, setImages] = useState<string[]>([]);
+  const [assets, setAssets] = useState<string[]>([]);
 
   useEffect(() => {
-    navigation.setOptions({ headerTitle: albumName });
+    navigation.setOptions({ headerTitle: route.params.albumName });
 
     fetchAssets();
   }, []);
@@ -53,7 +59,7 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
 
   // change headerRight when selectMode is active or images have changed
   useEffect(() => {
-    if (images.length === 0) {
+    if (assets.length === 0) {
       navigation.setOptions({
         headerRight: () => null,
       });
@@ -77,25 +83,28 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
       });
     } else {
       navigation.setOptions({
-        headerRight: () => (
-          <Pressable onPress={() => enableSelectMode()} hitSlop={20}>
-            <Text style={styles.headerRightButton}>Auswählen</Text>
-          </Pressable>
-        ),
+        // headerRight: () => (
+        //   <Pressable onPress={() => enableSelectMode()} hitSlop={20}>
+        //     <Text style={styles.headerRightButton}>Auswählen</Text>
+        //   </Pressable>
+        // ),
+        headerRight: () => null,
       });
     }
-  }, [isSelectModeActive, images]);
+  }, [isSelectModeActive, assets]);
 
   const viewInAssetCarousel = (startIndex: number) => {
     navigation.navigate("AssetsDetail", {
-      assetUris: images,
+      assetUris: assets,
       startIndex,
     });
   };
 
   const toggleSortDirection = () => {
-    setImages(images.reverse());
-    setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    // setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    albumContext.toggleAlbumSortDirection(albumMetaInfo.name);
+
+    fetchAssets();
   };
 
   const toggleSelect = (uri: string) => {
@@ -107,7 +116,7 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
   };
 
   const selectAllAssets = () => {
-    setSelectedAssets(images);
+    setSelectedAssets(assets);
   };
 
   const enableSelectMode = (firstItemUri?: string) => {
@@ -122,37 +131,49 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
     fetchAssets();
   };
 
+  useEffect(() => {
+    fetchAssets();
+  }, [albumMetaInfo.selectedSortDirection]);
+
   const fetchAssets = async () => {
-    const fileNames = await getAssetsByAlbumName(albumName);
+    const fileNames = await getAlbumAssetsFromFS(route.params.albumName);
 
     if (fileNames && fileNames.length) {
       const metaInfoImages = [];
 
       for (const fileName of fileNames) {
-        const info = await getAssetInfo(albumName, fileName);
+        const info = await getFSAssetInfo(route.params.albumName, fileName);
         if (info) metaInfoImages.push(info);
       }
 
       if (metaInfoImages.length) {
-        // default is ascending; the oldest file first
-
-        metaInfoImages.sort((a, b) => {
-          if (a && b) {
-            if (a.modificationTime! <= b.modificationTime!) return -1;
-            else return 1;
-          }
-          return 0;
-        });
+        if (albumMetaInfo.selectedSortDirection === "desc") {
+          metaInfoImages.sort((a, b) => {
+            if (a && b) {
+              if (a.modificationTime! <= b.modificationTime!) return 1;
+              else return -1;
+            }
+            return 0;
+          });
+        } else {
+          metaInfoImages.sort((a, b) => {
+            if (a && b) {
+              if (a.modificationTime! > b.modificationTime!) return 1;
+              else return -1;
+            }
+            return 0;
+          });
+        }
 
         const imageUris = metaInfoImages.map((info) => info.uri);
 
-        setImages(imageUris);
+        setAssets(imageUris);
       }
-    } else setImages([]);
+    } else setAssets([]);
   };
 
   const importAssets = async () => {
-    navigation.navigate("AssetSelector", { albumName });
+    navigation.navigate("AssetSelector", { albumName: route.params.albumName });
   };
 
   const exportSelectedAssets = async () => {
@@ -163,7 +184,7 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
     await exportAssetsIntoMediaLibrary(selectedAssets);
     Alert.alert(
       "Export erfolgreich",
-      "Sollen  die Kopien der exportierten Dateien gelöscht werden?",
+      "Sollen die Kopien der exportierten Dateien gelöscht werden?",
       [
         {
           text: "Abbrechen",
@@ -174,7 +195,7 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
           text: "Löschen",
           onPress: async () => {
             for (const uri of selectedAssets) {
-              await deleteAsset(uri);
+              await deleteAssetFromFS(uri);
             }
             disableSelectMode();
             await fetchAssets();
@@ -200,10 +221,10 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
           text: "Löschen",
           onPress: async () => {
             for (const uri of selectedAssets) {
-              await deleteAsset(uri);
+              await deleteAssetFromFS(uri);
             }
-            disableSelectMode();
             await fetchAssets();
+            disableSelectMode();
             setLoading(false);
           },
         },
@@ -213,11 +234,11 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
 
   return (
     <SafeAreaView style={styles.root}>
-      {images.length > 0 ? (
+      {assets.length > 0 ? (
         <>
           <FlatList
             numColumns={3}
-            data={images}
+            data={assets}
             renderItem={({ item, index }) => {
               return (
                 <ImagePreview
@@ -257,15 +278,15 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
                   <View style={styles.buttonContainer}>
                     <MaterialCommunityIcons
                       name={
-                        sortDirection === "asc"
-                          ? "sort-clock-ascending-outline"
-                          : "sort-clock-descending-outline"
+                        albumMetaInfo.selectedSortDirection === "asc"
+                          ? "sort-clock-descending-outline"
+                          : "sort-clock-ascending-outline"
                       }
                       size={28}
                       color="white"
                     />
                     <Text style={styles.buttonText}>
-                      {sortDirection === "asc"
+                      {albumMetaInfo.selectedSortDirection === "asc"
                         ? "Älteste zuerst"
                         : "Neueste zuerst"}
                     </Text>

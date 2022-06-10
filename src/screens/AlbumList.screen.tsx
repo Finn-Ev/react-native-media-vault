@@ -8,97 +8,123 @@ import {
   View,
 } from "react-native";
 import { useEffect, useState } from "react";
-import {
-  createAlbumAsync,
-  getAlbumInfo,
-  getAllAlbums,
-  hasMediaRootBeenCreated,
-} from "../util/MediaHelper";
+import { initMediaRoot } from "../util/MediaHelper";
 import AlbumPreview from "../components/AlbumPreview";
 import CreateAlbumDialog from "../components/CreateAlbumDialog";
-import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { AlbumListScreenNavigationProps } from "../navigation/types";
+import { useAlbumContext } from "../context/AlbumContext";
+import { useActionSheet } from "@expo/react-native-action-sheet";
+import * as Haptics from "expo-haptics";
+import * as FS from "expo-file-system";
 
 interface AlbumListScreenProps {}
 
 const AlbumListScreen: React.FC<AlbumListScreenProps> = ({}) => {
   const navigation = useNavigation<AlbumListScreenNavigationProps>();
 
-  const [albums, setAlbums] = useState<string[]>([""]);
+  const { showActionSheetWithOptions } = useActionSheet();
+
   const [showDialog, setShowDialog] = useState(false);
 
-  const createAlbum = async (name: string) => {
-    const result = await createAlbumAsync(name);
-    if (result) {
-      Alert.alert("Das Album wurde erstellt");
-      setShowDialog(false);
-      await fetchAlbums();
-    }
-  };
+  const albumContext = useAlbumContext();
+  if (!albumContext) throw new Error("MetaAlbumContext not found");
 
-  const fetchAlbums = async () => {
-    const albums = await getAllAlbums();
-    if (albums && albums.length > 0) {
-      setAlbums(albums);
-    }
-    if (albums && albums.length > 0) {
-      const metaInfoAlbums = [];
-
-      for (const album of albums) {
-        const info = await getAlbumInfo(album);
-        if (info) {
-          metaInfoAlbums.push(info);
-        }
-      }
-
-      metaInfoAlbums.sort((a, b) => {
-        if (a && b) {
-          if (a.uri.toLowerCase() < b.uri.toLowerCase()) return -1;
-          // if (a.modificationTime! <= b.modificationTime!) return -1;
-          else return 1;
-        }
-        return 0;
-      });
-
-      setAlbums(
-        metaInfoAlbums.map((album) => {
-          return album.uri.split("/").reverse()[1];
-        })
-      );
-    }
-  };
+  // useEffect(() => {
+  //   FS.deleteAsync(FS.documentDirectory! + "media/");
+  //   FS.deleteAsync(FS.documentDirectory! + "RCTAsyncLocalStorage/");
+  // }, []);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      fetchAlbums();
-    });
-
-    return unsubscribe;
-  }, [navigation]);
-
-  useEffect(() => {
-    hasMediaRootBeenCreated().then((result) => {
+    (async () => {
+      const wasMediaRootJustAdded = await initMediaRoot();
       // init directory structure
-      if (!result) {
-        createAlbum("media").then(() =>
-          createAlbum("media/Album1").then(() => fetchAlbums())
-        );
-      } else fetchAlbums();
-    });
+      if (wasMediaRootJustAdded) {
+        await albumContext.addAlbum("Album1");
+      }
+    })();
   }, []);
 
-  const changeSortDirection = () => {
-    // TODO
+  const openAlbumActionSheet = (albumName: string) => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    const options = [
+      `Album "${albumName}" umbenennen`,
+      `Album "${albumName}" löschen`,
+      "Abbrechen",
+    ];
+    const destructiveButtonIndex = 1;
+    const cancelButtonIndex = 2;
+
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        destructiveButtonIndex,
+      },
+      (buttonIndex) => {
+        if (buttonIndex === 0) {
+          Alert.prompt(
+            `Album "${albumName}" umbenennen`,
+            "",
+            (newAlbumName) => {
+              if (newAlbumName) {
+                console.log("newAlbumName", newAlbumName);
+                albumContext.editAlbumName(albumName, newAlbumName);
+              }
+            }
+          );
+        }
+        if (buttonIndex === 1) {
+          Alert.alert(
+            "Album löschen",
+            `Möchtest du das Album "${albumName}" wirklich löschen?`,
+            [
+              {
+                text: "Abbrechen",
+                style: "cancel",
+              },
+              {
+                text: "Löschen",
+                onPress: () => albumContext.deleteAlbum(albumName),
+              },
+            ]
+          );
+        }
+      }
+    );
+  };
+
+  const createAlbum = async (name: string) => {
+    const successful = await albumContext.addAlbum(name);
+
+    if (successful) {
+      Alert.alert("Das Album wurde erstellt");
+      setShowDialog(false);
+    }
+  };
+
+  const deleteAlbum = async (name: string) => {
+    const successful = await albumContext.deleteAlbum(name);
+
+    if (successful) {
+      Alert.alert("Das Album wurde gelöscht");
+      setShowDialog(false);
+    }
   };
 
   return (
     <SafeAreaView style={styles.root}>
       <FlatList
-        data={albums}
-        renderItem={({ item }) => <AlbumPreview key={item} albumName={item} />}
+        data={albumContext.metaAlbums}
+        renderItem={({ item }) => (
+          <AlbumPreview
+            onLongPress={() => openAlbumActionSheet(item.name)}
+            key={item.name}
+            albumName={item.name}
+          />
+        )}
         numColumns={2}
-        showsVerticalScrollIndicator={false}
         style={{ marginLeft: -2, marginRight: -2 }}
       />
 
@@ -110,9 +136,6 @@ const AlbumListScreen: React.FC<AlbumListScreenProps> = ({}) => {
 
       {/* Footer */}
       <View style={styles.footer}>
-        <Pressable onPress={changeSortDirection}>
-          {/*<MaterialCommunityIcons name="sort-variant" size={30} color="white" />*/}
-        </Pressable>
         <Pressable
           style={{ flexDirection: "row", alignItems: "center" }}
           onPress={() => {
@@ -137,10 +160,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   footer: {
-    flexDirection: "row",
+    flexDirection: "row-reverse",
     paddingHorizontal: 10,
     justifyContent: "space-between",
     alignItems: "center",
+
     width: "100%",
     paddingVertical: 10,
   },

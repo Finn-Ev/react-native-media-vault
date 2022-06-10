@@ -12,6 +12,7 @@
   "dependencies": {
     "@expo/react-native-action-sheet": "^3.13.0",
     "@openspacelabs/react-native-zoomable-view": "^2.0.4",
+    "@react-native-async-storage/async-storage": "~1.17.3",
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/native-stack": "^6.6.2",
     "expo": "~45.0.0",

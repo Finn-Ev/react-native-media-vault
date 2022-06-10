@@ -1,53 +1,102 @@
-import { Image, Pressable, StyleSheet, Text } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AlbumListScreenNavigationProps } from "../navigation/types";
 import {
-  getAssetsByAlbumName,
-  getAssetUriByAlbumAndFileName,
+  getAlbumAssetsFromFS,
+  getAssetUriFromFSByAlbumAndFileName,
+  getFSAssetInfo,
   getIsImage,
 } from "../util/MediaHelper";
 import { useEffect, useState } from "react";
 import { ResizeMode, Video } from "expo-av";
+import { useAlbumContext } from "../context/AlbumContext";
 
 interface ImagePreviewProps {
   albumName: string;
+  onLongPress: () => void;
 }
 
-const ImagePreview: React.FC<ImagePreviewProps> = ({ albumName }) => {
+const ImagePreview: React.FC<ImagePreviewProps> = ({
+  albumName,
+  onLongPress,
+}) => {
   const navigation = useNavigation<AlbumListScreenNavigationProps>();
 
-  const [thumbnailUri, setThumbnailUri] = useState<string>("");
+  const albumContext = useAlbumContext();
+  if (!albumContext) throw new Error("MetaAlbumContext not found");
+  const albumMetaInfo = albumContext.getMetaAlbum(albumName);
+  if (!albumMetaInfo) throw new Error("AlbumMetaInfo not found");
+
+  const [thumbnailUri, setThumbnailUri] = useState("");
 
   const onPress = () => {
     navigation.navigate("AlbumDetail", { albumName });
   };
 
   const getAlbumThumbnail = async () => {
-    const assets = await getAssetsByAlbumName(albumName);
-    if (assets && assets.length) {
-      const uri = getAssetUriByAlbumAndFileName(albumName, assets[0]);
+    const metaInfoImages = [];
 
-      if (uri) {
-        setThumbnailUri(uri);
+    let assets = await getAlbumAssetsFromFS(albumName);
+    if (!assets) return;
+
+    for (const asset of assets) {
+      const info = await getFSAssetInfo(albumName, asset);
+      if (info) metaInfoImages.push(info);
+    }
+
+    if (metaInfoImages.length) {
+      if (albumMetaInfo.selectedSortDirection === "desc") {
+        metaInfoImages.sort((a, b) => {
+          if (a && b) {
+            if (a.modificationTime! < b.modificationTime!) return 1;
+            else return -1;
+          }
+          return 0;
+        });
+      } else {
+        metaInfoImages.sort((a, b) => {
+          if (a && b) {
+            if (a.modificationTime! > b.modificationTime!) return 1;
+            else return -1;
+          }
+          return 0;
+        });
       }
-    } else {
-      setThumbnailUri("");
+      assets = metaInfoImages.map((info) => info.uri);
+
+      if (assets && assets.length) {
+        const uri = assets.pop();
+        if (uri) {
+          console.log("uri", uri);
+          setThumbnailUri(uri);
+        }
+      }
     }
   };
 
   useEffect(() => {
     getAlbumThumbnail();
-  }, []);
+  }, [albumMetaInfo.selectedSortDirection]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       getAlbumThumbnail();
     });
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation, albumMetaInfo.selectedSortDirection]);
 
   return (
-    <Pressable style={styles.container} onPress={onPress}>
+    <Pressable
+      style={styles.container}
+      onPress={onPress}
+      onLongPress={onLongPress}
+    >
       {!thumbnailUri || getIsImage(thumbnailUri) ? (
         <Image
           style={styles.preview}
