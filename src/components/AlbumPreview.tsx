@@ -51,30 +51,29 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
     }
 
     if (metaInfoImages.length) {
-      if (albumMetaInfo.selectedSortDirection === "desc") {
-        metaInfoImages.sort((a, b) => {
-          if (a && b) {
-            if (a.modificationTime! < b.modificationTime!) return 1;
-            else return -1;
-          }
-          return 0;
-        });
-      } else {
-        metaInfoImages.sort((a, b) => {
-          if (a && b) {
-            if (a.modificationTime! > b.modificationTime!) return 1;
-            else return -1;
-          }
-          return 0;
-        });
-      }
+      metaInfoImages.sort((a, b) => {
+        if (a && b) {
+          if (a.modificationTime! < b.modificationTime!) return 1;
+          else return -1;
+        }
+        return 0;
+      });
+
       assets = metaInfoImages.map((info) => info.uri);
 
       if (assets && assets.length) {
-        const uri = assets.pop();
-        if (uri) {
-          console.log("uri", uri);
-          setThumbnailUri(uri);
+        if (albumMetaInfo.selectedSortDirection === "desc") {
+          const uri = assets.pop();
+          if (uri) {
+            console.log("uri", uri);
+            setThumbnailUri(uri);
+          }
+        } else {
+          const uri = assets[0];
+          if (uri) {
+            console.log("uri", uri);
+            setThumbnailUri(uri);
+          }
         }
       }
     }
