@@ -3,6 +3,7 @@ const { documentDirectory, getInfoAsync } = FileSystem;
 import "react-native-get-random-values";
 import * as MediaLibrary from "expo-media-library";
 import { v4 as uuidv4 } from "uuid";
+import { IAssetToImport } from "../context/ImportAssetsContext";
 
 export const initMediaRoot = async () => {
   try {
@@ -93,10 +94,11 @@ export const importAssetIntoFSAlbum = async (
 };
 
 export const importAssetsIntoFSAlbum = async (
-  uris: string[],
+  assets: IAssetToImport[],
   albumName: string
 ) => {
-  for (const uri of uris) {
+  const localUris = assets.map((asset) => asset.localUri);
+  for (const uri of localUris) {
     const fileName = uuidv4() + "." + getFileExtension(uri);
 
     await FileSystem.copyAsync({

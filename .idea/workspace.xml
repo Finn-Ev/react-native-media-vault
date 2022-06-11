@@ -4,32 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6bbeae37-5161-4dd9-a061-f9297add82d8" name="Changes" comment="optimised getThumbnail sorting">
-      <change afterPath="$PROJECT_DIR$/src/components/ImportAssets/AlbumPreview.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ImportAssets/FooterMenu.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/util/LoadingIndicator.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/context/AuthContext/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/context/ImportAssetsContext/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/navigation/AuthStackNavigator.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/navigation/GalleryStackNavigator.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/navigation/ImportAssetsStackNavigator.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/screens/Auth/AuthUnlock.screen.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/screens/ImportAssets/MediaAlbumDetail.screen.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/screens/ImportAssets/MediaAlbumList.screen.tsx" afterDir="false" />
+    <list default="true" id="6bbeae37-5161-4dd9-a061-f9297add82d8" name="Changes" comment="refactored navigation and built custom asset-Picker">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AlbumPreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Gallery/AlbumPreview.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/CreateAlbumDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Gallery/CreateAlbumDialog.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ImagePreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ImagePreview.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ImageZoomView.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Gallery/ImageZoomView.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/navigation/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/navigation/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/navigation/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/navigation/types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/AlbumDetail.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Gallery/AlbumDetail.screen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/AlbumList.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Gallery/AlbumList.screen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/AssetSelector.screen.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/AssetsDetail.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Gallery/AssetsDetail.screen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Auth.screen.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ImportAssets/FooterMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ImportAssets/FooterMenu.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/context/ImportAssetsContext/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/ImportAssetsContext/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/Gallery/AlbumDetail.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Gallery/AlbumDetail.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/ImportAssets/MediaAlbumDetail.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/ImportAssets/MediaAlbumDetail.screen.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/util/MediaHelper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/MediaHelper.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -116,7 +96,7 @@
       <workItem from="1654777200248" duration="31441000" />
       <workItem from="1654882790539" duration="2784000" />
       <workItem from="1654892240539" duration="11637000" />
-      <workItem from="1654941159604" duration="5773000" />
+      <workItem from="1654941159604" duration="8324000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1654472318477</created>
@@ -188,7 +168,14 @@
       <option name="project" value="LOCAL" />
       <updated>1654820877046</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="refactored navigation and built custom asset-Picker">
+      <created>1654947631919</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1654947631919</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -216,7 +203,8 @@
     <MESSAGE value="album thumbnail and further improvements" />
     <MESSAGE value="save albumAsset sorting-direction in async-storage and adjusted album-thumbnail functionality accordingly" />
     <MESSAGE value="optimised getThumbnail sorting" />
-    <option name="LAST_COMMIT_MESSAGE" value="optimised getThumbnail sorting" />
+    <MESSAGE value="refactored navigation and built custom asset-Picker" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactored navigation and built custom asset-Picker" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

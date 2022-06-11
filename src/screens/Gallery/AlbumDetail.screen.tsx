@@ -350,6 +350,7 @@ const styles = StyleSheet.create({
   buttonText: {
     marginLeft: 5,
     color: "white",
+    fontSize: 15,
   },
   emptyAlbum: {
     marginTop: 30,

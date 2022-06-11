@@ -17,10 +17,6 @@ const FooterMenu: React.FC<ImportAssetsFooterProps> = ({}) => {
 
   const importSelectedAssets = async () => {
     await importAssetsContext?.importSelectedAssetsIntoFS();
-    Alert.alert(
-      "Erfolg",
-      "Die ausgewählten Dateien wurden erfolgreich importiert."
-    );
     // @ts-ignore
     navigation.navigate("Gallery");
   };
@@ -58,7 +54,7 @@ const styles = StyleSheet.create({
   buttonText: {
     marginRight: 5,
     color: "white",
-    fontSize: 16,
+    fontSize: 15,
   },
 });
 

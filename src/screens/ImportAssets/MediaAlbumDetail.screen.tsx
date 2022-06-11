@@ -8,7 +8,10 @@ import * as MediaLibrary from "expo-media-library";
 import { useEffect, useState } from "react";
 import ImagePreview from "../../components/ImagePreview";
 import LoadingIndicator from "../../components/util/LoadingIndicator";
-import { useImportAssetsContext } from "../../context/ImportAssetsContext";
+import {
+  IAssetToImport,
+  useImportAssetsContext,
+} from "../../context/ImportAssetsContext";
 import FooterMenu from "../../components/ImportAssets/FooterMenu";
 
 interface MediaAlbumDetailScreenProps {}
@@ -17,7 +20,7 @@ const MediaAlbumDetailScreen: React.FC<MediaAlbumDetailScreenProps> = ({}) => {
   const navigation = useNavigation<MediaAlbumDetailScreenNavigationProps>();
   const route = useRoute<MediaAlbumDetailScreenRouteProps>();
 
-  const [assetUris, setAssetUris] = useState<string[]>([]);
+  const [assetUris, setAssetUris] = useState<IAssetToImport[]>([]);
   const [loading, setLoading] = useState(true);
 
   const importAssetsContext = useImportAssetsContext();
@@ -30,14 +33,17 @@ const MediaAlbumDetailScreen: React.FC<MediaAlbumDetailScreenProps> = ({}) => {
       first: 20,
       mediaType: ["photo", "video"],
     });
-    const localUris: string[] = [];
+    const assets: IAssetToImport[] = [];
     for (const asset of items.assets) {
-      const { localUri } = await MediaLibrary.getAssetInfoAsync(asset);
-      if (localUri) {
-        localUris.push(localUri);
+      const { localUri, id } = await MediaLibrary.getAssetInfoAsync(asset);
+      if (localUri && id) {
+        assets.push({
+          localUri,
+          id,
+        });
       }
     }
-    setAssetUris(localUris);
+    setAssetUris(assets);
     setLoading(false);
   };
 
@@ -56,7 +62,7 @@ const MediaAlbumDetailScreen: React.FC<MediaAlbumDetailScreenProps> = ({}) => {
         data={assetUris}
         renderItem={({ item }) => (
           <ImagePreview
-            uri={item}
+            uri={item.localUri}
             onPress={() => importAssetsContext.toggleAsset(item)}
             isSelected={importAssetsContext?.assetsToImport.includes(item)}
             onLongPress={() => {}}
