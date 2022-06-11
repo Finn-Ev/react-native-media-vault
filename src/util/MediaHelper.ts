@@ -3,7 +3,7 @@ const { documentDirectory, getInfoAsync } = FileSystem;
 import "react-native-get-random-values";
 import * as MediaLibrary from "expo-media-library";
 import { v4 as uuidv4 } from "uuid";
-import { IAssetToImport } from "../context/ImportAssetsContext";
+import { IImportAsset } from "../context/ImportAssetsContext";
 
 export const initMediaRoot = async () => {
   try {
@@ -24,11 +24,10 @@ export const createAlbumInFS = async (albumName: string) => {
   if (!documentDirectoryExists()) return false;
   try {
     const newDirectoryPath = getFullDirectoryPath(
-      "media/" + encodeURIComponent(albumName) // deal with " " and "/" etc.
+      "media/" + albumName // TODO deal with " " and "/" etc.
     );
 
     const directoryExists = (await getInfoAsync(newDirectoryPath)).exists;
-
     if (directoryExists) return false;
 
     await FileSystem.makeDirectoryAsync(newDirectoryPath);
@@ -68,33 +67,8 @@ export const renameAlbumInFS = async (
   }
 };
 
-export const getAllAlbumsFromFS = async () => {
-  if (!documentDirectoryExists()) return false;
-  try {
-    const directories = await FileSystem.readDirectoryAsync(
-      getFullDirectoryPath("media")
-    );
-
-    return directories.filter((dirName) => dirName !== ".DS_Store");
-  } catch (e) {
-    console.warn(e);
-  }
-};
-
-export const importAssetIntoFSAlbum = async (
-  uri: string,
-  albumName: string
-) => {
-  const fileName = uuidv4() + "." + getFileExtension(uri);
-
-  await FileSystem.copyAsync({
-    from: uri,
-    to: getFullDirectoryPath("media/" + albumName) + fileName,
-  });
-};
-
 export const importAssetsIntoFSAlbum = async (
-  assets: IAssetToImport[],
+  assets: IImportAsset[],
   albumName: string
 ) => {
   const localUris = assets.map((asset) => asset.localUri);
@@ -139,24 +113,6 @@ export const deleteAssetFromFS = async (uri: string) => {
   } catch (e) {
     console.warn(e.message);
     return false;
-  }
-};
-
-// export const getFSAssetInfoByUri = async (uri: string) => {
-//   try {
-//     return FileSystem.getInfoAsync(uri);
-//   } catch (e) {
-//     console.warn(e.message);
-//   }
-// };
-
-export const getFSAlbumInfo = async (albumName: string) => {
-  try {
-    const uri = getFullDirectoryPath("media/" + albumName);
-
-    return FileSystem.getInfoAsync(uri);
-  } catch (e) {
-    console.warn(e.message);
   }
 };
 
@@ -212,6 +168,7 @@ export const getIsImage = (fileName: string) => {
     extension === "jpeg" ||
     extension === "png" ||
     extension === "heic" ||
+    extension === "heif" ||
     extension === "webp"
   );
 };

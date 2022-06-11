@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Alert,
   FlatList,
   Pressable,
@@ -138,6 +139,7 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
   }, [metaAlbumInfo.selectedSortDirection]);
 
   const fetchAssets = async () => {
+    setLoading(true);
     const fileNames = await getAlbumAssetsFromFS(route.params.albumName);
 
     if (fileNames && fileNames.length) {
@@ -170,8 +172,12 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
         const imageUris = metaInfoImages.map((info) => info.uri);
 
         setAssets(imageUris);
+        setLoading(false);
       }
-    } else setAssets([]);
+    } else {
+      setAssets([]);
+      setLoading(false);
+    }
   };
 
   const importAssets = async () => {
@@ -235,6 +241,8 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
       ]
     );
   };
+
+  // if (loading) return <ActivityIndicator />;
 
   return (
     <SafeAreaView style={styles.root}>

@@ -144,7 +144,7 @@ const AlbumListScreen: React.FC<AlbumListScreenProps> = ({}) => {
             // : setShowDialog((v) => !v);
           }}
         >
-          <Text style={{ color: "white", marginRight: 10 }}>
+          <Text style={{ color: "white", marginRight: 10, fontSize: 15 }}>
             Album erstellen
           </Text>
           <AntDesign name="addfolder" size={28} color="white" />

@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import ImagePreview from "../../components/ImagePreview";
 import LoadingIndicator from "../../components/util/LoadingIndicator";
 import {
-  IAssetToImport,
+  IImportAsset,
   useImportAssetsContext,
 } from "../../context/ImportAssetsContext";
 import FooterMenu from "../../components/ImportAssets/FooterMenu";
@@ -20,7 +20,7 @@ const MediaAlbumDetailScreen: React.FC<MediaAlbumDetailScreenProps> = ({}) => {
   const navigation = useNavigation<MediaAlbumDetailScreenNavigationProps>();
   const route = useRoute<MediaAlbumDetailScreenRouteProps>();
 
-  const [assetUris, setAssetUris] = useState<IAssetToImport[]>([]);
+  const [assetUris, setAssetUris] = useState<IImportAsset[]>([]);
   const [loading, setLoading] = useState(true);
 
   const importAssetsContext = useImportAssetsContext();
@@ -30,10 +30,11 @@ const MediaAlbumDetailScreen: React.FC<MediaAlbumDetailScreenProps> = ({}) => {
     setLoading(true);
     const items = await MediaLibrary.getAssetsAsync({
       album: route.params.albumId,
-      first: 20,
+      first: 100, // todo lazy load whole album
       mediaType: ["photo", "video"],
     });
-    const assets: IAssetToImport[] = [];
+
+    const assets: IImportAsset[] = [];
     for (const asset of items.assets) {
       const { localUri, id } = await MediaLibrary.getAssetInfoAsync(asset);
       if (localUri && id) {

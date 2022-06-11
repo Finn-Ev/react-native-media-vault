@@ -3,14 +3,14 @@ import { importAssetsIntoFSAlbum } from "../../util/MediaHelper";
 import * as MediaLibrary from "expo-media-library";
 import { Alert } from "react-native";
 
-export interface IAssetToImport {
+export interface IImportAsset {
   localUri: string;
   id: string;
 }
 
 export interface IImportAssetsContext {
-  assetsToImport: IAssetToImport[];
-  toggleAsset: (asset: IAssetToImport) => void;
+  assetsToImport: IImportAsset[];
+  toggleAsset: (asset: IImportAsset) => void;
   setSelectedAlbum: (album: string) => void;
   importSelectedAssetsIntoFS: () => Promise<void>;
 }
@@ -20,14 +20,14 @@ const ImportAssetsContext = createContext<IImportAssetsContext | null>(null);
 export const useImportAssetsContext = () => useContext(ImportAssetsContext);
 
 export const ImportAssetsContextProvider: React.FC = ({ children }) => {
-  const [assetsToImport, setAssetsToImport] = useState<IAssetToImport[]>([]);
+  const [assetsToImport, setAssetsToImport] = useState<IImportAsset[]>([]);
   const [selectedAlbum, _setSelectedAlbum] = useState<string | null>("");
 
   const setSelectedAlbum = (album: string) => {
     _setSelectedAlbum(album);
   };
 
-  const toggleAsset = (asset: IAssetToImport) => {
+  const toggleAsset = (asset: IImportAsset) => {
     if (assetsToImport.includes(asset))
       setAssetsToImport(assetsToImport.filter((a) => a !== asset));
     else setAssetsToImport([...assetsToImport, asset]);

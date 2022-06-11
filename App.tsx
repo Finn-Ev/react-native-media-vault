@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { SafeAreaView, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import Navigation from "./src/navigation";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -8,17 +8,9 @@ import { documentDirectory } from "expo-file-system";
 import { ImportAssetsContextProvider } from "./src/context/ImportAssetsContext";
 
 const App: React.FC = () => {
-  console.log(documentDirectory);
   if (!documentDirectory) {
     return (
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: "black",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      <View style={styles.root}>
         <StatusBar style="light" />
         <Text style={{ color: "white" }}>
           Dein Gerät unterstüzt diese App leider nicht.
@@ -42,5 +34,14 @@ const App: React.FC = () => {
     </SafeAreaProvider>
   );
 };
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: "black",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
 
 export default App;
