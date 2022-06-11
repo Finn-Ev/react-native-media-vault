@@ -92,6 +92,20 @@ export const importAssetIntoFSAlbum = async (
   });
 };
 
+export const importAssetsIntoFSAlbum = async (
+  uris: string[],
+  albumName: string
+) => {
+  for (const uri of uris) {
+    const fileName = uuidv4() + "." + getFileExtension(uri);
+
+    await FileSystem.copyAsync({
+      from: uri,
+      to: getFullDirectoryPath("media/" + albumName) + fileName,
+    });
+  }
+};
+
 export const getAssetUriFromFSByAlbumAndFileName = (
   albumName: string,
   imageName: string
@@ -193,6 +207,7 @@ export const getIsImage = (fileName: string) => {
 
   return (
     extension === "jpg" ||
+    extension === "jpeg" ||
     extension === "png" ||
     extension === "heic" ||
     extension === "webp"

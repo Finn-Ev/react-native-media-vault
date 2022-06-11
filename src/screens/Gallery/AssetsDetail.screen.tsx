@@ -11,13 +11,13 @@ import {
 import {
   AssetsDetailScreenRouteProps,
   AssetsDetailScreenScreenNavigationProps,
-} from "../navigation/types";
+} from "../../navigation/types";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { getIsImage } from "../util/MediaHelper";
+import { getIsImage } from "../../util/MediaHelper";
 import { Video } from "expo-av";
 import { useEffect, useRef, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import ImageZoomView from "../components/ImageZoomView";
+import ImageZoomView from "../../components/Gallery/ImageZoomView";
 import { AntDesign } from "@expo/vector-icons";
 
 interface AssetsDetailScreenProps {}

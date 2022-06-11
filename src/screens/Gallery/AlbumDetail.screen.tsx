@@ -11,18 +11,19 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   AlbumDetailScreenNavigationProps,
   AlbumDetailScreenRouteProps,
-} from "../navigation/types";
+} from "../../navigation/types";
 import { useEffect, useState } from "react";
 import {
   deleteAssetFromFS,
   exportAssetsIntoMediaLibrary,
   getFSAssetInfo,
   getAlbumAssetsFromFS,
-} from "../util/MediaHelper";
-import ImagePreview from "../components/ImagePreview";
+} from "../../util/MediaHelper";
+import ImagePreview from "../../components/ImagePreview";
 import * as Haptics from "expo-haptics";
 import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useAlbumContext } from "../context/AlbumContext";
+import { useAlbumContext } from "../../context/AlbumContext";
+import { useImportAssetsContext } from "../../context/ImportAssetsContext";
 
 interface AlbumDetailProps {}
 
@@ -30,9 +31,10 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
   const route = useRoute<AlbumDetailScreenRouteProps>();
 
   const albumContext = useAlbumContext();
-  if (!albumContext) throw new Error("MetaAlbumContext not found");
-  const albumMetaInfo = albumContext.getMetaAlbum(route.params.albumName);
-  if (!albumMetaInfo) throw new Error("AlbumMetaInfo not found");
+  const metaAlbumInfo = albumContext?.getMetaAlbum(route.params.albumName);
+  if (!metaAlbumInfo) throw new Error("AlbumMetaInfo not found");
+
+  const importAssetsContext = useImportAssetsContext();
 
   const navigation = useNavigation<AlbumDetailScreenNavigationProps>();
 
@@ -83,12 +85,12 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
       });
     } else {
       navigation.setOptions({
-        // headerRight: () => (
-        //   <Pressable onPress={() => enableSelectMode()} hitSlop={20}>
-        //     <Text style={styles.headerRightButton}>Auswählen</Text>
-        //   </Pressable>
-        // ),
-        headerRight: () => null,
+        headerRight: () => (
+          <Pressable onPress={() => enableSelectMode()} hitSlop={20}>
+            <Text style={styles.headerRightButton}>Auswählen</Text>
+          </Pressable>
+        ),
+        // headerRight: () => null,
       });
     }
   }, [isSelectModeActive, assets]);
@@ -102,7 +104,7 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
 
   const toggleSortDirection = () => {
     // setSortDirection(sortDirection === "asc" ? "desc" : "asc");
-    albumContext.toggleAlbumSortDirection(albumMetaInfo.name);
+    albumContext?.toggleAlbumSortDirection(metaAlbumInfo.name);
 
     fetchAssets();
   };
@@ -133,7 +135,7 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
 
   useEffect(() => {
     fetchAssets();
-  }, [albumMetaInfo.selectedSortDirection]);
+  }, [metaAlbumInfo.selectedSortDirection]);
 
   const fetchAssets = async () => {
     const fileNames = await getAlbumAssetsFromFS(route.params.albumName);
@@ -147,7 +149,7 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
       }
 
       if (metaInfoImages.length) {
-        if (albumMetaInfo.selectedSortDirection === "desc") {
+        if (metaAlbumInfo.selectedSortDirection === "desc") {
           metaInfoImages.sort((a, b) => {
             if (a && b) {
               if (a.modificationTime! <= b.modificationTime!) return 1;
@@ -173,7 +175,9 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
   };
 
   const importAssets = async () => {
-    navigation.navigate("AssetSelector", { albumName: route.params.albumName });
+    importAssetsContext?.setSelectedAlbum(metaAlbumInfo.name);
+    // @ts-ignore
+    navigation.navigate("ImportAssets");
   };
 
   const exportSelectedAssets = async () => {
@@ -278,7 +282,7 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
                   <View style={styles.buttonContainer}>
                     <MaterialCommunityIcons
                       name={
-                        albumMetaInfo.selectedSortDirection === "asc"
+                        metaAlbumInfo.selectedSortDirection === "asc"
                           ? "sort-clock-descending-outline"
                           : "sort-clock-ascending-outline"
                       }
@@ -286,7 +290,7 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
                       color="white"
                     />
                     <Text style={styles.buttonText}>
-                      {albumMetaInfo.selectedSortDirection === "asc"
+                      {metaAlbumInfo.selectedSortDirection === "asc"
                         ? "Älteste zuerst"
                         : "Neueste zuerst"}
                     </Text>

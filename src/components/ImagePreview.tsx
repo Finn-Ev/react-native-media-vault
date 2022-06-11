@@ -1,7 +1,5 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { AlbumListScreenNavigationProps } from "../navigation/types";
-import { getFullDirectoryPath, getIsImage } from "../util/MediaHelper";
+import { getIsImage } from "../util/MediaHelper";
 import { useState } from "react";
 import { ResizeMode, Video } from "expo-av";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -20,8 +18,6 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
   onLongPress,
   isSelected,
 }) => {
-  const navigation = useNavigation<AlbumListScreenNavigationProps>();
-  getFullDirectoryPath("");
   const [videoDuration, setVideoDuration] = useState(0);
 
   const isImage = getIsImage(uri);

@@ -1,56 +1,56 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RouteProp } from "@react-navigation/native";
-
-export type RootStackParamList = {
-  AlbumList: undefined;
-  AlbumDetail: { albumName: string };
-  AssetsDetail: {
-    assetUris: string[];
-    startIndex: number;
-    refreshCarousel?: boolean;
-  };
-  AssetSelector: { albumName: string };
-  Auth: undefined;
-};
+import { RootStackParamList } from "./index";
+import { GalleryStackParamList } from "./GalleryStackNavigator";
+import { ImportAssetsStackParamList } from "./ImportAssetsStackNavigator";
 
 // navigation prop types
 export type AlbumListScreenNavigationProps = NativeStackNavigationProp<
-  RootStackParamList,
+  GalleryStackParamList,
   "AlbumList"
 >;
 
 export type AlbumDetailScreenNavigationProps = NativeStackNavigationProp<
-  RootStackParamList,
+  GalleryStackParamList,
   "AlbumDetail"
 >;
 
 export type AssetsDetailScreenScreenNavigationProps = NativeStackNavigationProp<
-  RootStackParamList,
+  GalleryStackParamList,
   "AssetsDetail"
 >;
 
-export type AssetSelectorScreenNavigationProps = NativeStackNavigationProp<
-  RootStackParamList,
-  "AssetSelector"
+export type MediaAlbumListScreenNavigationProps = NativeStackNavigationProp<
+  ImportAssetsStackParamList,
+  "MediaAlbumList"
+>;
+
+export type MediaAlbumDetailScreenNavigationProps = NativeStackNavigationProp<
+  ImportAssetsStackParamList,
+  "MediaAlbumDetail"
 >;
 
 // route prop types
 export type AlbumListScreenRouteProps = RouteProp<
-  RootStackParamList,
+  GalleryStackParamList,
   "AlbumList"
 >;
 
 export type AlbumDetailScreenRouteProps = RouteProp<
-  RootStackParamList,
+  GalleryStackParamList & RootStackParamList,
   "AlbumDetail"
 >;
-
 export type AssetsDetailScreenRouteProps = RouteProp<
-  RootStackParamList,
+  GalleryStackParamList & RootStackParamList,
   "AssetsDetail"
 >;
 
-export type AssetSelectorScreenRouteProps = RouteProp<
-  RootStackParamList,
-  "AssetSelector"
+export type MediaAlbumListScreenRouteProps = RouteProp<
+  ImportAssetsStackParamList,
+  "MediaAlbumList"
+>;
+
+export type MediaAlbumDetailScreenRouteProps = RouteProp<
+  ImportAssetsStackParamList,
+  "MediaAlbumDetail"
 >;

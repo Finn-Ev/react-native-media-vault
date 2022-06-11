@@ -6,23 +6,23 @@ import {
   Text,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { AlbumListScreenNavigationProps } from "../navigation/types";
+import { AlbumListScreenNavigationProps } from "../../navigation/types";
 import {
   getAlbumAssetsFromFS,
   getAssetUriFromFSByAlbumAndFileName,
   getFSAssetInfo,
   getIsImage,
-} from "../util/MediaHelper";
+} from "../../util/MediaHelper";
 import { useEffect, useState } from "react";
 import { ResizeMode, Video } from "expo-av";
-import { useAlbumContext } from "../context/AlbumContext";
+import { useAlbumContext } from "../../context/AlbumContext";
 
 interface ImagePreviewProps {
   albumName: string;
   onLongPress: () => void;
 }
 
-const ImagePreview: React.FC<ImagePreviewProps> = ({
+const AlbumPreview: React.FC<ImagePreviewProps> = ({
   albumName,
   onLongPress,
 }) => {
@@ -53,7 +53,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
     if (metaInfoImages.length) {
       metaInfoImages.sort((a, b) => {
         if (a && b) {
-          if (a.modificationTime! < b.modificationTime!) return 1;
+          if (a.modificationTime! > b.modificationTime!) return 1;
           else return -1;
         }
         return 0;
@@ -64,14 +64,14 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
       if (assets && assets.length) {
         if (albumMetaInfo.selectedSortDirection === "desc") {
           const uri = assets.pop();
+          // const uri = assets[0];
           if (uri) {
-            console.log("uri", uri);
             setThumbnailUri(uri);
           }
         } else {
           const uri = assets[0];
+          // const uri = assets.pop();
           if (uri) {
-            console.log("uri", uri);
             setThumbnailUri(uri);
           }
         }
@@ -145,4 +145,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ImagePreview;
+export default AlbumPreview;

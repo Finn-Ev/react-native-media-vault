@@ -5,8 +5,10 @@ import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AlbumContextProvider } from "./src/context/AlbumContext";
 import { documentDirectory } from "expo-file-system";
+import { ImportAssetsContextProvider } from "./src/context/ImportAssetsContext";
 
 const App: React.FC = () => {
+  console.log(documentDirectory);
   if (!documentDirectory) {
     return (
       <View
@@ -28,12 +30,14 @@ const App: React.FC = () => {
   return (
     <SafeAreaProvider>
       <AlbumContextProvider>
-        <ActionSheetProvider>
-          <SafeAreaView style={{ backgroundColor: "black", flex: 1 }}>
-            <StatusBar style={"light"} />
-            <Navigation />
-          </SafeAreaView>
-        </ActionSheetProvider>
+        <ImportAssetsContextProvider>
+          <ActionSheetProvider>
+            <SafeAreaView style={{ backgroundColor: "black", flex: 1 }}>
+              <StatusBar style={"light"} />
+              <Navigation />
+            </SafeAreaView>
+          </ActionSheetProvider>
+        </ImportAssetsContextProvider>
       </AlbumContextProvider>
     </SafeAreaProvider>
   );

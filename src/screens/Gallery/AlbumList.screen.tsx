@@ -8,13 +8,13 @@ import {
   View,
 } from "react-native";
 import { useEffect, useState } from "react";
-import { initMediaRoot } from "../util/MediaHelper";
-import AlbumPreview from "../components/AlbumPreview";
-import CreateAlbumDialog from "../components/CreateAlbumDialog";
+import { initMediaRoot } from "../../util/MediaHelper";
+import AlbumPreview from "../../components/Gallery/AlbumPreview";
+import CreateAlbumDialog from "../../components/Gallery/CreateAlbumDialog";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { AlbumListScreenNavigationProps } from "../navigation/types";
-import { useAlbumContext } from "../context/AlbumContext";
+import { AlbumListScreenNavigationProps } from "../../navigation/types";
+import { useAlbumContext } from "../../context/AlbumContext";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import * as Haptics from "expo-haptics";
 import * as FS from "expo-file-system";

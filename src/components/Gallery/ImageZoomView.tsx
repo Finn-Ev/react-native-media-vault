@@ -15,7 +15,7 @@ const ImageZoomView: React.FC<ImageZoomZoomViewProps> = ({ uri }) => {
   const { width } = useWindowDimensions();
 
   return (
-    <ReactNativeZoomableView maxZoom={30} movementSensibility={5}>
+    <ReactNativeZoomableView maxZoom={30} movementSensibility={1}>
       <Image
         source={{ uri }}
         style={{ width, height: "100%" }}
