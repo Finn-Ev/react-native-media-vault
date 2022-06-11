@@ -13,6 +13,8 @@ export interface IImportAssetsContext {
   toggleAsset: (asset: IImportAsset) => void;
   setSelectedAlbum: (album: string) => void;
   importSelectedAssetsIntoFS: () => Promise<void>;
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
 }
 
 const ImportAssetsContext = createContext<IImportAssetsContext | null>(null);
@@ -22,19 +24,20 @@ export const useImportAssetsContext = () => useContext(ImportAssetsContext);
 export const ImportAssetsContextProvider: React.FC = ({ children }) => {
   const [assetsToImport, setAssetsToImport] = useState<IImportAsset[]>([]);
   const [selectedAlbum, _setSelectedAlbum] = useState<string | null>("");
+  const [loading, _setLoading] = useState<boolean>(false);
 
   const setSelectedAlbum = (album: string) => {
     _setSelectedAlbum(album);
+  };
+
+  const setLoading = (loading: boolean) => {
+    _setLoading(loading);
   };
 
   const toggleAsset = (asset: IImportAsset) => {
     if (assetsToImport.includes(asset))
       setAssetsToImport(assetsToImport.filter((a) => a !== asset));
     else setAssetsToImport([...assetsToImport, asset]);
-  };
-
-  const clearAssets = () => {
-    setAssetsToImport([]);
   };
 
   const importSelectedAssetsIntoFS = async () => {
@@ -68,6 +71,8 @@ export const ImportAssetsContextProvider: React.FC = ({ children }) => {
         toggleAsset,
         setSelectedAlbum,
         importSelectedAssetsIntoFS,
+        loading,
+        setLoading,
       }}
     >
       {children}

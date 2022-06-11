@@ -38,8 +38,8 @@ const AlbumListScreen: React.FC<AlbumListScreenProps> = ({}) => {
 
   useEffect(() => {
     (async () => {
-      const wasMediaRootJustAdded = await initMediaRoot();
       // init directory structure
+      const wasMediaRootJustAdded = await initMediaRoot();
       if (wasMediaRootJustAdded) {
         await albumContext.addAlbum("Album1");
       }
@@ -100,15 +100,6 @@ const AlbumListScreen: React.FC<AlbumListScreenProps> = ({}) => {
 
     if (successful) {
       Alert.alert("Das Album wurde erstellt");
-      setShowDialog(false);
-    }
-  };
-
-  const deleteAlbum = async (name: string) => {
-    const successful = await albumContext.deleteAlbum(name);
-
-    if (successful) {
-      Alert.alert("Das Album wurde gelöscht");
       setShowDialog(false);
     }
   };

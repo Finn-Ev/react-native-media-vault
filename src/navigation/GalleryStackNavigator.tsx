@@ -7,7 +7,7 @@ import AlbumDetailScreen from "../screens/Gallery/AlbumDetail.screen";
 import AssetsDetailScreen from "../screens/Gallery/AssetsDetail.screen";
 
 export type GalleryStackParamList = {
-  AlbumList: undefined;
+  AlbumList: { assetsHaveChanged: boolean };
   AlbumDetail: { albumName: string };
   AssetsDetail: {
     assetUris: string[];

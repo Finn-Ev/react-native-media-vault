@@ -30,7 +30,7 @@ const MediaAlbumDetailScreen: React.FC<MediaAlbumDetailScreenProps> = ({}) => {
     setLoading(true);
     const items = await MediaLibrary.getAssetsAsync({
       album: route.params.albumId,
-      first: 100, // todo lazy load whole album
+      first: 50, // todo lazy load whole album
       mediaType: ["photo", "video"],
     });
 
@@ -52,6 +52,7 @@ const MediaAlbumDetailScreen: React.FC<MediaAlbumDetailScreenProps> = ({}) => {
     getAssets();
     navigation.setOptions({ headerTitle: route.params.albumName });
   }, []);
+
   if (loading) {
     return <LoadingIndicator />;
   }

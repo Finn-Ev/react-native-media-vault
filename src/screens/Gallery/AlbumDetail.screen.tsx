@@ -25,10 +25,12 @@ import * as Haptics from "expo-haptics";
 import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAlbumContext } from "../../context/AlbumContext";
 import { useImportAssetsContext } from "../../context/ImportAssetsContext";
+import LoadingIndicator from "../../components/util/LoadingIndicator";
 
 interface AlbumDetailProps {}
 
 const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
+  const navigation = useNavigation<AlbumDetailScreenNavigationProps>();
   const route = useRoute<AlbumDetailScreenRouteProps>();
 
   const albumContext = useAlbumContext();
@@ -36,8 +38,6 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
   if (!metaAlbumInfo) throw new Error("AlbumMetaInfo not found");
 
   const importAssetsContext = useImportAssetsContext();
-
-  const navigation = useNavigation<AlbumDetailScreenNavigationProps>();
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -140,6 +140,7 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
 
   const fetchAssets = async () => {
     setLoading(true);
+
     const fileNames = await getAlbumAssetsFromFS(route.params.albumName);
 
     if (fileNames && fileNames.length) {
@@ -172,12 +173,11 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
         const imageUris = metaInfoImages.map((info) => info.uri);
 
         setAssets(imageUris);
-        setLoading(false);
       }
     } else {
       setAssets([]);
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   const importAssets = async () => {
@@ -242,7 +242,7 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
     );
   };
 
-  // if (loading) return <ActivityIndicator />;
+  if (loading) return <LoadingIndicator />;
 
   return (
     <SafeAreaView style={styles.root}>
@@ -317,13 +317,15 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
           </View>
         </>
       ) : (
-        <View style={styles.emptyAlbum}>
-          <Text style={styles.emptyAlbumText}>Dieses Album ist leer</Text>
-          <Text />
-          <Text style={styles.emptyAlbumButton} onPress={importAssets}>
-            Bilder & Videos hinzufügen
-          </Text>
-        </View>
+        !loading && (
+          <View style={styles.emptyAlbum}>
+            <Text style={styles.emptyAlbumText}>Dieses Album ist leer</Text>
+            <Text />
+            <Text style={styles.emptyAlbumButton} onPress={importAssets}>
+              Bilder & Videos hinzufügen
+            </Text>
+          </View>
+        )
       )}
       {/* Footer */}
     </SafeAreaView>

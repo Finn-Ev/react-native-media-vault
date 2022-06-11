@@ -9,7 +9,6 @@ import { useNavigation } from "@react-navigation/native";
 import { AlbumListScreenNavigationProps } from "../../navigation/types";
 import {
   getAlbumAssetsFromFS,
-  getAssetUriFromFSByAlbumAndFileName,
   getFSAssetInfo,
   getIsImage,
 } from "../../util/MediaHelper";
@@ -27,6 +26,7 @@ const AlbumPreview: React.FC<ImagePreviewProps> = ({
   onLongPress,
 }) => {
   const navigation = useNavigation<AlbumListScreenNavigationProps>();
+  // const [loading, setLoading] = useState(false);
 
   const albumContext = useAlbumContext();
   if (!albumContext) throw new Error("MetaAlbumContext not found");
@@ -40,6 +40,7 @@ const AlbumPreview: React.FC<ImagePreviewProps> = ({
   };
 
   const getAlbumThumbnail = async () => {
+    // setLoading(true);
     const metaInfoImages = [];
 
     let assets = await getAlbumAssetsFromFS(albumName);
@@ -77,6 +78,7 @@ const AlbumPreview: React.FC<ImagePreviewProps> = ({
         }
       }
     }
+    // setLoading(false);
   };
 
   useEffect(() => {
@@ -87,8 +89,23 @@ const AlbumPreview: React.FC<ImagePreviewProps> = ({
     const unsubscribe = navigation.addListener("focus", () => {
       getAlbumThumbnail();
     });
+
     return unsubscribe;
   }, [navigation, albumMetaInfo.selectedSortDirection]);
+
+  const thumbnail = getIsImage(thumbnailUri) ? (
+    <Image
+      source={{ uri: thumbnailUri }}
+      resizeMode={"cover"}
+      style={styles.thumbnail}
+    />
+  ) : (
+    <Video
+      source={{ uri: thumbnailUri }}
+      resizeMode={ResizeMode.COVER}
+      style={styles.thumbnail}
+    />
+  );
 
   return (
     <Pressable
@@ -96,27 +113,11 @@ const AlbumPreview: React.FC<ImagePreviewProps> = ({
       onPress={onPress}
       onLongPress={onLongPress}
     >
-      {!thumbnailUri || getIsImage(thumbnailUri) ? (
-        <Image
-          style={styles.preview}
-          resizeMode={"cover"}
-          source={{
-            uri:
-              thumbnailUri ||
-              "https://www.worldartfoundations.com/wp-content/uploads/2022/04/placeholder-image.png",
-          }}
-        />
-      ) : (
-        <Video
-          style={styles.preview}
-          resizeMode={ResizeMode.COVER}
-          source={{
-            uri:
-              thumbnailUri ||
-              "https://www.worldartfoundations.com/wp-content/uploads/2022/04/placeholder-image.png",
-          }}
-        />
-      )}
+      {/*{loading ? (*/}
+      {/*  <ActivityIndicator style={styles.activityIndicator} />*/}
+      {/*) : (*/}
+      {thumbnail}
+      {/*)}*/}
       <Text style={styles.text}>{albumName}</Text>
     </Pressable>
   );
@@ -129,7 +130,11 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     padding: 2,
   },
-  preview: {
+  activityIndicator: {
+    // height: 75,
+    // aspectRatio: 1,
+  },
+  thumbnail: {
     aspectRatio: 1,
     backgroundColor: "grey",
   },

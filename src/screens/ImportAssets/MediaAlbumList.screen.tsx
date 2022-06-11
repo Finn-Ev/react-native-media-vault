@@ -1,17 +1,10 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  FlatList,
-  SafeAreaView,
-  ScrollView,
-  Pressable,
-} from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import * as MediaLibrary from "expo-media-library";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { MediaAlbumListScreenNavigationProps } from "../../navigation/types";
 import FooterMenu from "../../components/ImportAssets/FooterMenu";
+import AlbumPreview from "../../components/ImportAssets/AlbumPreview";
 
 interface MediaAlbumListProps {}
 
@@ -49,43 +42,12 @@ const MediaAlbumListScreen: React.FC<MediaAlbumListProps> = ({}) => {
     return (
       <SafeAreaView style={styles.root}>
         <ScrollView>
-          {smartAlbums.map((album: MediaLibrary.Album, index) => (
-            <Pressable
-              onPress={() => {
-                navigation.navigate("MediaAlbumDetail", {
-                  albumId: album.id,
-                  albumName: album.title,
-                });
-              }}
-              key={index}
-              style={[
-                styles.album,
-                index !== standardAlbums.length - 1
-                  ? { borderBottomWidth: 1 }
-                  : {},
-              ]}
-            >
-              <Text style={styles.text}>{album.title}</Text>
-            </Pressable>
+          {smartAlbums.map((album, index) => (
+            <AlbumPreview name={album.title} id={album.id} key={index} />
           ))}
-          {standardAlbums.map((album: MediaLibrary.Album, index) => (
-            <Pressable
-              onPress={() => {
-                navigation.navigate("MediaAlbumDetail", {
-                  albumId: album.id,
-                  albumName: album.title,
-                });
-              }}
-              key={index}
-              style={[
-                styles.album,
-                index !== standardAlbums.length - 1
-                  ? { borderBottomWidth: 1 }
-                  : {},
-              ]}
-            >
-              <Text style={styles.text}>{album.title}</Text>
-            </Pressable>
+          {!!standardAlbums.length && <View style={styles.horizontalRow} />}
+          {standardAlbums.map((album, index) => (
+            <AlbumPreview name={album.title} id={album.id} key={index} />
           ))}
         </ScrollView>
         <FooterMenu />
@@ -113,6 +75,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "black",
   },
+  horizontalRow: {
+    borderBottomWidth: 1,
+    borderColor: "#777",
+    marginHorizontal: 15,
+    marginVertical: 10,
+  },
   noPermissions: {
     flex: 1,
     backgroundColor: "black",
@@ -130,12 +98,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 5,
-  },
-  album: {
-    flex: 1,
-    backgroundColor: "black",
-    borderColor: "gray",
-    paddingVertical: 20,
   },
   text: {
     color: "white",
