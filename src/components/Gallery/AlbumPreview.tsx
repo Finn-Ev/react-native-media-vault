@@ -44,8 +44,11 @@ const AlbumPreview: React.FC<ImagePreviewProps> = ({
     const metaInfoImages = [];
 
     let assets = await getAlbumAssetsFromFS(albumName);
-    if (!assets) return;
-
+    if (!assets || !assets.length) {
+      return setThumbnailUri(
+        "https://deconova.eu/wp-content/uploads/2016/02/default-placeholder.png"
+      );
+    }
     for (const asset of assets) {
       const info = await getFSAssetInfo(albumName, asset);
       if (info) metaInfoImages.push(info);

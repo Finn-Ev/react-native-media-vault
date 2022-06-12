@@ -1,13 +1,17 @@
 import { StatusBar } from "expo-status-bar";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { AppState, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import Navigation from "./src/navigation";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AlbumContextProvider } from "./src/context/AlbumContext";
 import { documentDirectory } from "expo-file-system";
 import { ImportAssetsContextProvider } from "./src/context/ImportAssetsContext";
+import { AuthContextProvider } from "./src/context/AuthContext";
+import { useRef } from "react";
 
 const App: React.FC = () => {
+  const appState = useRef(AppState.currentState);
+
   if (!documentDirectory) {
     return (
       <View style={styles.root}>
@@ -21,16 +25,18 @@ const App: React.FC = () => {
 
   return (
     <SafeAreaProvider>
-      <AlbumContextProvider>
-        <ImportAssetsContextProvider>
-          <ActionSheetProvider>
-            <SafeAreaView style={{ backgroundColor: "black", flex: 1 }}>
-              <StatusBar style={"light"} />
-              <Navigation />
-            </SafeAreaView>
-          </ActionSheetProvider>
-        </ImportAssetsContextProvider>
-      </AlbumContextProvider>
+      <AuthContextProvider>
+        <AlbumContextProvider>
+          <ImportAssetsContextProvider>
+            <ActionSheetProvider>
+              <SafeAreaView style={{ backgroundColor: "black", flex: 1 }}>
+                <StatusBar style={"light"} />
+                <Navigation />
+              </SafeAreaView>
+            </ActionSheetProvider>
+          </ImportAssetsContextProvider>
+        </AlbumContextProvider>
+      </AuthContextProvider>
     </SafeAreaProvider>
   );
 };

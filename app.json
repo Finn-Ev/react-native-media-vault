@@ -18,7 +18,10 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "Diese App benutzt FaceID um Nutzer zu authentifizieren."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -29,5 +32,5 @@
     "web": {
       "favicon": "./assets/favicon.png"
     }
-  }
+  },
 }

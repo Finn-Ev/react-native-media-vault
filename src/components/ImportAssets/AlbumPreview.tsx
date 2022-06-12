@@ -39,9 +39,17 @@ const AlbumPreview: React.FC<AlbumPreviewProps> = ({ name, id }) => {
       mediaType: ["photo", "video"],
     });
     setAssetCount(album.totalCount);
-    const thumbnail = await MediaLibrary.getAssetInfoAsync(album.assets[0].id);
-    if (thumbnail.localUri) {
-      setThumbnailUri(thumbnail.localUri);
+    if (album.assets.length) {
+      const thumbnail = await MediaLibrary.getAssetInfoAsync(
+        album.assets[0].id
+      );
+      if (thumbnail.localUri) {
+        setThumbnailUri(thumbnail.localUri);
+      }
+    } else {
+      setThumbnailUri(
+        "https://deconova.eu/wp-content/uploads/2016/02/default-placeholder.png"
+      );
     }
     setLoading(false);
   };

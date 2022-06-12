@@ -40,6 +40,7 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
   const importAssetsContext = useImportAssetsContext();
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [isInitialFetch, setIsInitialFetch] = useState<boolean>(true);
 
   const [selectedAssets, setSelectedAssets] = useState<string[]>([]);
   const [isSelectModeActive, setIsSelectModeActive] = useState(false);
@@ -96,50 +97,12 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
     }
   }, [isSelectModeActive, assets]);
 
-  const viewInAssetCarousel = (startIndex: number) => {
-    navigation.navigate("AssetsDetail", {
-      assetUris: assets,
-      startIndex,
-    });
-  };
-
-  const toggleSortDirection = () => {
-    // setSortDirection(sortDirection === "asc" ? "desc" : "asc");
-    albumContext?.toggleAlbumSortDirection(metaAlbumInfo.name);
-
-    fetchAssets();
-  };
-
-  const toggleSelect = (uri: string) => {
-    if (selectedAssets.includes(uri)) {
-      setSelectedAssets(selectedAssets.filter((a) => a !== uri));
-    } else {
-      setSelectedAssets([...selectedAssets, uri]);
-    }
-  };
-
-  const selectAllAssets = () => {
-    setSelectedAssets(assets);
-  };
-
-  const enableSelectMode = (firstItemUri?: string) => {
-    setIsSelectModeActive(true);
-    if (firstItemUri) setSelectedAssets([firstItemUri]);
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-  };
-
-  const disableSelectMode = () => {
-    setSelectedAssets([]);
-    setIsSelectModeActive(false);
-    fetchAssets();
-  };
-
   useEffect(() => {
     fetchAssets();
   }, [metaAlbumInfo.selectedSortDirection]);
 
   const fetchAssets = async () => {
-    setLoading(true);
+    // if (isInitialFetch) setLoading(true);
 
     const fileNames = await getAlbumAssetsFromFS(route.params.albumName);
 
@@ -177,7 +140,47 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
     } else {
       setAssets([]);
     }
-    setLoading(false);
+
+    if (isInitialFetch) setLoading(false);
+    setIsInitialFetch(false);
+  };
+
+  const viewInAssetCarousel = (startIndex: number) => {
+    navigation.navigate("AssetsDetail", {
+      assetUris: assets,
+      startIndex,
+    });
+  };
+
+  const toggleSortDirection = () => {
+    // setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    albumContext?.toggleAlbumSortDirection(metaAlbumInfo.name);
+
+    fetchAssets();
+  };
+
+  const toggleSelect = (uri: string) => {
+    if (selectedAssets.includes(uri)) {
+      setSelectedAssets(selectedAssets.filter((a) => a !== uri));
+    } else {
+      setSelectedAssets([...selectedAssets, uri]);
+    }
+  };
+
+  const selectAllAssets = () => {
+    setSelectedAssets(assets);
+  };
+
+  const enableSelectMode = (firstItemUri?: string) => {
+    setIsSelectModeActive(true);
+    if (firstItemUri) setSelectedAssets([firstItemUri]);
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+  };
+
+  const disableSelectMode = () => {
+    setSelectedAssets([]);
+    setIsSelectModeActive(false);
+    fetchAssets();
   };
 
   const importAssets = async () => {
