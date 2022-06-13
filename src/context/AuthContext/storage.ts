@@ -1,19 +1,19 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthMethod } from "./index";
 
-export const saveSelectedAuthMethodToStorage = async (value: AuthMethod) => {
+export const saveAuthPinToStorage = async (value: string) => {
   try {
-    await AsyncStorage.setItem("selectedAuthMethod", value);
+    await AsyncStorage.setItem("authPinCode", value);
   } catch (e) {
     console.warn(e.message);
   }
 };
 
-export const getSelectedAuthMethodFromStorage = async () => {
+export const getAuthPinFromFromStorage = async () => {
   try {
-    const value = await AsyncStorage.getItem("selectedAuthMethod");
+    const value = await AsyncStorage.getItem("authPinCode");
     if (value) {
-      return value as AuthMethod;
+      return value;
     } else return null;
   } catch (e) {
     console.warn(e.message);

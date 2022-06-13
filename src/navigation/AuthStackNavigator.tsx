@@ -12,7 +12,7 @@ export type AuthStackParamList = {
 const Stack = createNativeStackNavigator<AuthStackParamList>();
 
 const AuthStackNavigator: React.FC = ({}) => {
-  const hasSetAuthMethod = useAuthContext()?.selectedAuthMethod;
+  const hasSetPinCode = useAuthContext()?.selectedPinCode;
   return (
     <Stack.Navigator
       screenOptions={{
@@ -21,21 +21,21 @@ const AuthStackNavigator: React.FC = ({}) => {
         headerTitleStyle: { color: "white" },
       }}
     >
-      {hasSetAuthMethod ? (
-        <Stack.Screen
-          name={"Unlock"}
-          options={{
-            headerTitle: "App ist gesperrt",
-          }}
-          component={UnlockScreen}
-        />
-      ) : (
+      {!hasSetPinCode ? (
         <Stack.Screen
           name={"SetupAuth"}
           options={{
             headerTitle: "",
           }}
           component={SetupAuthScreen}
+        />
+      ) : (
+        <Stack.Screen
+          name={"Unlock"}
+          options={{
+            headerTitle: "App ist gesperrt",
+          }}
+          component={UnlockScreen}
         />
       )}
     </Stack.Navigator>

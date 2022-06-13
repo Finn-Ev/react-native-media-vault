@@ -4,22 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6bbeae37-5161-4dd9-a061-f9297add82d8" name="Changes" comment="AssetPicker AlbumPreview and some fixes">
-      <change afterPath="$PROJECT_DIR$/src/context/AuthContext/storage.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/screens/Auth/SetupAuth.screen.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/screens/Auth/Unlock.screen.tsx" afterDir="false" />
+    <list default="true" id="6bbeae37-5161-4dd9-a061-f9297add82d8" name="Changes" comment="local auth">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Gallery/AlbumPreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Gallery/AlbumPreview.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ImportAssets/AlbumPreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ImportAssets/AlbumPreview.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/context/AuthContext/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/AuthContext/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/context/AuthContext/storage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/AuthContext/storage.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/navigation/AuthStackNavigator.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/navigation/AuthStackNavigator.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/navigation/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/navigation/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Auth/AuthUnlock.screen.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Gallery/AlbumDetail.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Gallery/AlbumDetail.screen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/Auth/SetupAuth.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Auth/SetupAuth.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/Auth/Unlock.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Auth/Unlock.screen.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,7 +97,8 @@
       <workItem from="1654882790539" duration="2784000" />
       <workItem from="1654892240539" duration="11637000" />
       <workItem from="1654941159604" duration="23974000" />
-      <workItem from="1655039674928" duration="10269000" />
+      <workItem from="1655039674928" duration="12941000" />
+      <workItem from="1655144482179" duration="3759000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1654472318477</created>
@@ -206,7 +198,14 @@
       <option name="project" value="LOCAL" />
       <updated>1654988299193</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="local auth">
+      <created>1655068543099</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1655068543099</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -238,7 +237,8 @@
     <MESSAGE value="re-added deleteAssetAfterImport functionality" />
     <MESSAGE value="a few improvements" />
     <MESSAGE value="AssetPicker AlbumPreview and some fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="AssetPicker AlbumPreview and some fixes" />
+    <MESSAGE value="local auth" />
+    <option name="LAST_COMMIT_MESSAGE" value="local auth" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
