@@ -4,9 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuthContext } from "../../context/AuthContext";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-interface AuthUnlockScreenProps {}
-
-const SetupAuthScreen: React.FC<AuthUnlockScreenProps> = ({}) => {
+const AuthSetupScreen: React.FC = ({}) => {
   const insets = useSafeAreaInsets();
   const authContext = useAuthContext();
 
@@ -149,4 +147,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SetupAuthScreen;
+export default AuthSetupScreen;

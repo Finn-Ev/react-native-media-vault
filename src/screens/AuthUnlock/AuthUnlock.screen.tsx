@@ -14,9 +14,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuthContext } from "../../context/AuthContext";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 
-interface AuthUnlockScreenProps {}
-
-const UnlockScreen: React.FC<AuthUnlockScreenProps> = ({}) => {
+const AuthUnlockScreen: React.FC = ({}) => {
   const insets = useSafeAreaInsets();
   const appState = useRef(AppState.currentState);
 
@@ -162,4 +160,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UnlockScreen;
+export default AuthUnlockScreen;

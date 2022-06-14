@@ -2,9 +2,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { Platform } from "react-native";
-import AlbumListScreen from "../screens/Gallery/AlbumList.screen";
-import AlbumDetailScreen from "../screens/Gallery/AlbumDetail.screen";
-import AssetsDetailScreen from "../screens/Gallery/AssetsDetail.screen";
+import FSAlbumListScreen from "../screens/FSAlbumList/FSAlbumList.screen";
+import AlbumDetailScreen from "../screens/FSAssetList/FSAssetList.screen";
+import FSAssetCarouselScreen from "../screens/FSAssetCarousel/FSAssetCarousel.screen";
 
 export type GalleryStackParamList = {
   AlbumList: { assetsHaveChanged: boolean };
@@ -33,7 +33,7 @@ const GalleryStackNavigator: React.FC = ({}) => {
         options={{
           headerTitle: "Alben",
         }}
-        component={AlbumListScreen}
+        component={FSAlbumListScreen}
       />
       <Stack.Screen
         name={"AlbumDetail"}
@@ -48,7 +48,7 @@ const GalleryStackNavigator: React.FC = ({}) => {
           headerLargeTitle: false,
           animation: "slide_from_bottom",
         }}
-        component={AssetsDetailScreen}
+        component={FSAssetCarouselScreen}
       />
     </Stack.Navigator>
   );

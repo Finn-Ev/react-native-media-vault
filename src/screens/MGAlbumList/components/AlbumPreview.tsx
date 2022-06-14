@@ -9,11 +9,11 @@ import {
 import { useEffect, useState } from "react";
 import * as MediaLibrary from "expo-media-library";
 import { useNavigation } from "@react-navigation/native";
-import { MediaAlbumListScreenNavigationProps } from "../../navigation/types";
+import { MediaAlbumListScreenNavigationProps } from "../../../navigation/types";
 import { Entypo } from "@expo/vector-icons";
-import { getIsImage } from "../../util/MediaHelper";
+import { getIsImage } from "../../../util/MediaHelper";
 import { Video } from "expo-av";
-import { useImportAssetsContext } from "../../context/ImportAssetsContext";
+import { useImportAssetsContext } from "../../../context/ImportAssetsContext";
 
 interface AlbumPreviewProps {
   name: string;

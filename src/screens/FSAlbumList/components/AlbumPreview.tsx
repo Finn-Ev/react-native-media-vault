@@ -6,15 +6,15 @@ import {
   Text,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { AlbumListScreenNavigationProps } from "../../navigation/types";
+import { AlbumListScreenNavigationProps } from "../../../navigation/types";
 import {
   getAlbumAssetsFromFS,
   getFSAssetInfo,
   getIsImage,
-} from "../../util/MediaHelper";
+} from "../../../util/MediaHelper";
 import { useEffect, useState } from "react";
 import { ResizeMode, Video } from "expo-av";
-import { useAlbumContext } from "../../context/AlbumContext";
+import { useAlbumContext } from "../../../context/AlbumContext";
 
 interface ImagePreviewProps {
   albumName: string;

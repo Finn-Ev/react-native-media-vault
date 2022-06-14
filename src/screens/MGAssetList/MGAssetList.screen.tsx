@@ -7,16 +7,14 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import * as MediaLibrary from "expo-media-library";
 import { useEffect, useState } from "react";
 import ImagePreview from "../../components/ImagePreview";
-import LoadingIndicator from "../../components/util/LoadingIndicator";
+import LoadingIndicator from "../../components/LoadingIndicator";
 import {
   IImportAsset,
   useImportAssetsContext,
 } from "../../context/ImportAssetsContext";
-import FooterMenu from "../../components/ImportAssets/FooterMenu";
+import FooterMenu from "../../components/FooterMenu";
 
-interface MediaAlbumDetailScreenProps {}
-
-const MediaAlbumDetailScreen: React.FC<MediaAlbumDetailScreenProps> = ({}) => {
+const MGAssetListScreen: React.FC = ({}) => {
   const navigation = useNavigation<MediaAlbumDetailScreenNavigationProps>();
   const route = useRoute<MediaAlbumDetailScreenRouteProps>();
 
@@ -86,4 +84,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MediaAlbumDetailScreen;
+export default MGAssetListScreen;

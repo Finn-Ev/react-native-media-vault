@@ -25,11 +25,9 @@ import * as Haptics from "expo-haptics";
 import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAlbumContext } from "../../context/AlbumContext";
 import { useImportAssetsContext } from "../../context/ImportAssetsContext";
-import LoadingIndicator from "../../components/util/LoadingIndicator";
+import LoadingIndicator from "../../components/LoadingIndicator";
 
-interface AlbumDetailProps {}
-
-const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
+const FSAssetListScreen: React.FC = ({}) => {
   const navigation = useNavigation<AlbumDetailScreenNavigationProps>();
   const route = useRoute<AlbumDetailScreenRouteProps>();
 
@@ -219,6 +217,10 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({}) => {
     );
   };
 
+  const copySelectedAssets = async () => {};
+
+  const moveSelectedAssets = async () => {};
+
   const deleteSelectedAssets = async () => {
     if (loading || !selectedAssets.length) return;
     Alert.alert(
@@ -388,4 +390,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AlbumDetail;
+export default FSAssetListScreen;

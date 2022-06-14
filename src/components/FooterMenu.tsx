@@ -1,11 +1,11 @@
 import { StyleSheet, View, Text, Pressable, Alert } from "react-native";
 import { Feather, FontAwesome5, Ionicons } from "@expo/vector-icons";
-import { useImportAssetsContext } from "../../context/ImportAssetsContext";
+import { useImportAssetsContext } from "../context/ImportAssetsContext";
 import { useNavigation } from "@react-navigation/native";
 import {
   AlbumDetailScreenNavigationProps,
   AlbumListScreenNavigationProps,
-} from "../../navigation/types";
+} from "../navigation/types";
 
 interface ImportAssetsFooterProps {}
 

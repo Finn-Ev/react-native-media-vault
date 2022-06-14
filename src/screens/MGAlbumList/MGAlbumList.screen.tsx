@@ -3,14 +3,12 @@ import * as MediaLibrary from "expo-media-library";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { MediaAlbumListScreenNavigationProps } from "../../navigation/types";
-import FooterMenu from "../../components/ImportAssets/FooterMenu";
-import AlbumPreview from "../../components/ImportAssets/AlbumPreview";
-
-interface MediaAlbumListProps {}
+import FooterMenu from "../../components/FooterMenu";
+import AlbumPreview from "./components/AlbumPreview";
 
 const smartAlbumWhiteList = ["Recents", "Favorites"];
 
-const MediaAlbumListScreen: React.FC<MediaAlbumListProps> = ({}) => {
+const MGAlbumListScreen: React.FC = ({}) => {
   const [status, requestPermission] = MediaLibrary.usePermissions();
 
   const navigation = useNavigation<MediaAlbumListScreenNavigationProps>();
@@ -105,4 +103,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MediaAlbumListScreen;
+export default MGAlbumListScreen;

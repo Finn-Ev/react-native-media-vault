@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import SetupAuthScreen from "../screens/Auth/SetupAuth.screen";
-import UnlockScreen from "../screens/Auth/Unlock.screen";
+import AuthSetupScreen from "../screens/AuthSetup/AuthSetup.screen";
+import AuthUnlockScreen from "../screens/AuthUnlock/AuthUnlock.screen";
 import { useAuthContext } from "../context/AuthContext";
 
 export type AuthStackParamList = {
@@ -27,7 +27,7 @@ const AuthStackNavigator: React.FC = ({}) => {
           options={{
             headerTitle: "",
           }}
-          component={SetupAuthScreen}
+          component={AuthSetupScreen}
         />
       ) : (
         <Stack.Screen
@@ -35,7 +35,7 @@ const AuthStackNavigator: React.FC = ({}) => {
           options={{
             headerTitle: "App ist gesperrt",
           }}
-          component={UnlockScreen}
+          component={AuthUnlockScreen}
         />
       )}
     </Stack.Navigator>

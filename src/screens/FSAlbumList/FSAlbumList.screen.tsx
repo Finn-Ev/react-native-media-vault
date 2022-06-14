@@ -9,8 +9,8 @@ import {
 } from "react-native";
 import { useEffect, useState } from "react";
 import { initMediaRoot } from "../../util/MediaHelper";
-import AlbumPreview from "../../components/Gallery/AlbumPreview";
-import CreateAlbumDialog from "../../components/Gallery/CreateAlbumDialog";
+import AlbumPreview from "./components/AlbumPreview";
+import CreateAlbumDialog from "./components/CreateAlbumDialog";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { AlbumListScreenNavigationProps } from "../../navigation/types";
@@ -19,9 +19,7 @@ import { useActionSheet } from "@expo/react-native-action-sheet";
 import * as Haptics from "expo-haptics";
 import * as FS from "expo-file-system";
 
-interface AlbumListScreenProps {}
-
-const AlbumListScreen: React.FC<AlbumListScreenProps> = ({}) => {
+const FSAlbumListScreen: React.FC = ({}) => {
   const navigation = useNavigation<AlbumListScreenNavigationProps>();
 
   const { showActionSheetWithOptions } = useActionSheet();
@@ -161,4 +159,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AlbumListScreen;
+export default FSAlbumListScreen;

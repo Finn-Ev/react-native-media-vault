@@ -17,12 +17,10 @@ import { getIsImage } from "../../util/MediaHelper";
 import { Video } from "expo-av";
 import { useEffect, useRef, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import ImageZoomView from "../../components/Gallery/ImageZoomView";
+import ImageZoomView from "./components/ImageZoomView";
 import { AntDesign } from "@expo/vector-icons";
 
-interface AssetsDetailScreenProps {}
-
-const AssetsDetailScreen: React.FC<AssetsDetailScreenProps> = ({}) => {
+const FSAssetCarouselScreen: React.FC = ({}) => {
   const { width } = useWindowDimensions();
   const route = useRoute<AssetsDetailScreenRouteProps>();
   const navigation = useNavigation<AssetsDetailScreenScreenNavigationProps>();
@@ -133,4 +131,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AssetsDetailScreen;
+export default FSAssetCarouselScreen;

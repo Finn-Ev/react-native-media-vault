@@ -4,13 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6bbeae37-5161-4dd9-a061-f9297add82d8" name="Changes" comment="local auth">
+    <list default="true" id="6bbeae37-5161-4dd9-a061-f9297add82d8" name="Changes" comment="finished basic PIN auth">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/context/AuthContext/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/AuthContext/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/context/AuthContext/storage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/AuthContext/storage.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Gallery/AlbumPreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSAlbumList/components/AlbumPreview.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Gallery/CreateAlbumDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSAlbumList/components/CreateAlbumDialog.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Gallery/ImageZoomView.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSAssetCarousel/components/ImageZoomView.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ImportAssets/AlbumPreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MGAlbumList/components/AlbumPreview.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ImportAssets/FooterMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FooterMenu.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/util/LoadingIndicator.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/LoadingIndicator.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/navigation/AuthStackNavigator.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/navigation/AuthStackNavigator.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Auth/SetupAuth.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Auth/SetupAuth.screen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Auth/Unlock.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Auth/Unlock.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/navigation/GalleryStackNavigator.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/navigation/GalleryStackNavigator.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/navigation/ImportAssetsStackNavigator.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/navigation/ImportAssetsStackNavigator.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/Auth/SetupAuth.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/AuthSetup/AuthSetup.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/Auth/Unlock.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/AuthUnlock/AuthUnlock.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/Gallery/AlbumDetail.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSAssetList/FSAssetList.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/Gallery/AlbumList.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSAlbumList/FSAlbumList.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/Gallery/AssetsDetail.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSAssetCarousel/FSAssetCarousel.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/ImportAssets/MediaAlbumDetail.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MGAssetList/MGAssetList.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/ImportAssets/MediaAlbumList.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MGAlbumList/MGAlbumList.screen.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,11 +68,11 @@
       <recent name="$PROJECT_DIR$/src/components" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/screens/MGAlbumList/components" />
+      <recent name="$PROJECT_DIR$/src/screens/FSAssetCarousel/components" />
+      <recent name="$PROJECT_DIR$/src/screens/FSAlbumList/components" />
       <recent name="$PROJECT_DIR$/src/components" />
-      <recent name="$PROJECT_DIR$/src/components/Gallery" />
-      <recent name="$PROJECT_DIR$/src/screens/ImportAssets" />
-      <recent name="$PROJECT_DIR$/src/screens/Auth" />
-      <recent name="$PROJECT_DIR$/src/screens/Gallery" />
+      <recent name="$PROJECT_DIR$/src/screens/MGAlbumList" />
     </key>
   </component>
   <component name="RunManager">
@@ -98,7 +109,8 @@
       <workItem from="1654892240539" duration="11637000" />
       <workItem from="1654941159604" duration="23974000" />
       <workItem from="1655039674928" duration="12941000" />
-      <workItem from="1655144482179" duration="3759000" />
+      <workItem from="1655144482179" duration="3913000" />
+      <workItem from="1655203521360" duration="6683000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1654472318477</created>
@@ -205,7 +217,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655068543099</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="finished basic PIN auth">
+      <created>1655149485898</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1655149485898</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -238,7 +257,8 @@
     <MESSAGE value="a few improvements" />
     <MESSAGE value="AssetPicker AlbumPreview and some fixes" />
     <MESSAGE value="local auth" />
-    <option name="LAST_COMMIT_MESSAGE" value="local auth" />
+    <MESSAGE value="finished basic PIN auth" />
+    <option name="LAST_COMMIT_MESSAGE" value="finished basic PIN auth" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

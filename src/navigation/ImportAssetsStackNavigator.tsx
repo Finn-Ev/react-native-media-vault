@@ -2,10 +2,10 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { Platform, Pressable, Text } from "react-native";
-import AlbumListScreen from "../screens/Gallery/AlbumList.screen";
-import AlbumDetailScreen from "../screens/Gallery/AlbumDetail.screen";
-import MediaAlbumListScreen from "../screens/ImportAssets/MediaAlbumList.screen";
-import MediaAlbumDetailScreen from "../screens/ImportAssets/MediaAlbumDetail.screen";
+import FSAlbumListScreen from "../screens/FSAlbumList/FSAlbumList.screen";
+import AlbumDetailScreen from "../screens/FSAssetList/FSAssetList.screen";
+import MGAlbumListScreen from "../screens/MGAlbumList/MGAlbumList.screen";
+import MGAssetListScreen from "../screens/MGAssetList/MGAssetList.screen";
 
 export type ImportAssetsStackParamList = {
   MediaAlbumList: undefined;
@@ -37,12 +37,12 @@ const ImportAssetsStackNavigator: React.FC = ({}) => {
         options={{
           headerTitle: "Meine Alben",
         }}
-        component={MediaAlbumListScreen}
+        component={MGAlbumListScreen}
       />
       <Stack.Screen
         name={"MediaAlbumDetail"}
         options={{ headerTitle: "" }}
-        component={MediaAlbumDetailScreen}
+        component={MGAssetListScreen}
       />
     </Stack.Navigator>
   );
