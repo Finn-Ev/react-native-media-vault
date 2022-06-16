@@ -6,7 +6,7 @@ import {
   Text,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { AlbumListScreenNavigationProps } from "../../../navigation/types";
+import { FSAlbumListScreenNavigationProps } from "../../../navigation/types";
 import {
   getAlbumAssetsFromFS,
   getFSAssetInfo,
@@ -25,7 +25,7 @@ const AlbumPreview: React.FC<ImagePreviewProps> = ({
   albumName,
   onLongPress,
 }) => {
-  const navigation = useNavigation<AlbumListScreenNavigationProps>();
+  const navigation = useNavigation<FSAlbumListScreenNavigationProps>();
   // const [loading, setLoading] = useState(false);
 
   const albumContext = useAlbumContext();

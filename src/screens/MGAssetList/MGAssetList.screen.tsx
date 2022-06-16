@@ -1,6 +1,6 @@
 import { FlatList, SafeAreaView, StyleSheet } from "react-native";
 import {
-  MediaAlbumDetailScreenNavigationProps,
+  MGAssetListScreenNavigationProps,
   MediaAlbumDetailScreenRouteProps,
 } from "../../navigation/types";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -15,7 +15,7 @@ import {
 import FooterMenu from "../../components/FooterMenu";
 
 const MGAssetListScreen: React.FC = ({}) => {
-  const navigation = useNavigation<MediaAlbumDetailScreenNavigationProps>();
+  const navigation = useNavigation<MGAssetListScreenNavigationProps>();
   const route = useRoute<MediaAlbumDetailScreenRouteProps>();
 
   const [assetUris, setAssetUris] = useState<IImportAsset[]>([]);

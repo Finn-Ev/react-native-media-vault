@@ -8,8 +8,8 @@ import MGAlbumListScreen from "../screens/MGAlbumList/MGAlbumList.screen";
 import MGAssetListScreen from "../screens/MGAssetList/MGAssetList.screen";
 
 export type ImportAssetsStackParamList = {
-  MediaAlbumList: undefined;
-  MediaAlbumDetail: { albumId: string; albumName: string };
+  MGAlbumList: undefined;
+  MGAssetList: { albumId: string; albumName: string };
 };
 
 const Stack = createNativeStackNavigator<ImportAssetsStackParamList>();
@@ -17,7 +17,7 @@ const Stack = createNativeStackNavigator<ImportAssetsStackParamList>();
 const ImportAssetsStackNavigator: React.FC = ({}) => {
   return (
     <Stack.Navigator
-      initialRouteName={"MediaAlbumList"}
+      initialRouteName={"MGAlbumList"}
       screenOptions={({ navigation }) => ({
         headerLargeTitle: Platform.OS === "ios",
         headerStyle: { backgroundColor: "black" },
@@ -33,14 +33,14 @@ const ImportAssetsStackNavigator: React.FC = ({}) => {
       })}
     >
       <Stack.Screen
-        name={"MediaAlbumList"}
+        name={"MGAlbumList"}
         options={{
           headerTitle: "Meine Alben",
         }}
         component={MGAlbumListScreen}
       />
       <Stack.Screen
-        name={"MediaAlbumDetail"}
+        name={"MGAssetList"}
         options={{ headerTitle: "" }}
         component={MGAssetListScreen}
       />

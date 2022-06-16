@@ -27,7 +27,10 @@ const AuthUnlockScreen: React.FC = ({}) => {
   const checkPin = async (pin: string) => {
     const selectedPinCode = authContext?.selectedPinCode;
     if (selectedPinCode === pin) {
-      return authContext?.setAuthenticated(true);
+      return setTimeout(() => {
+        authContext?.setAuthenticated(true);
+      }, 250);
+      // without the timeout-delay, the user might get confused because he/she never sees the entered PIN completly
     } else {
       Alert.alert("Fehler", "Falsche PIN.", [
         {

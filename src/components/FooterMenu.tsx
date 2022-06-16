@@ -3,15 +3,15 @@ import { Feather, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { useImportAssetsContext } from "../context/ImportAssetsContext";
 import { useNavigation } from "@react-navigation/native";
 import {
-  AlbumDetailScreenNavigationProps,
-  AlbumListScreenNavigationProps,
+  FSAssetListScreenNavigationProps,
+  FSAlbumListScreenNavigationProps,
 } from "../navigation/types";
 
 interface ImportAssetsFooterProps {}
 
 const FooterMenu: React.FC<ImportAssetsFooterProps> = ({}) => {
   const navigation = useNavigation<
-    AlbumDetailScreenNavigationProps | AlbumListScreenNavigationProps
+    FSAssetListScreenNavigationProps | FSAlbumListScreenNavigationProps
   >();
   const importAssetsContext = useImportAssetsContext();
 

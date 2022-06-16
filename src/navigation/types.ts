@@ -5,52 +5,62 @@ import { GalleryStackParamList } from "./GalleryStackNavigator";
 import { ImportAssetsStackParamList } from "./ImportAssetsStackNavigator";
 
 // navigation prop types
-export type AlbumListScreenNavigationProps = NativeStackNavigationProp<
+export type FSAlbumListScreenNavigationProps = NativeStackNavigationProp<
   GalleryStackParamList,
-  "AlbumList"
+  "FSAlbumList"
 >;
 
-export type AlbumDetailScreenNavigationProps = NativeStackNavigationProp<
+export type FSAssetListScreenNavigationProps = NativeStackNavigationProp<
   GalleryStackParamList,
-  "AlbumDetail"
+  "FSAssetList"
 >;
 
-export type AssetsDetailScreenScreenNavigationProps = NativeStackNavigationProp<
+export type FSAssetCarouselScreenNavigationProps = NativeStackNavigationProp<
   GalleryStackParamList,
-  "AssetsDetail"
+  "FSAssetCarousel"
 >;
 
-export type MediaAlbumListScreenNavigationProps = NativeStackNavigationProp<
+export type FSMoveAssetsScreenNavigationProps = NativeStackNavigationProp<
+  GalleryStackParamList,
+  "FSMoveAssets"
+>;
+
+export type MGAlbumListScreenNavigationProps = NativeStackNavigationProp<
   ImportAssetsStackParamList,
-  "MediaAlbumList"
+  "MGAlbumList"
 >;
 
-export type MediaAlbumDetailScreenNavigationProps = NativeStackNavigationProp<
+export type MGAssetListScreenNavigationProps = NativeStackNavigationProp<
   ImportAssetsStackParamList,
-  "MediaAlbumDetail"
+  "MGAssetList"
 >;
 
 // route prop types
-export type AlbumListScreenRouteProps = RouteProp<
+export type FSAlbumListScreenRouteProps = RouteProp<
   GalleryStackParamList,
-  "AlbumList"
+  "FSAlbumList"
 >;
 
-export type AlbumDetailScreenRouteProps = RouteProp<
+export type FSAssetListScreenRouteProps = RouteProp<
   GalleryStackParamList & RootStackParamList,
-  "AlbumDetail"
+  "FSAssetList"
 >;
-export type AssetsDetailScreenRouteProps = RouteProp<
+export type FSAssetCarouselScreenRouteProps = RouteProp<
   GalleryStackParamList & RootStackParamList,
-  "AssetsDetail"
+  "FSAssetCarousel"
+>;
+
+export type FSMoveAssetsScreenRouteProps = RouteProp<
+  GalleryStackParamList & RootStackParamList,
+  "FSMoveAssets"
 >;
 
 export type MediaAlbumListScreenRouteProps = RouteProp<
   ImportAssetsStackParamList,
-  "MediaAlbumList"
+  "MGAlbumList"
 >;
 
 export type MediaAlbumDetailScreenRouteProps = RouteProp<
   ImportAssetsStackParamList,
-  "MediaAlbumDetail"
+  "MGAssetList"
 >;

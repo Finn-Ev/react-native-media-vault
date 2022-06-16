@@ -3,6 +3,8 @@ import { importAssetsIntoFSAlbum } from "../../util/MediaHelper";
 import * as MediaLibrary from "expo-media-library";
 import { Alert } from "react-native";
 
+// The purpose of this context is to manage the selection and import of assets from the media library
+// into the app's filesystem.
 export interface IImportAsset {
   localUri: string;
   id: string;

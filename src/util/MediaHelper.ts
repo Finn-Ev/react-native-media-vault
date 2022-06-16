@@ -105,10 +105,12 @@ export const getAlbumAssetsFromFS = async (albumName: string) => {
   }
 };
 
-export const deleteAssetFromFS = async (uri: string) => {
+export const deleteAssetsFromFS = async (uris: string[]) => {
   if (!documentDirectoryExists()) return false;
   try {
-    await FileSystem.deleteAsync(uri);
+    for (const uri of uris) {
+      await FileSystem.deleteAsync(uri);
+    }
     return true;
   } catch (e) {
     console.warn(e.message);

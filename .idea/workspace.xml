@@ -4,24 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6bbeae37-5161-4dd9-a061-f9297add82d8" name="Changes" comment="finished basic PIN auth">
+    <list default="true" id="6bbeae37-5161-4dd9-a061-f9297add82d8" name="Changes" comment="component/screen refactoring">
+      <change afterPath="$PROJECT_DIR$/src/screens/FSMoveAssets/FSMoveAssets.screen.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Gallery/AlbumPreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSAlbumList/components/AlbumPreview.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Gallery/CreateAlbumDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSAlbumList/components/CreateAlbumDialog.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Gallery/ImageZoomView.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSAssetCarousel/components/ImageZoomView.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ImportAssets/AlbumPreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MGAlbumList/components/AlbumPreview.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ImportAssets/FooterMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FooterMenu.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/util/LoadingIndicator.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/LoadingIndicator.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/navigation/AuthStackNavigator.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/navigation/AuthStackNavigator.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/FooterMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FooterMenu.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/context/AlbumContext/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/AlbumContext/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/context/ImportAssetsContext/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/ImportAssetsContext/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/navigation/GalleryStackNavigator.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/navigation/GalleryStackNavigator.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/navigation/ImportAssetsStackNavigator.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/navigation/ImportAssetsStackNavigator.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Auth/SetupAuth.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/AuthSetup/AuthSetup.screen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Auth/Unlock.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/AuthUnlock/AuthUnlock.screen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Gallery/AlbumDetail.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSAssetList/FSAssetList.screen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Gallery/AlbumList.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSAlbumList/FSAlbumList.screen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Gallery/AssetsDetail.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSAssetCarousel/FSAssetCarousel.screen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/ImportAssets/MediaAlbumDetail.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MGAssetList/MGAssetList.screen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/ImportAssets/MediaAlbumList.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MGAlbumList/MGAlbumList.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/navigation/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/navigation/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/AuthUnlock/AuthUnlock.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/AuthUnlock/AuthUnlock.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/FSAlbumList/FSAlbumList.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSAlbumList/FSAlbumList.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/FSAlbumList/components/AlbumPreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSAlbumList/components/AlbumPreview.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/FSAssetCarousel/FSAssetCarousel.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSAssetCarousel/FSAssetCarousel.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/FSAssetList/FSAssetList.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSAssetList/FSAssetList.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/MGAlbumList/MGAlbumList.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MGAlbumList/MGAlbumList.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/MGAlbumList/components/AlbumPreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MGAlbumList/components/AlbumPreview.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/MGAssetList/MGAssetList.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MGAssetList/MGAssetList.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/util/MediaHelper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/MediaHelper.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,26 +42,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/finnevermann/projects/media-vault/src/components/ImportAssets&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
-    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/usr/local/lib/node_modules/prettier&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Users/finnevermann/projects/media-vault/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "/Users/finnevermann/projects/media-vault/src/components/ImportAssets",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "yarn",
+    "prettierjs.PrettierConfiguration.Package": "/usr/local/lib/node_modules/prettier",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "ts.external.directory.path": "/Users/finnevermann/projects/media-vault/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/components/ImportAssets" />
@@ -110,7 +110,8 @@
       <workItem from="1654941159604" duration="23974000" />
       <workItem from="1655039674928" duration="12941000" />
       <workItem from="1655144482179" duration="3913000" />
-      <workItem from="1655203521360" duration="6683000" />
+      <workItem from="1655203521360" duration="6762000" />
+      <workItem from="1655370052440" duration="7220000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1654472318477</created>
@@ -224,7 +225,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655149485898</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="component/screen refactoring">
+      <created>1655220508799</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1655220508799</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -258,7 +266,8 @@
     <MESSAGE value="AssetPicker AlbumPreview and some fixes" />
     <MESSAGE value="local auth" />
     <MESSAGE value="finished basic PIN auth" />
-    <option name="LAST_COMMIT_MESSAGE" value="finished basic PIN auth" />
+    <MESSAGE value="component/screen refactoring" />
+    <option name="LAST_COMMIT_MESSAGE" value="component/screen refactoring" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

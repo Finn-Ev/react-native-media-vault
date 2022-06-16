@@ -9,7 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import * as MediaLibrary from "expo-media-library";
 import { useNavigation } from "@react-navigation/native";
-import { MediaAlbumListScreenNavigationProps } from "../../../navigation/types";
+import { MGAlbumListScreenNavigationProps } from "../../../navigation/types";
 import { Entypo } from "@expo/vector-icons";
 import { getIsImage } from "../../../util/MediaHelper";
 import { Video } from "expo-av";
@@ -24,7 +24,7 @@ const AlbumPreview: React.FC<AlbumPreviewProps> = ({ name, id }) => {
   const [loading, setLoading] = useState(false);
   // TODO getAlbumAssetsById and Display Thumbnail, Name and AssetCount in row
 
-  const navigation = useNavigation<MediaAlbumListScreenNavigationProps>();
+  const navigation = useNavigation<MGAlbumListScreenNavigationProps>();
 
   const [thumbnailUri, setThumbnailUri] = useState("x");
   const [assetCount, setAssetCount] = useState(0);

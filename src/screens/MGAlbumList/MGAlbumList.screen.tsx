@@ -2,7 +2,7 @@ import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import * as MediaLibrary from "expo-media-library";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { MediaAlbumListScreenNavigationProps } from "../../navigation/types";
+import { MGAlbumListScreenNavigationProps } from "../../navigation/types";
 import FooterMenu from "../../components/FooterMenu";
 import AlbumPreview from "./components/AlbumPreview";
 
@@ -11,7 +11,7 @@ const smartAlbumWhiteList = ["Recents", "Favorites"];
 const MGAlbumListScreen: React.FC = ({}) => {
   const [status, requestPermission] = MediaLibrary.usePermissions();
 
-  const navigation = useNavigation<MediaAlbumListScreenNavigationProps>();
+  const navigation = useNavigation<MGAlbumListScreenNavigationProps>();
 
   const [standardAlbums, setStandardAlbums] = useState<MediaLibrary.Album[]>(
     []

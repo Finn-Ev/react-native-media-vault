@@ -3,16 +3,20 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { Platform } from "react-native";
 import FSAlbumListScreen from "../screens/FSAlbumList/FSAlbumList.screen";
-import AlbumDetailScreen from "../screens/FSAssetList/FSAssetList.screen";
+import FSAssetListScreen from "../screens/FSAssetList/FSAssetList.screen";
 import FSAssetCarouselScreen from "../screens/FSAssetCarousel/FSAssetCarousel.screen";
 
 export type GalleryStackParamList = {
-  AlbumList: { assetsHaveChanged: boolean };
-  AlbumDetail: { albumName: string };
-  AssetsDetail: {
+  FSAlbumList: { assetsHaveChanged: boolean };
+  FSAssetList: { albumName: string };
+  FSAssetCarousel: {
     assetUris: string[];
     startIndex: number;
     refreshCarousel?: boolean;
+  };
+  FSMoveAssets: {
+    assetUris: string[];
+    copy: boolean;
   };
 };
 
@@ -21,7 +25,7 @@ const Stack = createNativeStackNavigator<GalleryStackParamList>();
 const GalleryStackNavigator: React.FC = ({}) => {
   return (
     <Stack.Navigator
-      initialRouteName={"AlbumList"}
+      initialRouteName={"FSAlbumList"}
       screenOptions={{
         headerLargeTitle: Platform.OS === "ios",
         headerStyle: { backgroundColor: "black" },
@@ -29,23 +33,33 @@ const GalleryStackNavigator: React.FC = ({}) => {
       }}
     >
       <Stack.Screen
-        name={"AlbumList"}
+        name={"FSAlbumList"}
         options={{
           headerTitle: "Alben",
         }}
         component={FSAlbumListScreen}
       />
       <Stack.Screen
-        name={"AlbumDetail"}
+        name={"FSAssetList"}
         options={{ headerTitle: "" }}
-        component={AlbumDetailScreen}
+        component={FSAssetListScreen}
       />
       <Stack.Screen
-        name={"AssetsDetail"}
+        name={"FSAssetCarousel"}
         options={{
           headerTitle: "",
           headerBackVisible: false,
           headerLargeTitle: false,
+          animation: "slide_from_bottom",
+        }}
+        component={FSAssetCarouselScreen}
+      />
+
+      <Stack.Screen
+        name={"FSMoveAssets"}
+        options={{
+          headerTitle: "",
+          headerBackVisible: true,
           animation: "slide_from_bottom",
         }}
         component={FSAssetCarouselScreen}

@@ -9,8 +9,8 @@ import {
   ViewToken,
 } from "react-native";
 import {
-  AssetsDetailScreenRouteProps,
-  AssetsDetailScreenScreenNavigationProps,
+  FSAssetCarouselScreenRouteProps,
+  FSAssetCarouselScreenNavigationProps,
 } from "../../navigation/types";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { getIsImage } from "../../util/MediaHelper";
@@ -22,8 +22,8 @@ import { AntDesign } from "@expo/vector-icons";
 
 const FSAssetCarouselScreen: React.FC = ({}) => {
   const { width } = useWindowDimensions();
-  const route = useRoute<AssetsDetailScreenRouteProps>();
-  const navigation = useNavigation<AssetsDetailScreenScreenNavigationProps>();
+  const route = useRoute<FSAssetCarouselScreenRouteProps>();
+  const navigation = useNavigation<FSAssetCarouselScreenNavigationProps>();
 
   const { assetUris, startIndex } = route.params;
 

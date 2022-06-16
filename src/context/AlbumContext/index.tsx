@@ -6,10 +6,11 @@ import {
 } from "../../util/MediaHelper";
 import { getMetaAlbumsFromStorage, saveMetaAlbumsToStorage } from "./storage";
 
-// meta albums are stored in the app's state and persisted in asyncStorage
-// they are needed to display the albums by creation-time and to store values like the selected sort direction for each album
-// FS (file system) albums are stored in the device's file system
-// they are synced and connected by a 1..1 relation, albumname is so to say the primary-key
+// The purpose of this context is to create and sync FileSystem Albums with Meta-Albums.
+// Meta-Albums are stored in the app's state and get persisted in asyncStorage.
+// They are needed to display the albums by creation-time and to store values like the selected sort direction for each album
+// FS (file system) albums are stored in the device's file system and store the assets themselves.
+// FS Albums and Meta-Albums are synced and connected by a 1..1 relation, album name is so to say the primary-key
 export interface IMetaAlbum {
   name: string;
   selectedSortDirection: "asc" | "desc";
