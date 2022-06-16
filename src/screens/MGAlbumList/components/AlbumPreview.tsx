@@ -67,7 +67,7 @@ const AlbumPreview: React.FC<AlbumPreviewProps> = ({ name, id }) => {
   return (
     <Pressable
       onPress={() => {
-        navigation.navigate("MediaAlbumDetail", {
+        navigation.navigate("MGAssetList", {
           albumId: id,
           albumName: name,
         });

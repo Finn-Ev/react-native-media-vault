@@ -29,7 +29,7 @@ const AuthUnlockScreen: React.FC = ({}) => {
     if (selectedPinCode === pin) {
       return setTimeout(() => {
         authContext?.setAuthenticated(true);
-      }, 250);
+      }, 200);
       // without the timeout-delay, the user might get confused because he/she never sees the entered PIN completly
     } else {
       Alert.alert("Fehler", "Falsche PIN.", [
@@ -38,7 +38,7 @@ const AuthUnlockScreen: React.FC = ({}) => {
           onPress: () => {
             setTimeout(() => {
               setPinInput("");
-            }, 250);
+            }, 200);
           },
         },
       ]);

@@ -5,6 +5,7 @@ import { Platform } from "react-native";
 import FSAlbumListScreen from "../screens/FSAlbumList/FSAlbumList.screen";
 import FSAssetListScreen from "../screens/FSAssetList/FSAssetList.screen";
 import FSAssetCarouselScreen from "../screens/FSAssetCarousel/FSAssetCarousel.screen";
+import FSMoveAssetsScreen from "../screens/FSMoveAssets/FSMoveAssets.screen";
 
 export type GalleryStackParamList = {
   FSAlbumList: { assetsHaveChanged: boolean };
@@ -17,6 +18,7 @@ export type GalleryStackParamList = {
   FSMoveAssets: {
     assetUris: string[];
     copy: boolean;
+    sourceAlbumName: string;
   };
 };
 
@@ -60,9 +62,9 @@ const GalleryStackNavigator: React.FC = ({}) => {
         options={{
           headerTitle: "",
           headerBackVisible: true,
-          animation: "slide_from_bottom",
+          headerLargeTitle: false,
         }}
-        component={FSAssetCarouselScreen}
+        component={FSMoveAssetsScreen}
       />
     </Stack.Navigator>
   );

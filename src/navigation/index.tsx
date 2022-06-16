@@ -18,7 +18,8 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const Navigation: React.FC = ({}) => {
   const authContext = useAuthContext();
-  const isAuthenticated = authContext?.authenticated;
+  // const isAuthenticated = authContext?.authenticated;
+  const isAuthenticated = true;
   return (
     <NavigationContainer>
       <Stack.Navigator

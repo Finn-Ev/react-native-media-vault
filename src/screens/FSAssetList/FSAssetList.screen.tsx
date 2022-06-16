@@ -21,10 +21,16 @@ import {
 } from "../../util/MediaHelper";
 import ImagePreview from "../../components/ImagePreview";
 import * as Haptics from "expo-haptics";
-import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  Entypo,
+  Feather,
+  Ionicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { useAlbumContext } from "../../context/AlbumContext";
 import { useImportAssetsContext } from "../../context/ImportAssetsContext";
 import LoadingIndicator from "../../components/LoadingIndicator";
+import { useActionSheet } from "@expo/react-native-action-sheet";
 
 // Although this component is very huge and rather complex, I decided to not split it up into multiple components
 // or to create a context for it as all of the state is used by multiple parts of the UI and thus cannot be
@@ -34,6 +40,8 @@ const FSAssetListScreen: React.FC = ({}) => {
   const navigation = useNavigation<FSAssetListScreenNavigationProps>();
   const route = useRoute<FSAssetListScreenRouteProps>();
   const [loading, setLoading] = useState(false);
+
+  const { showActionSheetWithOptions } = useActionSheet();
 
   const importAssetsContext = useImportAssetsContext();
   const albumContext = useAlbumContext();
@@ -163,6 +171,9 @@ const FSAssetListScreen: React.FC = ({}) => {
     setLoading(true);
 
     await exportAssetsIntoMediaLibrary(selectedAssets);
+    await fetchAssets();
+    disableSelectMode();
+    setLoading(false);
     Alert.alert(
       "Export erfolgreich",
       "Sollen die Kopien der exportierten Dateien gelöscht werden?",
@@ -170,14 +181,11 @@ const FSAssetListScreen: React.FC = ({}) => {
         {
           text: "Abbrechen",
           style: "cancel",
-          onPress: () => setLoading(false),
         },
         {
           text: "Löschen",
           onPress: async () => {
             await deleteAssetsFromFS(selectedAssets);
-            disableSelectMode();
-            setLoading(false);
             await fetchAssets();
           },
         },
@@ -213,11 +221,46 @@ const FSAssetListScreen: React.FC = ({}) => {
     importAssetsContext?.setSelectedAlbum(metaAlbumInfo!.name);
     // @ts-ignore
     navigation.navigate("ImportAssets");
+    disableSelectMode();
   };
 
-  const openMoveAssetsScreen = async () => {
+  const openMoveAssetsScreen = (copy = false) => {
     if (loading || !selectedAssets.length) return;
-    // navigate to FSMoveAssets screen
+    navigation.navigate("FSMoveAssets", {
+      assetUris: selectedAssets,
+      sourceAlbumName: route.params.albumName,
+      copy,
+    });
+    disableSelectMode();
+  };
+
+  const openAlbumActionSheet = () => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    const options = [
+      "Dateien in anderes Album verschieben",
+      "Dateien in anderes Album kopieren",
+      "Ausgewähle Dateien exportieren",
+      "Abbrechen",
+    ];
+    const cancelButtonIndex = 3;
+
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+      },
+      (buttonIndex) => {
+        if (buttonIndex === 0) {
+          openMoveAssetsScreen(false);
+        }
+        if (buttonIndex === 1) {
+          openMoveAssetsScreen(true);
+        }
+        if (buttonIndex === 2) {
+          exportSelectedAssets();
+        }
+      }
+    );
   };
 
   if (loading) return <LoadingIndicator />;
@@ -251,20 +294,29 @@ const FSAssetListScreen: React.FC = ({}) => {
           <View style={styles.footer}>
             {isSelectModeActive ? (
               <>
-                <Pressable onPress={exportSelectedAssets} hitSlop={15}>
-                  <View style={styles.buttonContainer}>
-                    <Feather name="share" size={24} color="white" />
-                    <Text style={styles.buttonText}>Exportieren</Text>
-                  </View>
-                </Pressable>
+                {!!selectedAssets.length && (
+                  <Pressable onPress={deleteSelectedAssets} hitSlop={15}>
+                    <View style={styles.buttonContainer}>
+                      <Ionicons name="trash" size={24} color="white" />
+                    </View>
+                  </Pressable>
+                )}
                 <Text style={{ color: "white", fontSize: 16 }}>
                   {selectedAssets.length} ausgewählt
                 </Text>
-                <Pressable onPress={deleteSelectedAssets} hitSlop={15}>
-                  <View style={styles.buttonContainer}>
-                    <Ionicons name="trash" size={24} color="white" />
-                  </View>
-                </Pressable>
+
+                {!!selectedAssets.length && (
+                  <Pressable onPress={openAlbumActionSheet} hitSlop={15}>
+                    <View style={styles.buttonContainer}>
+                      {/*<Text style={styles.buttonText}>Aktionen</Text>*/}
+                      <Entypo
+                        name="dots-three-horizontal"
+                        size={24}
+                        color="white"
+                      />
+                    </View>
+                  </Pressable>
+                )}
               </>
             ) : (
               <>
@@ -345,7 +397,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonText: {
-    marginLeft: 5,
+    marginRight: 5,
     color: "white",
     fontSize: 15,
   },

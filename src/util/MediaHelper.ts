@@ -82,6 +82,31 @@ export const importAssetsIntoFSAlbum = async (
   }
 };
 
+export const moveAssetsFromFSAlbumToFSAlbum = async (
+  destinationAlbumName: string,
+  assets: string[],
+  copy = false
+) => {
+  for (const assetUri of assets) {
+    const filenameWithExtension = assetUri.split("/").pop();
+    if (copy) {
+      await FileSystem.copyAsync({
+        from: assetUri,
+        to:
+          getFullDirectoryPath("media/" + destinationAlbumName) +
+          filenameWithExtension,
+      });
+    } else {
+      await FileSystem.moveAsync({
+        from: assetUri,
+        to:
+          getFullDirectoryPath("media/" + destinationAlbumName) +
+          filenameWithExtension,
+      });
+    }
+  }
+};
+
 export const getAssetUriFromFSByAlbumAndFileName = (
   albumName: string,
   imageName: string

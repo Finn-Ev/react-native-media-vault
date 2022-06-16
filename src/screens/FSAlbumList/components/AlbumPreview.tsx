@@ -36,7 +36,7 @@ const AlbumPreview: React.FC<ImagePreviewProps> = ({
   const [thumbnailUri, setThumbnailUri] = useState("");
 
   const onPress = () => {
-    navigation.navigate("AlbumDetail", { albumName });
+    navigation.navigate("FSAssetList", { albumName });
   };
 
   const getAlbumThumbnail = async () => {

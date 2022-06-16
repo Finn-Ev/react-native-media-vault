@@ -22,7 +22,6 @@ const MGAssetListScreen: React.FC = ({}) => {
   const [loading, setLoading] = useState(true);
 
   const importAssetsContext = useImportAssetsContext();
-  if (!importAssetsContext) throw new Error("ImportAssetsContext not found");
 
   const getAssets = async () => {
     setLoading(true);
@@ -63,8 +62,8 @@ const MGAssetListScreen: React.FC = ({}) => {
         renderItem={({ item }) => (
           <ImagePreview
             uri={item.localUri}
-            onPress={() => importAssetsContext.toggleAsset(item)}
-            isSelected={importAssetsContext?.assetsToImport.includes(item)}
+            onPress={() => importAssetsContext?.toggleAsset(item)}
+            isSelected={importAssetsContext!.assetsToImport.includes(item)}
             onLongPress={() => {}}
           />
         )}
