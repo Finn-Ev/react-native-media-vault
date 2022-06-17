@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Pressable } from "react-native";
+import { StyleSheet, View, Text, Pressable, ScrollView } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   FSMoveAssetsScreenNavigationProps,
@@ -28,7 +28,7 @@ const FSMoveAssetsScreen: React.FC = ({}) => {
   );
 
   return (
-    <View style={styles.root}>
+    <ScrollView style={styles.root}>
       <Text style={styles.heading}>Wähle das Ziel-Album aus</Text>
       {destinationAlbums?.map((album) => (
         <Pressable
@@ -40,7 +40,7 @@ const FSMoveAssetsScreen: React.FC = ({}) => {
           <Entypo name="chevron-thin-right" size={16} color="gray" />
         </Pressable>
       ))}
-    </View>
+    </ScrollView>
   );
 };
 

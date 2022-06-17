@@ -8,7 +8,7 @@ import { getVideoDurationString } from "../util";
 interface ImagePreviewProps {
   uri: string;
   onPress: () => void;
-  onLongPress: () => void;
+  onLongPress?: () => void;
   isSelected: boolean;
 }
 

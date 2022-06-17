@@ -5,11 +5,13 @@ import { useNavigation } from "@react-navigation/native";
 import { MGAlbumListScreenNavigationProps } from "../../navigation/types";
 import FooterMenu from "../../components/FooterMenu";
 import AlbumPreview from "./components/AlbumPreview";
+import LoadingIndicator from "../../components/LoadingIndicator";
 
 const smartAlbumWhiteList = ["Recents", "Favorites"];
 
 const MGAlbumListScreen: React.FC = ({}) => {
   const [status, requestPermission] = MediaLibrary.usePermissions();
+  const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation<MGAlbumListScreenNavigationProps>();
 
@@ -20,6 +22,7 @@ const MGAlbumListScreen: React.FC = ({}) => {
   const [smartAlbums, setSmartAlbums] = useState<MediaLibrary.Album[]>([]);
 
   const getAlbums = async () => {
+    setLoading(true);
     const smartAlbums = await MediaLibrary.getAlbumsAsync({
       includeSmartAlbums: true,
     });
@@ -30,6 +33,7 @@ const MGAlbumListScreen: React.FC = ({}) => {
 
     const albums = await MediaLibrary.getAlbumsAsync();
     setStandardAlbums(albums);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -39,15 +43,19 @@ const MGAlbumListScreen: React.FC = ({}) => {
   if (status?.granted) {
     return (
       <SafeAreaView style={styles.root}>
-        <ScrollView>
-          {smartAlbums.map((album, index) => (
-            <AlbumPreview name={album.title} id={album.id} key={index} />
-          ))}
-          {!!standardAlbums.length && <View style={styles.horizontalRow} />}
-          {standardAlbums.map((album, index) => (
-            <AlbumPreview name={album.title} id={album.id} key={index} />
-          ))}
-        </ScrollView>
+        {!loading ? (
+          <ScrollView>
+            {smartAlbums.map((album, index) => (
+              <AlbumPreview name={album.title} id={album.id} key={index} />
+            ))}
+            {!!standardAlbums.length && <View style={styles.horizontalRow} />}
+            {standardAlbums.map((album, index) => (
+              <AlbumPreview name={album.title} id={album.id} key={index} />
+            ))}
+          </ScrollView>
+        ) : (
+          <LoadingIndicator />
+        )}
         <FooterMenu />
       </SafeAreaView>
     );

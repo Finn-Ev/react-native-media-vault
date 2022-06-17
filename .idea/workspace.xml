@@ -4,17 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6bbeae37-5161-4dd9-a061-f9297add82d8" name="Changes" comment="component/screen refactoring">
+    <list default="true" id="6bbeae37-5161-4dd9-a061-f9297add82d8" name="Changes" comment="added move/copy into another FileSystem Album functionality">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/navigation/GalleryStackNavigator.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/navigation/GalleryStackNavigator.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/navigation/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/navigation/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/AuthUnlock/AuthUnlock.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/AuthUnlock/AuthUnlock.screen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/FSAlbumList/components/AlbumPreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSAlbumList/components/AlbumPreview.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ImagePreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ImagePreview.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/FSAssetList/FSAssetList.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSAssetList/FSAssetList.screen.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/FSMoveAssets/FSMoveAssets.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSMoveAssets/FSMoveAssets.screen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/MGAlbumList/components/AlbumPreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MGAlbumList/components/AlbumPreview.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/MGAlbumList/MGAlbumList.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MGAlbumList/MGAlbumList.screen.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/MGAssetList/MGAssetList.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MGAssetList/MGAssetList.screen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/util/MediaHelper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/MediaHelper.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,7 +101,7 @@
       <workItem from="1655144482179" duration="3913000" />
       <workItem from="1655203521360" duration="6762000" />
       <workItem from="1655370052440" duration="7303000" />
-      <workItem from="1655389375848" duration="4652000" />
+      <workItem from="1655389375848" duration="17091000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1654472318477</created>
@@ -233,7 +229,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655383380955</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="added move/copy into another FileSystem Album functionality">
+      <created>1655394299440</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1655394299440</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -268,7 +271,8 @@
     <MESSAGE value="local auth" />
     <MESSAGE value="finished basic PIN auth" />
     <MESSAGE value="component/screen refactoring" />
-    <option name="LAST_COMMIT_MESSAGE" value="component/screen refactoring" />
+    <MESSAGE value="added move/copy into another FileSystem Album functionality" />
+    <option name="LAST_COMMIT_MESSAGE" value="added move/copy into another FileSystem Album functionality" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

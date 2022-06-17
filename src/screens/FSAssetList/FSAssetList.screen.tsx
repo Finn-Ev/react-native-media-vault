@@ -357,6 +357,7 @@ const FSAssetListScreen: React.FC = ({}) => {
         </>
       ) : (
         !loading && (
+          // null
           <View style={styles.emptyAlbum}>
             <Text style={styles.emptyAlbumText}>Dieses Album ist leer</Text>
             <Text />
