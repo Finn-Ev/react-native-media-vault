@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6bbeae37-5161-4dd9-a061-f9297add82d8" name="Changes" comment="added move/copy into another FileSystem Album functionality">
+    <list default="true" id="6bbeae37-5161-4dd9-a061-f9297add82d8" name="Changes" comment="assetImport pagination">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ImagePreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ImagePreview.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/FSAssetList/FSAssetList.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSAssetList/FSAssetList.screen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/FSMoveAssets/FSMoveAssets.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSMoveAssets/FSMoveAssets.screen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/MGAlbumList/MGAlbumList.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MGAlbumList/MGAlbumList.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/navigation/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/navigation/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/MGAssetList/MGAssetList.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MGAssetList/MGAssetList.screen.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -101,7 +98,8 @@
       <workItem from="1655144482179" duration="3913000" />
       <workItem from="1655203521360" duration="6762000" />
       <workItem from="1655370052440" duration="7303000" />
-      <workItem from="1655389375848" duration="17091000" />
+      <workItem from="1655389375848" duration="19824000" />
+      <workItem from="1655573890176" duration="2546000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1654472318477</created>
@@ -236,7 +234,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655394299440</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="assetImport pagination">
+      <created>1655459763107</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1655459763107</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -272,7 +277,8 @@
     <MESSAGE value="finished basic PIN auth" />
     <MESSAGE value="component/screen refactoring" />
     <MESSAGE value="added move/copy into another FileSystem Album functionality" />
-    <option name="LAST_COMMIT_MESSAGE" value="added move/copy into another FileSystem Album functionality" />
+    <MESSAGE value="assetImport pagination" />
+    <option name="LAST_COMMIT_MESSAGE" value="assetImport pagination" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

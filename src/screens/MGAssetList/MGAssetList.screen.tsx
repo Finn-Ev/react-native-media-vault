@@ -22,7 +22,7 @@ import {
 import FooterMenu from "../../components/FooterMenu";
 import { Entypo } from "@expo/vector-icons";
 
-const PAGE_SIZE = 24;
+const PAGE_SIZE = 6;
 
 const MGAssetListScreen: React.FC = ({}) => {
   const navigation = useNavigation<MGAssetListScreenNavigationProps>();
@@ -31,6 +31,10 @@ const MGAssetListScreen: React.FC = ({}) => {
   const [loading, setLoading] = useState(true);
 
   const [currentPage, setCurrentPage] = useState(0);
+
+  const [totalAlbumCount, setTotalAlbumCount] = useState(0);
+  const [startReached, setStartReached] = useState(true);
+  const [endReached, setEndReached] = useState(false);
 
   const [allFetchedAssets, setAllFetchedAssets] = useState<IImportAsset[]>([]);
   const [visibleAssets, setVisibleAssets] = useState<IImportAsset[]>([]);
@@ -45,6 +49,7 @@ const MGAssetListScreen: React.FC = ({}) => {
       after: lastItemId,
       mediaType: ["photo", "video"],
     });
+    setTotalAlbumCount(items.totalCount);
 
     // const newAssets: IImportAsset[] = [];
     const newAssets: IImportAsset[] = allFetchedAssets;
@@ -66,24 +71,21 @@ const MGAssetListScreen: React.FC = ({}) => {
   };
 
   useEffect(() => {
-    let startAtItem = currentPage * PAGE_SIZE;
-    let endAtItem = currentPage * PAGE_SIZE + PAGE_SIZE;
+    let startAtItem = currentPage * PAGE_SIZE; // wenn vorne eine Zahl fehlt, ist startAtItem zu hoch
+    let endAtItem = currentPage * PAGE_SIZE + PAGE_SIZE; // wenn hinten eine niedrigere Zahl ist, ist endAtItem zu hoch
     getAssets().then(() => {
       setVisibleAssets(allFetchedAssets.slice(startAtItem, endAtItem));
     });
     navigation.setOptions({ headerTitle: route.params.albumName });
   }, []);
 
-  useEffect(() => {
-    let startAtItem = currentPage * PAGE_SIZE;
-    let endAtItem = currentPage * PAGE_SIZE + PAGE_SIZE;
-    setVisibleAssets(allFetchedAssets.slice(startAtItem, endAtItem));
-  }, [currentPage]);
-
   const nextPage = async () => {
-    if (loading) return;
     let startAtItem = currentPage * PAGE_SIZE;
     let endAtItem = currentPage * PAGE_SIZE + PAGE_SIZE;
+
+    if (loading && totalAlbumCount <= endAtItem) return;
+
+    if (startReached) setStartReached(false);
 
     if (allFetchedAssets.length <= endAtItem) {
       const allAssets = await getAssets(allFetchedAssets.pop()?.id);
@@ -97,9 +99,17 @@ const MGAssetListScreen: React.FC = ({}) => {
       endAtItem += PAGE_SIZE;
       setVisibleAssets(allFetchedAssets.slice(startAtItem, endAtItem));
     }
+
+    // console.log({ allFetchedAssets });
+
+    if (totalAlbumCount <= endAtItem) {
+      setEndReached(true);
+    }
   };
   const previousPage = async () => {
     if (loading) return;
+
+    if (endReached) setEndReached(false);
     let startAtItem = currentPage * PAGE_SIZE;
     let endAtItem = currentPage * PAGE_SIZE + PAGE_SIZE;
     if (currentPage > 0) {
@@ -107,6 +117,9 @@ const MGAssetListScreen: React.FC = ({}) => {
       startAtItem -= PAGE_SIZE;
       endAtItem -= PAGE_SIZE;
       setVisibleAssets(allFetchedAssets.slice(startAtItem, endAtItem));
+    }
+    if (startAtItem === 0) {
+      setStartReached(true);
     }
   };
 
@@ -128,18 +141,27 @@ const MGAssetListScreen: React.FC = ({}) => {
         />
       )}
       <View style={styles.pagination}>
-        <Pressable hitSlop={8} onPress={previousPage}>
-          <Entypo name="chevron-left" size={36} color="white" />
-        </Pressable>
+        {!startReached ? (
+          <Pressable hitSlop={8} onPress={previousPage}>
+            <Entypo name="chevron-left" size={36} color="white" />
+          </Pressable>
+        ) : (
+          <Entypo name="chevron-left" size={36} color="black" />
+        )}
+
         {!loading && (
           <Text style={styles.paginationText}>
             {currentPage * PAGE_SIZE + 1} -{" "}
-            {currentPage * PAGE_SIZE + PAGE_SIZE}
+            {endReached ? totalAlbumCount : currentPage * PAGE_SIZE + PAGE_SIZE}
           </Text>
         )}
-        <Pressable hitSlop={8} onPress={nextPage}>
-          <Entypo name="chevron-right" size={36} color="white" />
-        </Pressable>
+        {!endReached ? (
+          <Pressable hitSlop={8} onPress={nextPage}>
+            <Entypo name="chevron-right" size={36} color="white" />
+          </Pressable>
+        ) : (
+          <Entypo name="chevron-right" size={36} color="black" />
+        )}
       </View>
       <FooterMenu />
     </SafeAreaView>

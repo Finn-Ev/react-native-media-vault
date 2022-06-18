@@ -40,7 +40,7 @@ const Navigation: React.FC = ({}) => {
             />
             <Stack.Screen
               name={"ImportAssets"}
-              options={{ headerShown: false }}
+              options={{ headerShown: false, animation: "slide_from_bottom" }}
               component={ImportAssetsStackNavigator}
             />
           </>
