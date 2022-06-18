@@ -22,7 +22,7 @@ import {
 import FooterMenu from "../../components/FooterMenu";
 import { Entypo } from "@expo/vector-icons";
 
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 24;
 
 const MGAssetListScreen: React.FC = ({}) => {
   const navigation = useNavigation<MGAssetListScreenNavigationProps>();
@@ -49,23 +49,27 @@ const MGAssetListScreen: React.FC = ({}) => {
       after: lastItemId,
       mediaType: ["photo", "video"],
     });
-    setTotalAlbumCount(items.totalCount);
 
-    // const newAssets: IImportAsset[] = [];
-    const newAssets: IImportAsset[] = allFetchedAssets;
+    const allAssets: IImportAsset[] = allFetchedAssets;
     for (const asset of items.assets) {
       const { localUri, id } = await MediaLibrary.getAssetInfoAsync(asset);
       if (localUri && id) {
-        newAssets.push({
+        allAssets.push({
           localUri,
           id,
         });
       }
     }
-    setAllFetchedAssets(newAssets);
+
+    if (items.totalCount <= PAGE_SIZE) {
+      setEndReached(true);
+    }
+
+    setAllFetchedAssets(allAssets);
+    setTotalAlbumCount(items.totalCount);
     setLoading(false);
 
-    return newAssets;
+    return allAssets;
   };
 
   useEffect(() => {
@@ -86,12 +90,12 @@ const MGAssetListScreen: React.FC = ({}) => {
     if (startReached) setStartReached(false);
 
     if (allFetchedAssets.length <= endAtItem) {
-      const allAssets = await getAssets(
+      const oldAssetsPlusNewAssets = await getAssets(
         allFetchedAssets[allFetchedAssets.length - 1]?.id
       );
       startAtItem += PAGE_SIZE;
       endAtItem += PAGE_SIZE;
-      setVisibleAssets(allAssets.slice(startAtItem, endAtItem));
+      setVisibleAssets(oldAssetsPlusNewAssets.slice(startAtItem, endAtItem));
       setCurrentPage(currentPage + 1);
     } else {
       setCurrentPage(currentPage + 1);
@@ -109,8 +113,10 @@ const MGAssetListScreen: React.FC = ({}) => {
     if (loading) return;
 
     if (endReached) setEndReached(false);
+
     let startAtItem = currentPage * PAGE_SIZE;
     let endAtItem = currentPage * PAGE_SIZE + PAGE_SIZE;
+
     if (currentPage > 0) {
       setCurrentPage(currentPage - 1);
       startAtItem -= PAGE_SIZE;
@@ -121,6 +127,21 @@ const MGAssetListScreen: React.FC = ({}) => {
       setStartReached(true);
     }
   };
+
+  if (!loading && totalAlbumCount === 0) {
+    return (
+      <View
+        style={[
+          styles.root,
+          { justifyContent: "center", alignItems: "center" },
+        ]}
+      >
+        <Text style={[styles.text, { fontSize: 22 }]}>
+          Dieses Album ist leer
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.root}>
@@ -154,6 +175,7 @@ const MGAssetListScreen: React.FC = ({}) => {
             {endReached ? totalAlbumCount : currentPage * PAGE_SIZE + PAGE_SIZE}
           </Text>
         )}
+
         {!endReached ? (
           <Pressable hitSlop={8} onPress={nextPage}>
             <Entypo name="chevron-right" size={36} color="white" />
