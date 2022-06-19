@@ -6,6 +6,9 @@ import {
   FSAssetListScreenNavigationProps,
   FSAlbumListScreenNavigationProps,
 } from "../navigation/types";
+import { v4 as uuidv4 } from "uuid";
+import * as FileSystem from "expo-file-system";
+import { getFileExtension, getFullDirectoryPath } from "../util/MediaHelper";
 
 interface ImportAssetsFooterProps {}
 
@@ -17,6 +20,7 @@ const FooterMenu: React.FC<ImportAssetsFooterProps> = ({}) => {
 
   const importSelectedAssets = async () => {
     await importAssetsContext?.importSelectedAssetsIntoFS();
+
     // @ts-ignore
     navigation.navigate("Gallery");
   };

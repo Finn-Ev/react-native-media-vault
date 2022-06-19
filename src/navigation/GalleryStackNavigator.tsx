@@ -11,12 +11,12 @@ export type GalleryStackParamList = {
   FSAlbumList: { assetsHaveChanged: boolean };
   FSAssetList: { albumName: string };
   FSAssetCarousel: {
-    assetUris: string[];
+    assetIds: string[];
     startIndex: number;
     albumName: string;
   };
   FSMoveAssets: {
-    assetUris: string[];
+    assetIds: string[];
     copy: boolean;
     sourceAlbumName: string;
   };

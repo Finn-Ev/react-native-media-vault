@@ -1,21 +1,12 @@
-import {
-  ActivityIndicator,
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-} from "react-native";
+import { Image, Pressable, StyleSheet, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FSAlbumListScreenNavigationProps } from "../../../navigation/types";
-import {
-  getAlbumAssetsFromFS,
-  getFSAssetInfo,
-  getIsImage,
-} from "../../../util/MediaHelper";
+
 import { useEffect, useState } from "react";
 import { ResizeMode, Video } from "expo-av";
 import { useAlbumContext } from "../../../context/AlbumContext";
 import { EMPTY_ALBUM_PLACEHOLDER_IMAGE } from "../../../constants";
+import { getIsImage } from "../../../util/MediaHelper";
 
 interface ImagePreviewProps {
   albumName: string;
@@ -27,87 +18,26 @@ const AlbumPreview: React.FC<ImagePreviewProps> = ({
   onLongPress,
 }) => {
   const navigation = useNavigation<FSAlbumListScreenNavigationProps>();
-  // const [loading, setLoading] = useState(false);
 
   const albumContext = useAlbumContext();
   if (!albumContext) throw new Error("MetaAlbumContext not found");
   const albumMetaInfo = albumContext.getMetaAlbum(albumName);
   if (!albumMetaInfo) throw new Error("AlbumMetaInfo not found");
 
-  const [thumbnailUri, setThumbnailUri] = useState("");
+  const [thumbnail, setThumbnail] = useState("");
 
   const onPress = () => {
     navigation.navigate("FSAssetList", { albumName });
   };
 
-  const getAlbumThumbnail = async () => {
-    // setLoading(true);
-    const metaInfoImages = [];
-
-    let assets = await getAlbumAssetsFromFS(albumName);
-    if (!assets || !assets.length) {
-      return setThumbnailUri(EMPTY_ALBUM_PLACEHOLDER_IMAGE);
-    }
-    for (const asset of assets) {
-      const info = await getFSAssetInfo(albumName, asset);
-      if (info) metaInfoImages.push(info);
-    }
-
-    if (metaInfoImages.length) {
-      metaInfoImages.sort((a, b) => {
-        if (a && b) {
-          if (a.modificationTime! > b.modificationTime!) return 1;
-          else return -1;
-        }
-        return 0;
-      });
-
-      assets = metaInfoImages.map((info) => info.uri);
-
-      if (assets && assets.length) {
-        if (albumMetaInfo.selectedSortDirection === "desc") {
-          const uri = assets.pop();
-          // const uri = assets[0];
-          if (uri) {
-            setThumbnailUri(uri);
-          }
-        } else {
-          const uri = assets[0];
-          // const uri = assets.pop();
-          if (uri) {
-            setThumbnailUri(uri);
-          }
-        }
-      }
-    }
-    // setLoading(false);
+  const getAlbumThumbnail = () => {
+    let assets = albumContext.getAssetsByAlbum(albumName);
+    setThumbnail(assets[0].localUri);
   };
 
   useEffect(() => {
     getAlbumThumbnail();
-  }, [albumMetaInfo.selectedSortDirection]);
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      getAlbumThumbnail();
-    });
-
-    return unsubscribe;
-  }, [navigation, albumMetaInfo.selectedSortDirection]);
-
-  const thumbnail = getIsImage(thumbnailUri) ? (
-    <Image
-      source={{ uri: thumbnailUri }}
-      resizeMode={"cover"}
-      style={styles.thumbnail}
-    />
-  ) : (
-    <Video
-      source={{ uri: thumbnailUri }}
-      resizeMode={ResizeMode.COVER}
-      style={styles.thumbnail}
-    />
-  );
+  }, [albumMetaInfo.selectedSortDirection, albumContext.metaAlbums]);
 
   return (
     <Pressable
@@ -115,11 +45,19 @@ const AlbumPreview: React.FC<ImagePreviewProps> = ({
       onPress={onPress}
       onLongPress={onLongPress}
     >
-      {/*{loading ? (*/}
-      {/*  <ActivityIndicator style={styles.activityIndicator} />*/}
-      {/*) : (*/}
-      {thumbnail}
-      {/*)}*/}
+      {getIsImage(thumbnail) ? (
+        <Image
+          source={{ uri: thumbnail }}
+          resizeMode={"cover"}
+          style={styles.thumbnail}
+        />
+      ) : (
+        <Video
+          source={{ uri: thumbnail }}
+          resizeMode={ResizeMode.COVER}
+          style={styles.thumbnail}
+        />
+      )}
       <Text style={styles.text}>{albumName}</Text>
     </Pressable>
   );

@@ -1,9 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import {
-  createAlbumInFS,
-  deleteAlbumFromFS,
-  renameAlbumInFS,
-} from "../../util/MediaHelper";
+import { deleteAssetsFromFS } from "../../util/MediaHelper";
 import { getMetaAlbumsFromStorage, saveMetaAlbumsToStorage } from "./storage";
 
 // The purpose of this context is to create and sync FileSystem Albums with Meta-Albums.
@@ -11,23 +7,45 @@ import { getMetaAlbumsFromStorage, saveMetaAlbumsToStorage } from "./storage";
 // They are needed to display the albums by creation-time and to store values like the selected sort direction for each album
 // FS (file system) albums are stored in the device's file system and store the assets themselves.
 // FS Albums and Meta-Albums are synced and connected by a 1..1 relation, album name is so to say the primary-key
-export interface IMetaAlbum {
+
+export interface IAlbumAsset {
+  id: string;
+  localUri: string;
+  addedAt: number;
+  createdAt: number;
+  type: "photo" | "video";
+  duration?: number;
+}
+
+export interface IAlbum {
   name: string;
   selectedSortDirection: "asc" | "desc";
   createdAt: number;
   updatedAt: number;
+  assets: IAlbumAsset[];
 }
 
 export interface IAlbumContext {
-  metaAlbums: IMetaAlbum[];
+  metaAlbums: IAlbum[];
   addAlbum: (albumName: string) => Promise<boolean>;
   deleteAlbum: (albumName: string) => Promise<boolean>;
   editAlbumName: (
     currentAlbumName: string,
     newAlbumName: string
   ) => Promise<boolean>;
-  getMetaAlbum: (albumId: string) => IMetaAlbum | undefined;
+  getMetaAlbum: (albumId: string) => IAlbum | undefined;
   toggleAlbumSortDirection: (albumName: string) => void;
+
+  getAssetsByAlbum: (albumName: string) => IAlbumAsset[];
+  getAssetsByIdsFromAlbum: (albumName: string, ids: string[]) => IAlbumAsset[];
+  addAssetsToAlbum: (
+    albumName: string,
+    assets: IAlbumAsset[]
+  ) => Promise<boolean>;
+  removeAssetsFromAlbum: (
+    albumName: string,
+    assetsIdsToRemove: string[]
+  ) => Promise<boolean>;
 }
 
 const AlbumContext = createContext<IAlbumContext | null>(null);
@@ -35,7 +53,7 @@ const AlbumContext = createContext<IAlbumContext | null>(null);
 export const useAlbumContext = () => useContext(AlbumContext);
 
 export const AlbumContextProvider: React.FC = ({ children }) => {
-  const [metaAlbums, setMetaAlbums] = useState<IMetaAlbum[]>([]);
+  const [metaAlbums, setMetaAlbums] = useState<IAlbum[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -45,65 +63,49 @@ export const AlbumContextProvider: React.FC = ({ children }) => {
   }, []);
 
   const addAlbum = async (albumName: string) => {
-    const successful = await createAlbumInFS(albumName);
-    if (successful) {
-      const newMetaAlbum: IMetaAlbum = {
-        name: albumName,
-        selectedSortDirection: "desc",
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-      };
-      const newMetaAlbums = sorted([...metaAlbums, newMetaAlbum]);
-      setMetaAlbums(newMetaAlbums);
-      await saveMetaAlbumsToStorage(newMetaAlbums);
-      return true;
-    }
-    return false;
+    if (getMetaAlbum(albumName)) return false; // album already exists
+
+    const newMetaAlbum: IAlbum = {
+      name: albumName,
+      selectedSortDirection: "desc",
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      assets: [],
+    };
+    const newMetaAlbums = sortAlbums([...metaAlbums, newMetaAlbum]);
+    setMetaAlbums(newMetaAlbums);
+    await saveMetaAlbumsToStorage(newMetaAlbums);
+    return true;
   };
   const deleteAlbum = async (albumName: string) => {
-    const successful = await deleteAlbumFromFS(albumName);
-    if (successful) {
-      const newMetaAlbums = metaAlbums.filter(
-        (metaAlbum) => metaAlbum.name !== albumName
-      );
-      setMetaAlbums(newMetaAlbums);
-      await saveMetaAlbumsToStorage(newMetaAlbums);
-      return true;
-    } else return false;
+    const newMetaAlbums = metaAlbums.filter(
+      (metaAlbum) => metaAlbum.name !== albumName
+    );
+    setMetaAlbums(newMetaAlbums);
+    await saveMetaAlbumsToStorage(newMetaAlbums);
+    return true;
   };
 
   const editAlbumName = async (
     currentAlbumName: string,
     newAlbumName: string
   ) => {
-    const currentAlbumVersion = metaAlbums.find(
-      (album) => album.name === currentAlbumName
-    );
+    const currentAlbumVersion = getMetaAlbum(currentAlbumName);
 
     if (!currentAlbumVersion || !newAlbumName) return false;
 
-    const editedAlbum: IMetaAlbum = {
+    const editedAlbum: IAlbum = {
       ...currentAlbumVersion,
       name: newAlbumName,
     };
 
-    let successful: boolean;
-    if (editedAlbum.name !== currentAlbumVersion.name) {
-      successful = await renameAlbumInFS(
-        currentAlbumVersion.name,
-        editedAlbum.name
-      );
-    } else successful = true;
-
-    if (successful) {
-      const newMetaAlbums = [
-        ...metaAlbums.filter((album) => album.name !== currentAlbumName),
-        editedAlbum,
-      ];
-      setMetaAlbums(sorted(newMetaAlbums));
-      await saveMetaAlbumsToStorage(sorted(newMetaAlbums));
-      return true;
-    } else return false;
+    const newMetaAlbums = [
+      ...metaAlbums.filter((album) => album.name !== currentAlbumName),
+      editedAlbum,
+    ];
+    setMetaAlbums(sortAlbums(newMetaAlbums));
+    await saveMetaAlbumsToStorage(sortAlbums(newMetaAlbums));
+    return true;
   };
 
   const getMetaAlbum = (albumName: string) => {
@@ -114,7 +116,7 @@ export const AlbumContextProvider: React.FC = ({ children }) => {
     const album = getMetaAlbum(albumName);
     if (!album) return;
 
-    const editedAlbum: IMetaAlbum = {
+    const editedAlbum: IAlbum = {
       ...album,
       selectedSortDirection:
         album.selectedSortDirection === "asc" ? "desc" : "asc",
@@ -124,8 +126,88 @@ export const AlbumContextProvider: React.FC = ({ children }) => {
       editedAlbum,
     ];
 
-    setMetaAlbums(sorted(newMetaAlbums));
-    await saveMetaAlbumsToStorage(sorted(newMetaAlbums));
+    setMetaAlbums(sortAlbums(newMetaAlbums));
+    await saveMetaAlbumsToStorage(sortAlbums(newMetaAlbums));
+  };
+
+  const getAssetsByAlbum = (albumName: string) => {
+    const album = getMetaAlbum(albumName);
+    // console.log(album);
+    if (!album) return [];
+
+    return sortedAssets(album);
+  };
+
+  const getAssetsByIdsFromAlbum = (albumName: string, ids: string[]) => {
+    const album = getMetaAlbum(albumName);
+    if (!album) return [];
+    const assets: IAlbumAsset[] = [];
+    for (const id of ids) {
+      const asset = album.assets.find((asset) => asset.id === id);
+      if (asset) assets.push(asset);
+    }
+    album.assets = assets;
+    return sortedAssets(album);
+  };
+
+  const addAssetsToAlbum = async (
+    albumName: string,
+    assetsToAdd: IAlbumAsset[]
+  ) => {
+    const album = getMetaAlbum(albumName);
+    if (!album) return false;
+
+    const newAssets = [...album.assets, ...assetsToAdd];
+
+    const editedAlbum: IAlbum = {
+      ...album,
+      assets: newAssets,
+    };
+
+    const newMetaAlbums = [
+      ...metaAlbums.filter((album) => album.name !== albumName),
+      editedAlbum,
+    ];
+
+    setMetaAlbums(sortAlbums(newMetaAlbums));
+    await saveMetaAlbumsToStorage(sortAlbums(newMetaAlbums));
+
+    return true;
+  };
+
+  const removeAssetsFromAlbum = async (
+    albumName: string,
+    assetsIdsToRemove: string[]
+  ) => {
+    const album = getMetaAlbum(albumName);
+    if (!album) return false;
+
+    const newAssets = album.assets.filter(
+      (asset) => !assetsIdsToRemove.includes(asset.id)
+    );
+
+    const editedAlbum: IAlbum = {
+      ...album,
+      assets: newAssets,
+    };
+
+    const newMetaAlbums = [
+      ...metaAlbums.filter((album) => album.name !== albumName),
+      editedAlbum,
+    ];
+
+    setMetaAlbums(sortAlbums(newMetaAlbums));
+    await saveMetaAlbumsToStorage(sortAlbums(newMetaAlbums));
+
+    // TODO test if all assets with the uri are removed or just the first one
+    // remove assets from fs, as they from now on don't belong to any album
+    const assetsToRemove = getAssetsByIdsFromAlbum(
+      albumName,
+      assetsIdsToRemove
+    );
+    await deleteAssetsFromFS(assetsToRemove);
+
+    return true;
   };
 
   return (
@@ -137,6 +219,10 @@ export const AlbumContextProvider: React.FC = ({ children }) => {
         deleteAlbum,
         getMetaAlbum,
         toggleAlbumSortDirection,
+        getAssetsByAlbum,
+        addAssetsToAlbum,
+        removeAssetsFromAlbum,
+        getAssetsByIdsFromAlbum,
       }}
     >
       {children}
@@ -144,10 +230,28 @@ export const AlbumContextProvider: React.FC = ({ children }) => {
   );
 };
 
-const sorted = (metaAlbums: IMetaAlbum[]) => {
+const sortAlbums = (metaAlbums: IAlbum[]) => {
   return metaAlbums.sort((a, b) => {
     if (a.createdAt > b.createdAt) return 1;
     if (a.createdAt < b.createdAt) return -1;
     return 0;
   });
+};
+
+const sortedAssets = (album: IAlbum) => {
+  let sortedAssets: IAlbumAsset[] = [];
+  if (album.selectedSortDirection === "asc") {
+    sortedAssets = album.assets.sort((a, b) => {
+      if (a.createdAt > b.createdAt) return -1;
+      if (a.createdAt < b.createdAt) return 1;
+      return 0;
+    });
+  } else if (album.selectedSortDirection === "desc") {
+    sortedAssets = album.assets.sort((a, b) => {
+      if (a.createdAt > b.createdAt) return 1;
+      if (a.createdAt < b.createdAt) return -1;
+      return 0;
+    });
+  }
+  return sortedAssets;
 };

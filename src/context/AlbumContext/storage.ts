@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { IMetaAlbum } from "./index";
+import { IAlbum } from "./index";
 
-export const saveMetaAlbumsToStorage = async (value: IMetaAlbum[]) => {
+export const saveMetaAlbumsToStorage = async (value: IAlbum[]) => {
   try {
     const jsonValue = JSON.stringify(value);
     await AsyncStorage.setItem("albumContext", jsonValue);
@@ -13,11 +13,11 @@ export const saveMetaAlbumsToStorage = async (value: IMetaAlbum[]) => {
 export const getMetaAlbumsFromStorage = async () => {
   try {
     const jsonValue = await AsyncStorage.getItem("albumContext");
-    if (jsonValue) return JSON.parse(jsonValue) as IMetaAlbum[];
-    else return [] as IMetaAlbum[];
+    if (jsonValue) return JSON.parse(jsonValue) as IAlbum[];
+    else return [] as IAlbum[];
   } catch (e) {
     console.warn(e.message);
-    return [] as IMetaAlbum[];
+    return [] as IAlbum[];
   }
 };
 

@@ -5,7 +5,6 @@ import {
   FSMoveAssetsScreenRouteProps,
 } from "../../navigation/types";
 import { useAlbumContext } from "../../context/AlbumContext";
-import { moveAssetsFromFSAlbumToFSAlbum } from "../../util/MediaHelper";
 import { Entypo } from "@expo/vector-icons";
 
 const FSMoveAssetsScreen: React.FC = ({}) => {
@@ -15,11 +14,26 @@ const FSMoveAssetsScreen: React.FC = ({}) => {
   const albumContext = useAlbumContext();
 
   const moveAssets = async (destinationAlbumName: string) => {
-    await moveAssetsFromFSAlbumToFSAlbum(
-      destinationAlbumName,
-      route.params.assetUris,
-      route.params.copy
+    // await moveAssetsFromFSAlbumToFSAlbum(
+    //   destinationAlbumName,
+    //   route.params.assetUris,
+    //   route.params.copy
+    // );
+
+    const assets = albumContext?.getAssetsByIdsFromAlbum(
+      route.params.sourceAlbumName,
+      route.params.assetIds
     );
+    if (assets) {
+      albumContext?.addAssetsToAlbum(destinationAlbumName, assets);
+    }
+
+    if (!route.params.copy) {
+      albumContext?.removeAssetsFromAlbum(
+        route.params.sourceAlbumName,
+        route.params.assetIds
+      );
+    }
     navigation.replace("FSAssetList", { albumName: destinationAlbumName });
   };
 

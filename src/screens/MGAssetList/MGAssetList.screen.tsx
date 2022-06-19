@@ -15,13 +15,11 @@ import * as MediaLibrary from "expo-media-library";
 import { useEffect, useRef, useState } from "react";
 import ImagePreview from "../../components/ImagePreview";
 import LoadingIndicator from "../../components/LoadingIndicator";
-import {
-  IImportAsset,
-  useImportAssetsContext,
-} from "../../context/ImportAssetsContext";
+import { useImportAssetsContext } from "../../context/ImportAssetsContext";
 import FooterMenu from "../../components/FooterMenu";
 import { Entypo } from "@expo/vector-icons";
 import { IMPORT_ASSETS_PAGE_SIZE } from "../../constants";
+import { IAlbumAsset } from "../../context/AlbumContext";
 
 const MGAssetListScreen: React.FC = ({}) => {
   const navigation = useNavigation<MGAssetListScreenNavigationProps>();
@@ -35,8 +33,8 @@ const MGAssetListScreen: React.FC = ({}) => {
   const [startReached, setStartReached] = useState(true);
   const [endReached, setEndReached] = useState(false);
 
-  const [allFetchedAssets, setAllFetchedAssets] = useState<IImportAsset[]>([]);
-  const [visibleAssets, setVisibleAssets] = useState<IImportAsset[]>([]);
+  const [allFetchedAssets, setAllFetchedAssets] = useState<IAlbumAsset[]>([]);
+  const [visibleAssets, setVisibleAssets] = useState<IAlbumAsset[]>([]);
 
   const importAssetsContext = useImportAssetsContext();
 
@@ -51,11 +49,16 @@ const MGAssetListScreen: React.FC = ({}) => {
 
     const allAssets = allFetchedAssets;
     for (const asset of items.assets) {
-      const { localUri, id } = await MediaLibrary.getAssetInfoAsync(asset);
-      if (localUri && id) {
+      const { localUri, id, duration, mediaType, creationTime } =
+        await MediaLibrary.getAssetInfoAsync(asset);
+      if (localUri) {
         allAssets.push({
-          localUri,
           id,
+          localUri,
+          addedAt: Date.now(),
+          createdAt: creationTime,
+          type: mediaType === "photo" ? "photo" : "video",
+          duration: duration || undefined,
         });
       }
     }

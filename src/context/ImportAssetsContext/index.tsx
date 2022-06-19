@@ -1,18 +1,20 @@
 import { createContext, useContext, useState } from "react";
-import { importAssetsIntoFSAlbum } from "../../util/MediaHelper";
+import {
+  getFileExtension,
+  getFullDirectoryPath,
+  importAssetsIntoFS,
+} from "../../util/MediaHelper";
 import * as MediaLibrary from "expo-media-library";
 import { Alert } from "react-native";
+import { IAlbumAsset, useAlbumContext } from "../AlbumContext";
+import { v4 as uuidv4 } from "uuid";
+import * as FileSystem from "expo-file-system";
 
 // The purpose of this context is to manage the selection and import of assets from the media library
 // into the app's filesystem.
-export interface IImportAsset {
-  localUri: string;
-  id: string;
-}
-
 export interface IImportAssetsContext {
-  assetsToImport: IImportAsset[];
-  toggleAsset: (asset: IImportAsset) => void;
+  assetsToImport: IAlbumAsset[];
+  toggleAsset: (asset: IAlbumAsset) => void;
   setSelectedAlbum: (album: string) => void;
   importSelectedAssetsIntoFS: () => Promise<void>;
   loading: boolean;
@@ -25,9 +27,11 @@ const ImportAssetsContext = createContext<IImportAssetsContext | null>(null);
 export const useImportAssetsContext = () => useContext(ImportAssetsContext);
 
 export const ImportAssetsContextProvider: React.FC = ({ children }) => {
-  const [assetsToImport, setAssetsToImport] = useState<IImportAsset[]>([]);
+  const [assetsToImport, setAssetsToImport] = useState<IAlbumAsset[]>([]);
   const [selectedAlbum, _setSelectedAlbum] = useState<string | null>("");
   const [loading, _setLoading] = useState<boolean>(false);
+
+  const albumContext = useAlbumContext();
 
   const setSelectedAlbum = (album: string) => {
     _setSelectedAlbum(album);
@@ -37,15 +41,29 @@ export const ImportAssetsContextProvider: React.FC = ({ children }) => {
     _setLoading(loading);
   };
 
-  const toggleAsset = (asset: IImportAsset) => {
-    if (assetsToImport.includes(asset))
+  const toggleAsset = (asset: IAlbumAsset) => {
+    if (assetsToImport.some((a) => a.id === asset.id)) {
       setAssetsToImport(assetsToImport.filter((a) => a !== asset));
-    else setAssetsToImport([...assetsToImport, asset]);
+    } else setAssetsToImport([...assetsToImport, asset]);
   };
 
   const importSelectedAssetsIntoFS = async () => {
     if (!selectedAlbum) return console.error("No album selected");
-    await importAssetsIntoFSAlbum(assetsToImport, selectedAlbum);
+
+    for (const asset of assetsToImport) {
+      const fileName = uuidv4() + "." + getFileExtension(asset.localUri);
+
+      const newLocalUri = getFullDirectoryPath("assets") + fileName;
+
+      await FileSystem.copyAsync({
+        from: asset.localUri,
+        to: newLocalUri,
+      });
+
+      asset.localUri = newLocalUri;
+    }
+
+    await albumContext?.addAssetsToAlbum(selectedAlbum, assetsToImport);
 
     const assetIds = assetsToImport.map((asset) => asset.id);
 

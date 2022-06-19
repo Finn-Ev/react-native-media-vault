@@ -16,25 +16,18 @@ import { useEffect, useState } from "react";
 import {
   deleteAssetsFromFS,
   exportAssetsIntoMediaLibrary,
-  getAlbumAssetsFromFS,
-  getFSAssetInfo,
 } from "../../util/MediaHelper";
 import ImagePreview from "../../components/ImagePreview";
 import * as Haptics from "expo-haptics";
-import {
-  Entypo,
-  Feather,
-  Ionicons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
-import { useAlbumContext } from "../../context/AlbumContext";
+import { Entypo, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { IAlbumAsset, useAlbumContext } from "../../context/AlbumContext";
 import { useImportAssetsContext } from "../../context/ImportAssetsContext";
 import LoadingIndicator from "../../components/LoadingIndicator";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 
 // Although this component is very huge and rather complex, I decided to not split it up into multiple components
-// or to create a context for it as all of the state is used by multiple parts of the UI and thus cannot be
-// separated appropriately. A context would be a waste as all of the additional state is only used in this screen and
+// or to create a context for it as all the state is used by multiple parts of the UI and thus cannot be
+// separated appropriately. A context would be a waste as all the additional state is only used in this screen and
 // not in any of the other part of the app.
 const FSAssetListScreen: React.FC = ({}) => {
   const navigation = useNavigation<FSAssetListScreenNavigationProps>();
@@ -47,12 +40,11 @@ const FSAssetListScreen: React.FC = ({}) => {
   const albumContext = useAlbumContext();
 
   const metaAlbumInfo = albumContext?.getMetaAlbum(route.params.albumName);
+  const assets = metaAlbumInfo?.assets!;
 
   const [isInitialFetch, setIsInitialFetch] = useState(true);
 
-  const [assets, setAssets] = useState<string[]>([]);
-
-  const [selectedAssets, setSelectedAssets] = useState<string[]>([]);
+  const [selectedAssets, setSelectedAssets] = useState<IAlbumAsset[]>([]);
   const [isSelectModeActive, setIsSelectModeActive] = useState(false);
 
   useEffect(() => {
@@ -61,12 +53,12 @@ const FSAssetListScreen: React.FC = ({}) => {
 
   // fetch assets initially and when sortDirection or screenFocusState changes
   // to keep the assetList in sync with the state
-  useEffect(() => {
-    fetchAssets();
-    return navigation.addListener("focus", () => {
-      fetchAssets();
-    });
-  }, [metaAlbumInfo?.selectedSortDirection, navigation]);
+  // useEffect(() => {
+  //   fetchAssets();
+  //   return navigation.addListener("focus", () => {
+  //     fetchAssets();
+  //   });
+  // }, [metaAlbumInfo?.selectedSortDirection, navigation]);
 
   // change headerRight when selectMode is active or images have changed
   useEffect(() => {
@@ -103,66 +95,25 @@ const FSAssetListScreen: React.FC = ({}) => {
     }
   }, [isSelectModeActive, assets]);
 
-  const toggleSelect = (uri: string) => {
-    if (selectedAssets.includes(uri)) {
-      setSelectedAssets(selectedAssets.filter((a) => a !== uri));
+  const toggleSelect = (assetToToggle: IAlbumAsset) => {
+    if (selectedAssets.some((asset) => asset.id === assetToToggle.id)) {
+      setSelectedAssets(
+        selectedAssets.filter((a) => a.id !== assetToToggle.id)
+      );
     } else {
-      setSelectedAssets([...selectedAssets, uri]);
+      setSelectedAssets([...selectedAssets, assetToToggle]);
     }
   };
 
-  const enableSelectMode = (firstItemUri?: string) => {
+  const enableSelectMode = (firstItem?: IAlbumAsset) => {
     setIsSelectModeActive(true);
-    if (firstItemUri) setSelectedAssets([firstItemUri]);
+    if (firstItem) setSelectedAssets([firstItem]);
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
   };
 
   const disableSelectMode = () => {
     setSelectedAssets([]);
     setIsSelectModeActive(false);
-    fetchAssets();
-  };
-
-  const fetchAssets = async () => {
-    const fileNames = await getAlbumAssetsFromFS(route.params.albumName);
-
-    if (fileNames && fileNames.length) {
-      const metaInfoImages = [];
-
-      for (const fileName of fileNames) {
-        const info = await getFSAssetInfo(route.params.albumName, fileName);
-        if (info) metaInfoImages.push(info);
-      }
-
-      if (metaInfoImages.length) {
-        if (metaAlbumInfo?.selectedSortDirection === "desc") {
-          metaInfoImages.sort((a, b) => {
-            if (a && b) {
-              if (a.modificationTime! <= b.modificationTime!) return 1;
-              else return -1;
-            }
-            return 0;
-          });
-        } else {
-          metaInfoImages.sort((a, b) => {
-            if (a && b) {
-              if (a.modificationTime! > b.modificationTime!) return 1;
-              else return -1;
-            }
-            return 0;
-          });
-        }
-
-        const imageUris = metaInfoImages.map((info) => info.uri);
-
-        setAssets(imageUris);
-      }
-    } else {
-      setAssets([]);
-    }
-
-    if (isInitialFetch) setLoading(false);
-    setIsInitialFetch(false);
   };
 
   const exportSelectedAssets = async () => {
@@ -171,7 +122,6 @@ const FSAssetListScreen: React.FC = ({}) => {
     setLoading(true);
 
     await exportAssetsIntoMediaLibrary(selectedAssets);
-    await fetchAssets();
     disableSelectMode();
     setLoading(false);
     Alert.alert(
@@ -185,8 +135,11 @@ const FSAssetListScreen: React.FC = ({}) => {
         {
           text: "Löschen",
           onPress: async () => {
-            await deleteAssetsFromFS(selectedAssets);
-            await fetchAssets();
+            await albumContext?.removeAssetsFromAlbum(
+              route.params.albumName,
+              selectedAssets.map((asset) => asset.id)
+            );
+            // await deleteAssetsFromFS(selectedAssets);
           },
         },
       ]
@@ -207,10 +160,13 @@ const FSAssetListScreen: React.FC = ({}) => {
         {
           text: "Löschen",
           onPress: async () => {
-            await deleteAssetsFromFS(selectedAssets);
+            await albumContext?.removeAssetsFromAlbum(
+              route.params.albumName,
+              selectedAssets.map((asset) => asset.id)
+            );
+            // await deleteAssetsFromFS(selectedAssets);
             disableSelectMode();
             setLoading(false);
-            await fetchAssets();
           },
         },
       ]
@@ -227,7 +183,7 @@ const FSAssetListScreen: React.FC = ({}) => {
   const openMoveAssetsScreen = (copy = false) => {
     if (loading || !selectedAssets.length) return;
     navigation.navigate("FSMoveAssets", {
-      assetUris: selectedAssets,
+      assetIds: selectedAssets.map((asset) => asset.id),
       sourceAlbumName: route.params.albumName,
       copy,
     });
@@ -271,7 +227,7 @@ const FSAssetListScreen: React.FC = ({}) => {
         <>
           <FlatList
             numColumns={3}
-            data={assets}
+            data={albumContext?.getAssetsByAlbum(route.params.albumName)}
             renderItem={({ item, index }) => {
               return (
                 <ImagePreview
@@ -281,13 +237,13 @@ const FSAssetListScreen: React.FC = ({}) => {
                       ? () => toggleSelect(item)
                       : () =>
                           navigation.navigate("FSAssetCarousel", {
-                            assetUris: assets,
+                            assetIds: assets.map((a) => a.id),
                             startIndex: index,
                             albumName: route.params.albumName,
                           })
                   }
                   isSelected={selectedAssets.includes(item)}
-                  uri={item}
+                  uri={item.localUri}
                 />
               );
             }}

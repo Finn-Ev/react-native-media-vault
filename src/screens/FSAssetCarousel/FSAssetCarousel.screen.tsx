@@ -27,13 +27,16 @@ import { AntDesign, Entypo, Feather, Ionicons } from "@expo/vector-icons";
 import GestureRecognizer from "react-native-swipe-detect";
 import * as Haptics from "expo-haptics";
 import { useActionSheet } from "@expo/react-native-action-sheet";
+import { IAlbumAsset, useAlbumContext } from "../../context/AlbumContext";
 
 const FSAssetCarouselScreen: React.FC = ({}) => {
   const { width } = useWindowDimensions();
   const route = useRoute<FSAssetCarouselScreenRouteProps>();
   const navigation = useNavigation<FSAssetCarouselScreenNavigationProps>();
 
-  const [assetUris, setAssetUris] = useState<string[]>(route.params.assetUris);
+  const albumContext = useAlbumContext();
+
+  const [assets, setAssets] = useState<IAlbumAsset[]>([]);
 
   const [showMenuUI, setShowMenuUI] = useState(true);
 
@@ -56,18 +59,20 @@ const FSAssetCarouselScreen: React.FC = ({}) => {
   );
 
   useEffect(() => {
-    toggleMenuUI();
-  }, []);
-
-  useEffect(() => {
     updateHeader();
   }, [showMenuUI]);
 
   useEffect(() => {
-    if (assetUris.length === 0) {
-      navigation.goBack();
+    toggleMenuUI();
+    const allAssets = albumContext?.getAssetsByIdsFromAlbum(
+      route.params.albumName,
+      route.params.assetIds
+    );
+
+    if (allAssets) {
+      setAssets(allAssets);
     }
-  }, [assetUris]);
+  }, []);
 
   const toggleMenuUI = () => {
     setShowMenuUI(true);
@@ -91,7 +96,9 @@ const FSAssetCarouselScreen: React.FC = ({}) => {
   };
 
   const deleteAsset = () => {
-    const fileType = getIsImage(assetUris[activeImageIndex]) ? "Bild" : "Video";
+    const fileType = getIsImage(assets[activeImageIndex].localUri)
+      ? "Bild"
+      : "Video";
     Alert.alert(
       "Löschen",
       `Soll dieses ${fileType} wirklich gelöscht werden?`,
@@ -103,10 +110,13 @@ const FSAssetCarouselScreen: React.FC = ({}) => {
         {
           text: "Löschen",
           onPress: async () => {
-            await deleteAssetsFromFS([assetUris[activeImageIndex]]);
+            await albumContext?.removeAssetsFromAlbum(route.params.albumName, [
+              assets[activeImageIndex].id,
+            ]);
+
             // remove the asset from the current carousel-view
-            setAssetUris(
-              assetUris.filter((uri) => uri !== assetUris[activeImageIndex])
+            setAssets(
+              assets.filter((asset) => asset.id !== assets[activeImageIndex].id)
             );
           },
         },
@@ -119,7 +129,8 @@ const FSAssetCarouselScreen: React.FC = ({}) => {
   const openActionSheet = () => {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
 
-    const fileType = getIsImage(assetUris[activeImageIndex]) ? "Bild" : "Video";
+    const fileType =
+      assets[activeImageIndex].type === "photo" ? "Bild" : "Video";
 
     const options = [
       `${fileType} in anderes Album verschieben`,
@@ -137,25 +148,25 @@ const FSAssetCarouselScreen: React.FC = ({}) => {
       async (buttonIndex) => {
         if (buttonIndex === 0) {
           navigation.navigate("FSMoveAssets", {
-            assetUris: [assetUris[activeImageIndex]],
+            assetIds: [assets[activeImageIndex].id],
             sourceAlbumName: route.params.albumName,
             copy: false,
           });
           // remove the asset from the current carousel-view
-          setAssetUris(
-            assetUris.filter((uri) => uri !== assetUris[activeImageIndex])
+          setAssets(
+            assets.filter((asset) => asset.id !== assets[activeImageIndex].id)
           );
         }
         if (buttonIndex === 1) {
           navigation.navigate("FSMoveAssets", {
-            assetUris: [assetUris[activeImageIndex]],
+            assetIds: [assets[activeImageIndex].id],
             sourceAlbumName: route.params.albumName,
             copy: true,
           });
           // no need to remove the asset from the current carousel-view as it gets copied
         }
         if (buttonIndex === 2) {
-          await exportAssetsIntoMediaLibrary([assetUris[activeImageIndex]]);
+          await exportAssetsIntoMediaLibrary([assets[activeImageIndex]]);
           Alert.alert(
             "Export erfolgreich",
             "Soll die Kopie der exportierten Dateie gelöscht werden?",
@@ -167,10 +178,10 @@ const FSAssetCarouselScreen: React.FC = ({}) => {
               {
                 text: "Löschen",
                 onPress: async () => {
-                  await deleteAssetsFromFS([assetUris[activeImageIndex]]);
-                  setAssetUris(
-                    assetUris.filter(
-                      (uri) => uri !== assetUris[activeImageIndex]
+                  await deleteAssetsFromFS([assets[activeImageIndex]]);
+                  setAssets(
+                    assets.filter(
+                      (asset) => asset.id !== assets[activeImageIndex].id
                     )
                   );
                 },
@@ -190,31 +201,33 @@ const FSAssetCarouselScreen: React.FC = ({}) => {
       <FlatList
         initialScrollIndex={route.params.startIndex}
         horizontal={true}
-        data={assetUris}
+        data={assets}
         pagingEnabled
         ref={flatList}
-        renderItem={({ item, index }) => (
-          <GestureRecognizer
-            style={{ flex: 1 }}
-            onSwipeDown={(state) => navigation.goBack()}
-          >
-            {getIsImage(item) ? (
-              <ImageZoomView uri={item} />
-            ) : (
-              <Video
-                source={{ uri: item }}
-                style={{
-                  width,
-                  height: "100%",
-                }}
-                shouldPlay={activeImageIndex === index}
-                isMuted={false}
-                isLooping
-                useNativeControls={true}
-              />
-            )}
-          </GestureRecognizer>
-        )}
+        renderItem={({ item, index }) => {
+          return (
+            <GestureRecognizer
+              style={{ flex: 1 }}
+              onSwipeDown={(state) => navigation.goBack()}
+            >
+              {getIsImage(item.localUri) ? (
+                <ImageZoomView uri={item.localUri} />
+              ) : (
+                <Video
+                  source={{ uri: item.localUri }}
+                  style={{
+                    width,
+                    height: "100%",
+                  }}
+                  shouldPlay={activeImageIndex === index}
+                  isMuted={false}
+                  isLooping
+                  useNativeControls={true}
+                />
+              )}
+            </GestureRecognizer>
+          );
+        }}
         viewabilityConfig={{
           itemVisiblePercentThreshold: 51,
         }}
