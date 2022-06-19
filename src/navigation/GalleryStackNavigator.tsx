@@ -13,7 +13,7 @@ export type GalleryStackParamList = {
   FSAssetCarousel: {
     assetUris: string[];
     startIndex: number;
-    refreshCarousel?: boolean;
+    albumName: string;
   };
   FSMoveAssets: {
     assetUris: string[];

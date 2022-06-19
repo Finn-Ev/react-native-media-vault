@@ -28,7 +28,7 @@ const FSMoveAssetsScreen: React.FC = ({}) => {
   );
 
   return (
-    <ScrollView style={styles.root}>
+    <ScrollView contentContainerStyle={styles.root}>
       <Text style={styles.heading}>Wähle das Ziel-Album aus</Text>
       {destinationAlbums?.map((album) => (
         <Pressable

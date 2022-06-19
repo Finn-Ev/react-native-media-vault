@@ -14,6 +14,7 @@ import { Entypo } from "@expo/vector-icons";
 import { getIsImage } from "../../../util/MediaHelper";
 import { Video } from "expo-av";
 import { useImportAssetsContext } from "../../../context/ImportAssetsContext";
+import { EMPTY_ALBUM_PLACEHOLDER_IMAGE } from "../../../constants";
 
 interface AlbumPreviewProps {
   name: string;
@@ -22,14 +23,11 @@ interface AlbumPreviewProps {
 
 const AlbumPreview: React.FC<AlbumPreviewProps> = ({ name, id }) => {
   const [loading, setLoading] = useState(false);
-  // TODO getAlbumAssetsById and Display Thumbnail, Name and AssetCount in row
 
   const navigation = useNavigation<MGAlbumListScreenNavigationProps>();
 
   const [thumbnailUri, setThumbnailUri] = useState("x");
   const [assetCount, setAssetCount] = useState(0);
-
-  const importAssetsProvider = useImportAssetsContext();
 
   const getThumbnail = async () => {
     setLoading(true);
@@ -47,9 +45,7 @@ const AlbumPreview: React.FC<AlbumPreviewProps> = ({ name, id }) => {
         setThumbnailUri(thumbnail.localUri);
       }
     } else {
-      setThumbnailUri(
-        "https://deconova.eu/wp-content/uploads/2016/02/default-placeholder.png"
-      );
+      setThumbnailUri(EMPTY_ALBUM_PLACEHOLDER_IMAGE);
     }
     setLoading(false);
   };

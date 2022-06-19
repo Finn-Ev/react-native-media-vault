@@ -6,10 +6,13 @@ import { MGAlbumListScreenNavigationProps } from "../../navigation/types";
 import FooterMenu from "../../components/FooterMenu";
 import AlbumPreview from "./components/AlbumPreview";
 import LoadingIndicator from "../../components/LoadingIndicator";
+import { useImportAssetsContext } from "../../context/ImportAssetsContext";
 
 const smartAlbumWhiteList = ["Recents", "Favorites"];
 
 const MGAlbumListScreen: React.FC = ({}) => {
+  const importAssetsContext = useImportAssetsContext();
+
   const [status, requestPermission] = MediaLibrary.usePermissions();
   const [loading, setLoading] = useState(false);
 
@@ -38,6 +41,7 @@ const MGAlbumListScreen: React.FC = ({}) => {
 
   useEffect(() => {
     requestPermission().then(getAlbums);
+    return () => importAssetsContext?.reset();
   }, []);
 
   if (status?.granted) {

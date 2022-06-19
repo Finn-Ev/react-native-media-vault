@@ -15,6 +15,7 @@ import {
 import { useEffect, useState } from "react";
 import { ResizeMode, Video } from "expo-av";
 import { useAlbumContext } from "../../../context/AlbumContext";
+import { EMPTY_ALBUM_PLACEHOLDER_IMAGE } from "../../../constants";
 
 interface ImagePreviewProps {
   albumName: string;
@@ -45,9 +46,7 @@ const AlbumPreview: React.FC<ImagePreviewProps> = ({
 
     let assets = await getAlbumAssetsFromFS(albumName);
     if (!assets || !assets.length) {
-      return setThumbnailUri(
-        "https://deconova.eu/wp-content/uploads/2016/02/default-placeholder.png"
-      );
+      return setThumbnailUri(EMPTY_ALBUM_PLACEHOLDER_IMAGE);
     }
     for (const asset of assets) {
       const info = await getFSAssetInfo(albumName, asset);

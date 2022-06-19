@@ -17,6 +17,7 @@ export interface IImportAssetsContext {
   importSelectedAssetsIntoFS: () => Promise<void>;
   loading: boolean;
   setLoading: (loading: boolean) => void;
+  reset: () => void;
 }
 
 const ImportAssetsContext = createContext<IImportAssetsContext | null>(null);
@@ -66,6 +67,12 @@ export const ImportAssetsContextProvider: React.FC = ({ children }) => {
     setAssetsToImport([]);
   };
 
+  const reset = () => {
+    setAssetsToImport([]);
+    _setSelectedAlbum(null);
+    setLoading(false);
+  };
+
   return (
     <ImportAssetsContext.Provider
       value={{
@@ -75,6 +82,7 @@ export const ImportAssetsContextProvider: React.FC = ({ children }) => {
         importSelectedAssetsIntoFS,
         loading,
         setLoading,
+        reset,
       }}
     >
       {children}

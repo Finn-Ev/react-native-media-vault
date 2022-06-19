@@ -21,8 +21,7 @@ import {
 } from "../../context/ImportAssetsContext";
 import FooterMenu from "../../components/FooterMenu";
 import { Entypo } from "@expo/vector-icons";
-
-const PAGE_SIZE = 24;
+import { IMPORT_ASSETS_PAGE_SIZE } from "../../constants";
 
 const MGAssetListScreen: React.FC = ({}) => {
   const navigation = useNavigation<MGAssetListScreenNavigationProps>();
@@ -45,12 +44,12 @@ const MGAssetListScreen: React.FC = ({}) => {
     setLoading(true);
     const items = await MediaLibrary.getAssetsAsync({
       album: route.params.albumId,
-      first: PAGE_SIZE,
+      first: IMPORT_ASSETS_PAGE_SIZE,
       after: lastItemId,
       mediaType: ["photo", "video"],
     });
 
-    const allAssets: IImportAsset[] = allFetchedAssets;
+    const allAssets = allFetchedAssets;
     for (const asset of items.assets) {
       const { localUri, id } = await MediaLibrary.getAssetInfoAsync(asset);
       if (localUri && id) {
@@ -61,7 +60,7 @@ const MGAssetListScreen: React.FC = ({}) => {
       }
     }
 
-    if (items.totalCount <= PAGE_SIZE) {
+    if (items.totalCount <= IMPORT_ASSETS_PAGE_SIZE) {
       setEndReached(true);
     }
 
@@ -73,8 +72,9 @@ const MGAssetListScreen: React.FC = ({}) => {
   };
 
   useEffect(() => {
-    let startAtItem = currentPage * PAGE_SIZE;
-    let endAtItem = currentPage * PAGE_SIZE + PAGE_SIZE;
+    let startAtItem = currentPage * IMPORT_ASSETS_PAGE_SIZE;
+    let endAtItem =
+      currentPage * IMPORT_ASSETS_PAGE_SIZE + IMPORT_ASSETS_PAGE_SIZE;
     getAssets().then(() => {
       setVisibleAssets(allFetchedAssets.slice(startAtItem, endAtItem));
     });
@@ -82,8 +82,9 @@ const MGAssetListScreen: React.FC = ({}) => {
   }, []);
 
   const nextPage = async () => {
-    let startAtItem = currentPage * PAGE_SIZE;
-    let endAtItem = currentPage * PAGE_SIZE + PAGE_SIZE;
+    let startAtItem = currentPage * IMPORT_ASSETS_PAGE_SIZE;
+    let endAtItem =
+      currentPage * IMPORT_ASSETS_PAGE_SIZE + IMPORT_ASSETS_PAGE_SIZE;
 
     if (loading && totalAlbumCount <= endAtItem) return;
 
@@ -91,16 +92,16 @@ const MGAssetListScreen: React.FC = ({}) => {
 
     if (allFetchedAssets.length <= endAtItem) {
       const oldAssetsPlusNewAssets = await getAssets(
-        allFetchedAssets[allFetchedAssets.length - 1]?.id
+        allFetchedAssets.at(-1)?.id
       );
-      startAtItem += PAGE_SIZE;
-      endAtItem += PAGE_SIZE;
+      startAtItem += IMPORT_ASSETS_PAGE_SIZE;
+      endAtItem += IMPORT_ASSETS_PAGE_SIZE;
       setVisibleAssets(oldAssetsPlusNewAssets.slice(startAtItem, endAtItem));
       setCurrentPage(currentPage + 1);
     } else {
       setCurrentPage(currentPage + 1);
-      startAtItem += PAGE_SIZE;
-      endAtItem += PAGE_SIZE;
+      startAtItem += IMPORT_ASSETS_PAGE_SIZE;
+      endAtItem += IMPORT_ASSETS_PAGE_SIZE;
       setVisibleAssets(allFetchedAssets.slice(startAtItem, endAtItem));
     }
 
@@ -114,13 +115,14 @@ const MGAssetListScreen: React.FC = ({}) => {
 
     if (endReached) setEndReached(false);
 
-    let startAtItem = currentPage * PAGE_SIZE;
-    let endAtItem = currentPage * PAGE_SIZE + PAGE_SIZE;
+    let startAtItem = currentPage * IMPORT_ASSETS_PAGE_SIZE;
+    let endAtItem =
+      currentPage * IMPORT_ASSETS_PAGE_SIZE + IMPORT_ASSETS_PAGE_SIZE;
 
     if (currentPage > 0) {
       setCurrentPage(currentPage - 1);
-      startAtItem -= PAGE_SIZE;
-      endAtItem -= PAGE_SIZE;
+      startAtItem -= IMPORT_ASSETS_PAGE_SIZE;
+      endAtItem -= IMPORT_ASSETS_PAGE_SIZE;
       setVisibleAssets(allFetchedAssets.slice(startAtItem, endAtItem));
     }
     if (startAtItem === 0) {
@@ -155,35 +157,42 @@ const MGAssetListScreen: React.FC = ({}) => {
             <ImagePreview
               uri={item.localUri}
               onPress={() => importAssetsContext?.toggleAsset(item)}
-              isSelected={importAssetsContext!.assetsToImport.includes(item)}
+              isSelected={importAssetsContext!.assetsToImport.some(
+                (asset) => asset.id === item.id
+              )}
             />
           )}
         />
       )}
-      <View style={styles.pagination}>
-        {!startReached ? (
-          <Pressable hitSlop={8} onPress={previousPage}>
-            <Entypo name="chevron-left" size={36} color="white" />
-          </Pressable>
-        ) : (
-          <Entypo name="chevron-left" size={36} color="black" />
-        )}
+      {totalAlbumCount > IMPORT_ASSETS_PAGE_SIZE && (
+        <View style={styles.pagination}>
+          {!startReached ? (
+            <Pressable hitSlop={8} onPress={previousPage}>
+              <Entypo name="chevron-left" size={36} color="white" />
+            </Pressable>
+          ) : (
+            <Entypo name="chevron-left" size={36} color="black" />
+          )}
 
-        {!loading && (
-          <Text style={styles.paginationText}>
-            {currentPage * PAGE_SIZE + 1} -{" "}
-            {endReached ? totalAlbumCount : currentPage * PAGE_SIZE + PAGE_SIZE}
-          </Text>
-        )}
+          {!loading && (
+            <Text style={styles.paginationText}>
+              {currentPage * IMPORT_ASSETS_PAGE_SIZE + 1} -{" "}
+              {endReached
+                ? totalAlbumCount
+                : currentPage * IMPORT_ASSETS_PAGE_SIZE +
+                  IMPORT_ASSETS_PAGE_SIZE}
+            </Text>
+          )}
 
-        {!endReached ? (
-          <Pressable hitSlop={8} onPress={nextPage}>
-            <Entypo name="chevron-right" size={36} color="white" />
-          </Pressable>
-        ) : (
-          <Entypo name="chevron-right" size={36} color="black" />
-        )}
-      </View>
+          {!endReached ? (
+            <Pressable hitSlop={8} onPress={nextPage}>
+              <Entypo name="chevron-right" size={36} color="white" />
+            </Pressable>
+          ) : (
+            <Entypo name="chevron-right" size={36} color="black" />
+          )}
+        </View>
+      )}
       <FooterMenu />
     </SafeAreaView>
   );

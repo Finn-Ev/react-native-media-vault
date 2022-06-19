@@ -234,7 +234,7 @@ const FSAssetListScreen: React.FC = ({}) => {
     disableSelectMode();
   };
 
-  const openAlbumActionSheet = () => {
+  const openActionSheet = () => {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     const options = [
       "Dateien in anderes Album verschieben",
@@ -283,6 +283,7 @@ const FSAssetListScreen: React.FC = ({}) => {
                           navigation.navigate("FSAssetCarousel", {
                             assetUris: assets,
                             startIndex: index,
+                            albumName: route.params.albumName,
                           })
                   }
                   isSelected={selectedAssets.includes(item)}
@@ -306,9 +307,8 @@ const FSAssetListScreen: React.FC = ({}) => {
                 </Text>
 
                 {!!selectedAssets.length && (
-                  <Pressable onPress={openAlbumActionSheet} hitSlop={15}>
+                  <Pressable onPress={openActionSheet} hitSlop={15}>
                     <View style={styles.buttonContainer}>
-                      {/*<Text style={styles.buttonText}>Aktionen</Text>*/}
                       <Entypo
                         name="dots-three-horizontal"
                         size={24}

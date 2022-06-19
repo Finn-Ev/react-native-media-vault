@@ -4,9 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6bbeae37-5161-4dd9-a061-f9297add82d8" name="Changes" comment="removed pop-Method and managed to get the pagination fully working">
+    <list default="true" id="6bbeae37-5161-4dd9-a061-f9297add82d8" name="Changes" comment="fixed FSAssetCarousel.screen.tsx scroll-index issue, added footerMenu to move/export the current shown image">
+      <change afterPath="$PROJECT_DIR$/src/constants/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/context/ImportAssetsContext/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/ImportAssetsContext/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/navigation/GalleryStackNavigator.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/navigation/GalleryStackNavigator.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/FSAlbumList/components/AlbumPreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSAlbumList/components/AlbumPreview.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/FSAssetCarousel/FSAssetCarousel.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSAssetCarousel/FSAssetCarousel.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/FSAssetCarousel/components/ImageZoomView.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSAssetCarousel/components/ImageZoomView.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/FSAssetList/FSAssetList.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSAssetList/FSAssetList.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/FSMoveAssets/FSMoveAssets.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FSMoveAssets/FSMoveAssets.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/MGAlbumList/MGAlbumList.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MGAlbumList/MGAlbumList.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/MGAlbumList/components/AlbumPreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MGAlbumList/components/AlbumPreview.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/MGAssetList/MGAssetList.screen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MGAssetList/MGAssetList.screen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +110,7 @@
       <workItem from="1655203521360" duration="6762000" />
       <workItem from="1655370052440" duration="7303000" />
       <workItem from="1655389375848" duration="19824000" />
-      <workItem from="1655573890176" duration="12293000" />
+      <workItem from="1655573890176" duration="31863000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1654472318477</created>
@@ -261,7 +273,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655585758948</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="finished MGAssetList.screen.tsx">
+      <created>1655587756407</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1655587756407</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -301,7 +320,9 @@
     <MESSAGE value="finished with trying improving the pagination" />
     <MESSAGE value="assetImportList:switched from pagination to lazyLoading" />
     <MESSAGE value="removed pop-Method and managed to get the pagination fully working" />
-    <option name="LAST_COMMIT_MESSAGE" value="removed pop-Method and managed to get the pagination fully working" />
+    <MESSAGE value="finished MGAssetList.screen.tsx" />
+    <MESSAGE value="fixed FSAssetCarousel.screen.tsx scroll-index issue, added footerMenu to move/export the current shown image" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed FSAssetCarousel.screen.tsx scroll-index issue, added footerMenu to move/export the current shown image" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
