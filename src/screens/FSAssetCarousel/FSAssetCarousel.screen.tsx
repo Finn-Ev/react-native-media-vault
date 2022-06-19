@@ -63,11 +63,17 @@ const FSAssetCarouselScreen: React.FC = ({}) => {
     updateHeader();
   }, [showMenuUI]);
 
+  useEffect(() => {
+    if (assetUris.length === 0) {
+      navigation.goBack();
+    }
+  }, [assetUris]);
+
   const toggleMenuUI = () => {
     setShowMenuUI(true);
     setTimeout(() => {
       setShowMenuUI(false);
-    }, 2500);
+    }, 3000);
   };
 
   const updateHeader = () => {
@@ -85,7 +91,27 @@ const FSAssetCarouselScreen: React.FC = ({}) => {
   };
 
   const deleteAsset = () => {
-    console.log("deleteAsset");
+    const fileType = getIsImage(assetUris[activeImageIndex]) ? "Bild" : "Video";
+    Alert.alert(
+      "Löschen",
+      `Soll dieses ${fileType} wirklich gelöscht werden?`,
+      [
+        {
+          text: "Abbrechen",
+          style: "cancel",
+        },
+        {
+          text: "Löschen",
+          onPress: async () => {
+            await deleteAssetsFromFS([assetUris[activeImageIndex]]);
+            // remove the asset from the current carousel-view
+            setAssetUris(
+              assetUris.filter((uri) => uri !== assetUris[activeImageIndex])
+            );
+          },
+        },
+      ]
+    );
   };
 
   const startDiashow = () => {};
@@ -93,7 +119,7 @@ const FSAssetCarouselScreen: React.FC = ({}) => {
   const openActionSheet = () => {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
 
-    const fileType = getIsImage(assetUris[activeImageIndex]) ? "Bild" : "video";
+    const fileType = getIsImage(assetUris[activeImageIndex]) ? "Bild" : "Video";
 
     const options = [
       `${fileType} in anderes Album verschieben`,
@@ -177,7 +203,10 @@ const FSAssetCarouselScreen: React.FC = ({}) => {
             ) : (
               <Video
                 source={{ uri: item }}
-                style={{ width, height: "100%" }}
+                style={{
+                  width,
+                  height: "100%",
+                }}
                 shouldPlay={activeImageIndex === index}
                 isMuted={false}
                 isLooping
