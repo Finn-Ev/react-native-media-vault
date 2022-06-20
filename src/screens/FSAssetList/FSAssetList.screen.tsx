@@ -42,8 +42,6 @@ const FSAssetListScreen: React.FC = ({}) => {
   const metaAlbumInfo = albumContext?.getMetaAlbum(route.params.albumName);
   const assets = metaAlbumInfo?.assets!;
 
-  const [isInitialFetch, setIsInitialFetch] = useState(true);
-
   const [selectedAssets, setSelectedAssets] = useState<IAlbumAsset[]>([]);
   const [isSelectModeActive, setIsSelectModeActive] = useState(false);
 
@@ -51,16 +49,6 @@ const FSAssetListScreen: React.FC = ({}) => {
     navigation.setOptions({ headerTitle: route.params.albumName });
   }, []);
 
-  // fetch assets initially and when sortDirection or screenFocusState changes
-  // to keep the assetList in sync with the state
-  // useEffect(() => {
-  //   fetchAssets();
-  //   return navigation.addListener("focus", () => {
-  //     fetchAssets();
-  //   });
-  // }, [metaAlbumInfo?.selectedSortDirection, navigation]);
-
-  // change headerRight when selectMode is active or images have changed
   useEffect(() => {
     if (assets.length === 0) {
       navigation.setOptions({
@@ -139,7 +127,6 @@ const FSAssetListScreen: React.FC = ({}) => {
               route.params.albumName,
               selectedAssets.map((asset) => asset.id)
             );
-            // await deleteAssetsFromFS(selectedAssets);
           },
         },
       ]
@@ -185,38 +172,52 @@ const FSAssetListScreen: React.FC = ({}) => {
     navigation.navigate("FSMoveAssets", {
       assetIds: selectedAssets.map((asset) => asset.id),
       sourceAlbumName: route.params.albumName,
-      copy,
     });
     disableSelectMode();
   };
 
   const openActionSheet = () => {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    const options = [
-      "Dateien in anderes Album verschieben",
-      "Dateien in anderes Album kopieren",
-      "Ausgewähle Dateien exportieren",
-      "Abbrechen",
-    ];
-    const cancelButtonIndex = 3;
 
-    showActionSheetWithOptions(
-      {
-        options,
-        cancelButtonIndex,
-      },
-      (buttonIndex) => {
-        if (buttonIndex === 0) {
-          openMoveAssetsScreen(false);
+    if (albumContext!.metaAlbums!.length > 1) {
+      const options = [
+        "Dateien in anderes Album verschieben",
+        "Ausgewähle Dateien exportieren",
+        "Abbrechen",
+      ];
+      const cancelButtonIndex = 2;
+
+      showActionSheetWithOptions(
+        {
+          options,
+          cancelButtonIndex,
+        },
+        (buttonIndex) => {
+          if (buttonIndex === 0) {
+            openMoveAssetsScreen(false);
+          }
+
+          if (buttonIndex === 1) {
+            exportSelectedAssets();
+          }
         }
-        if (buttonIndex === 1) {
-          openMoveAssetsScreen(true);
+      );
+    } else {
+      const options = ["Ausgewähle Dateien exportieren", "Abbrechen"];
+      const cancelButtonIndex = 1;
+
+      showActionSheetWithOptions(
+        {
+          options,
+          cancelButtonIndex,
+        },
+        (buttonIndex) => {
+          if (buttonIndex === 0) {
+            exportSelectedAssets();
+          }
         }
-        if (buttonIndex === 2) {
-          exportSelectedAssets();
-        }
-      }
-    );
+      );
+    }
   };
 
   if (loading) return <LoadingIndicator />;

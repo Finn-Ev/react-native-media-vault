@@ -90,9 +90,7 @@ const FSAssetCarouselScreen: React.FC = ({}) => {
           </Pressable>
         ),
       });
-    }
-    // hide whole menu-ui after 2s inactivity
-    else navigation.setOptions({ headerRight: () => null });
+    } else navigation.setOptions({ headerRight: () => null });
   };
 
   const deleteAsset = () => {
@@ -134,11 +132,10 @@ const FSAssetCarouselScreen: React.FC = ({}) => {
 
     const options = [
       `${fileType} in anderes Album verschieben`,
-      `${fileType} in anderes Album kopieren`,
       `${fileType} exportieren`,
       "Abbrechen",
     ];
-    const cancelButtonIndex = 3;
+    const cancelButtonIndex = 2;
 
     showActionSheetWithOptions(
       {
@@ -150,7 +147,6 @@ const FSAssetCarouselScreen: React.FC = ({}) => {
           navigation.navigate("FSMoveAssets", {
             assetIds: [assets[activeImageIndex].id],
             sourceAlbumName: route.params.albumName,
-            copy: false,
           });
           // remove the asset from the current carousel-view
           setAssets(
@@ -158,14 +154,6 @@ const FSAssetCarouselScreen: React.FC = ({}) => {
           );
         }
         if (buttonIndex === 1) {
-          navigation.navigate("FSMoveAssets", {
-            assetIds: [assets[activeImageIndex].id],
-            sourceAlbumName: route.params.albumName,
-            copy: true,
-          });
-          // no need to remove the asset from the current carousel-view as it gets copied
-        }
-        if (buttonIndex === 2) {
           await exportAssetsIntoMediaLibrary([assets[activeImageIndex]]);
           Alert.alert(
             "Export erfolgreich",

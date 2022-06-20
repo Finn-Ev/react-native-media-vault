@@ -1,18 +1,15 @@
-import { StyleSheet, View, Text, Pressable, Alert } from "react-native";
-import { Feather, FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { FontAwesome5 } from "@expo/vector-icons";
 import { useImportAssetsContext } from "../context/ImportAssetsContext";
 import { useNavigation } from "@react-navigation/native";
 import {
-  FSAssetListScreenNavigationProps,
   FSAlbumListScreenNavigationProps,
+  FSAssetListScreenNavigationProps,
 } from "../navigation/types";
-import { v4 as uuidv4 } from "uuid";
-import * as FileSystem from "expo-file-system";
-import { getFileExtension, getFullDirectoryPath } from "../util/MediaHelper";
 
 interface ImportAssetsFooterProps {}
 
-const FooterMenu: React.FC<ImportAssetsFooterProps> = ({}) => {
+const FSFooterMenu: React.FC<ImportAssetsFooterProps> = ({}) => {
   const navigation = useNavigation<
     FSAssetListScreenNavigationProps | FSAlbumListScreenNavigationProps
   >();
@@ -62,4 +59,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FooterMenu;
+export default FSFooterMenu;

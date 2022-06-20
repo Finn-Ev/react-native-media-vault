@@ -17,7 +17,6 @@ export type GalleryStackParamList = {
   };
   FSMoveAssets: {
     assetIds: string[];
-    copy: boolean;
     sourceAlbumName: string;
   };
 };

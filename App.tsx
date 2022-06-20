@@ -7,8 +7,15 @@ import { AlbumContextProvider } from "./src/context/AlbumContext";
 import { documentDirectory } from "expo-file-system";
 import { ImportAssetsContextProvider } from "./src/context/ImportAssetsContext";
 import { AuthContextProvider } from "./src/context/AuthContext";
+import { useEffect } from "react";
+import * as FS from "expo-file-system";
 
 const App: React.FC = () => {
+  // useEffect(() => {
+  //   FS.deleteAsync(FS.documentDirectory! + "assets/");
+  //   FS.deleteAsync(FS.documentDirectory! + "RCTAsyncLocalStorage/");
+  // }, []);
+
   if (!documentDirectory) {
     return (
       <View style={styles.root}>

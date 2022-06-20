@@ -65,15 +65,17 @@ export const ImportAssetsContextProvider: React.FC = ({ children }) => {
 
     await albumContext?.addAssetsToAlbum(selectedAlbum, assetsToImport);
 
-    const assetIds = assetsToImport.map((asset) => asset.id);
-
+    const deviceGalleryIds = assetsToImport.map(
+      (asset) => asset.deviceGalleryId
+    );
     Alert.alert(
       "Duplikate löschen?",
       "Wenn sie die importierten Dateien aus ihrer Galerie löschen wollen, drücken sie im nächsten Schritt auf 'Löschen'",
       [
         {
           text: "Ja, weiter",
-          onPress: async () => await MediaLibrary.deleteAssetsAsync(assetIds),
+          onPress: async () =>
+            await MediaLibrary.deleteAssetsAsync(deviceGalleryIds),
         },
         {
           text: "Nein, abbrechen",

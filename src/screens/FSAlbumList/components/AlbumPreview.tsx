@@ -1,7 +1,6 @@
-import { Image, Pressable, StyleSheet, Text } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FSAlbumListScreenNavigationProps } from "../../../navigation/types";
-
 import { useEffect, useState } from "react";
 import { ResizeMode, Video } from "expo-av";
 import { useAlbumContext } from "../../../context/AlbumContext";
@@ -32,6 +31,7 @@ const AlbumPreview: React.FC<ImagePreviewProps> = ({
 
   const getAlbumThumbnail = () => {
     let assets = albumContext.getAssetsByAlbum(albumName);
+    if (!assets.length) return setThumbnail(EMPTY_ALBUM_PLACEHOLDER_IMAGE);
     setThumbnail(assets[0].localUri);
   };
 
@@ -58,7 +58,10 @@ const AlbumPreview: React.FC<ImagePreviewProps> = ({
           style={styles.thumbnail}
         />
       )}
-      <Text style={styles.text}>{albumName}</Text>
+      <View style={styles.albumInfo}>
+        <Text style={styles.name}>{albumName}</Text>
+        <Text style={styles.assetCount}>{albumMetaInfo.assets.length}</Text>
+      </View>
     </Pressable>
   );
 };
@@ -67,26 +70,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     maxWidth: "50%",
-    aspectRatio: 1,
-    padding: 2,
-  },
-  activityIndicator: {
-    // height: 75,
-    // aspectRatio: 1,
+    padding: 5,
   },
   thumbnail: {
     aspectRatio: 1,
     backgroundColor: "grey",
+    borderRadius: 8,
   },
-  text: {
+  albumInfo: {
+    paddingTop: 10,
+  },
+  name: {
     color: "white",
-    position: "absolute",
-    bottom: 5,
-    left: 5,
-    padding: 3,
-    textShadowColor: "black",
-    textShadowOffset: { width: -2, height: 1 },
-    textShadowRadius: 10,
+  },
+  assetCount: {
+    color: "#999",
   },
 });
 

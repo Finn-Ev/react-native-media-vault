@@ -29,11 +29,6 @@ const FSAlbumListScreen: React.FC = ({}) => {
   const albumContext = useAlbumContext();
   if (!albumContext) throw new Error("MetaAlbumContext not found");
 
-  // useEffect(() => {
-  //   FS.deleteAsync(FS.documentDirectory! + "assets/");
-  //   FS.deleteAsync(FS.documentDirectory! + "RCTAsyncLocalStorage/");
-  // }, []);
-
   useEffect(() => {
     // init directory structure
     initMediaRoot();
@@ -91,9 +86,8 @@ const FSAlbumListScreen: React.FC = ({}) => {
   const createAlbum = async (name: string) => {
     const successful = await albumContext.addAlbum(name);
 
-    if (successful) {
-      setShowDialog(false);
-    }
+    if (!successful)
+      Alert.alert("Fehler", "Ein Album mit dem Namen existiert bereits.");
   };
 
   return (

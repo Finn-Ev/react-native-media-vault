@@ -16,10 +16,11 @@ import { useEffect, useRef, useState } from "react";
 import ImagePreview from "../../components/ImagePreview";
 import LoadingIndicator from "../../components/LoadingIndicator";
 import { useImportAssetsContext } from "../../context/ImportAssetsContext";
-import FooterMenu from "../../components/FooterMenu";
+import FSFooterMenu from "../../components/FSFooterMenu";
 import { Entypo } from "@expo/vector-icons";
 import { IMPORT_ASSETS_PAGE_SIZE } from "../../constants";
 import { IAlbumAsset } from "../../context/AlbumContext";
+import { v4 as uuidv4 } from "uuid";
 
 const MGAssetListScreen: React.FC = ({}) => {
   const navigation = useNavigation<MGAssetListScreenNavigationProps>();
@@ -49,16 +50,19 @@ const MGAssetListScreen: React.FC = ({}) => {
 
     const allAssets = allFetchedAssets;
     for (const asset of items.assets) {
-      const { localUri, id, duration, mediaType, creationTime } =
+      const { localUri, id, duration, mediaType, creationTime, height, width } =
         await MediaLibrary.getAssetInfoAsync(asset);
       if (localUri) {
         allAssets.push({
-          id,
+          id: uuidv4(),
+          deviceGalleryId: id,
           localUri,
           addedAt: Date.now(),
           createdAt: creationTime,
           type: mediaType === "photo" ? "photo" : "video",
           duration: duration || undefined,
+          height: height || undefined,
+          width: width || undefined,
         });
       }
     }
@@ -196,7 +200,7 @@ const MGAssetListScreen: React.FC = ({}) => {
           )}
         </View>
       )}
-      <FooterMenu />
+      <FSFooterMenu />
     </SafeAreaView>
   );
 };

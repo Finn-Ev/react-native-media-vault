@@ -3,7 +3,7 @@ import * as MediaLibrary from "expo-media-library";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { MGAlbumListScreenNavigationProps } from "../../navigation/types";
-import FooterMenu from "../../components/FooterMenu";
+import FSFooterMenu from "../../components/FSFooterMenu";
 import AlbumPreview from "./components/AlbumPreview";
 import LoadingIndicator from "../../components/LoadingIndicator";
 import { useImportAssetsContext } from "../../context/ImportAssetsContext";
@@ -60,7 +60,7 @@ const MGAlbumListScreen: React.FC = ({}) => {
         ) : (
           <LoadingIndicator />
         )}
-        <FooterMenu />
+        <FSFooterMenu />
       </SafeAreaView>
     );
   } else

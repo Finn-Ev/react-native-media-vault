@@ -14,26 +14,18 @@ const FSMoveAssetsScreen: React.FC = ({}) => {
   const albumContext = useAlbumContext();
 
   const moveAssets = async (destinationAlbumName: string) => {
-    // await moveAssetsFromFSAlbumToFSAlbum(
-    //   destinationAlbumName,
-    //   route.params.assetUris,
-    //   route.params.copy
-    // );
-
     const assets = albumContext?.getAssetsByIdsFromAlbum(
       route.params.sourceAlbumName,
       route.params.assetIds
     );
-    if (assets) {
-      albumContext?.addAssetsToAlbum(destinationAlbumName, assets);
-    }
-
-    if (!route.params.copy) {
-      albumContext?.removeAssetsFromAlbum(
+    if (assets?.length) {
+      albumContext?.moveAssetsFromAlbumToAlbum(
         route.params.sourceAlbumName,
+        destinationAlbumName,
         route.params.assetIds
       );
     }
+
     navigation.replace("FSAssetList", { albumName: destinationAlbumName });
   };
 

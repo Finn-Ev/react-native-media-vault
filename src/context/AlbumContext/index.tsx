@@ -10,11 +10,14 @@ import { getMetaAlbumsFromStorage, saveMetaAlbumsToStorage } from "./storage";
 
 export interface IAlbumAsset {
   id: string;
+  deviceGalleryId: string; // doesn't have to be unique
   localUri: string;
   addedAt: number;
   createdAt: number;
   type: "photo" | "video";
   duration?: number;
+  height?: number;
+  width?: number;
 }
 
 export interface IAlbum {
@@ -42,6 +45,12 @@ export interface IAlbumContext {
     albumName: string,
     assets: IAlbumAsset[]
   ) => Promise<boolean>;
+  moveAssetsFromAlbumToAlbum: (
+    sourceAlbum: string,
+    destinationAlbum: string,
+    assetIds: string[]
+  ) => Promise<boolean>;
+  // copyAssetsFromAlbumToAlbum: () => Promise<boolean>;
   removeAssetsFromAlbum: (
     albumName: string,
     assetsIdsToRemove: string[]
@@ -169,9 +178,20 @@ export const AlbumContextProvider: React.FC = ({ children }) => {
       editedAlbum,
     ];
 
+    console.log("Adding " + assetsToAdd.length + " Assets to " + albumName);
+    console.log("newMetaAlbums: ", newMetaAlbums);
+
     setMetaAlbums(sortAlbums(newMetaAlbums));
     await saveMetaAlbumsToStorage(sortAlbums(newMetaAlbums));
 
+    return true;
+  };
+
+  const moveAssetsFromAlbumToAlbum = async (
+    sourceAlbum: string,
+    destinationAlbum: string,
+    assetIds: string[]
+  ) => {
     return true;
   };
 
@@ -182,9 +202,12 @@ export const AlbumContextProvider: React.FC = ({ children }) => {
     const album = getMetaAlbum(albumName);
     if (!album) return false;
 
+    // console.log("removeAssetsBeforeFilter:", album.assets.length);
+
     const newAssets = album.assets.filter(
       (asset) => !assetsIdsToRemove.includes(asset.id)
     );
+    // console.log("removeAssetsAfterFilter:", newAssets);
 
     const editedAlbum: IAlbum = {
       ...album,
@@ -221,6 +244,7 @@ export const AlbumContextProvider: React.FC = ({ children }) => {
         toggleAlbumSortDirection,
         getAssetsByAlbum,
         addAssetsToAlbum,
+        moveAssetsFromAlbumToAlbum,
         removeAssetsFromAlbum,
         getAssetsByIdsFromAlbum,
       }}
